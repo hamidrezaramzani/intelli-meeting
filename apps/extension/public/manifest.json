@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Intelli Meeting",
+  "version": "1.0",
+  "description": "AI-powered online meeting assistant that records meetings, analyzes speech, and summarizes who said what.",
+  "action": {
+    "default_popup": "index.html"
+  }
+}
