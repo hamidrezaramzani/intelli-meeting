@@ -1,0 +1,9 @@
+{
+  "name": "@intelli-meeting/design-system",
+  "version": "1.0.0",
+  "files": [
+    "index.css",
+    "assets"
+  ],
+  "main": "index.css"
+}

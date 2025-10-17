@@ -1,4 +1,3 @@
-import "./index.css";
 import { RecordPage } from "./pages";
 
 function App() {

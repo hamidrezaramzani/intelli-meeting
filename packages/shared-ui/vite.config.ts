@@ -9,7 +9,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "SharedUI",
-      formats: ["es", "cjs"],
+      formats: ["es"],
       fileName: (format) => `${format}/index.js`,
     },
     rollupOptions: {
