@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@intelli-meeting/shared-ui": "*",
+    "@intelli-meeting/icons": "*",
     "@tailwindcss/vite": "^4.0.7",
     "autoprefixer": "^10.4.21",
     "react": "^19.1.1",

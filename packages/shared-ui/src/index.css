@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/web/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/web/Roboto-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/web/Roboto-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/web/Roboto-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
 @theme {
   --color-primary-50: oklch(0.957 0.014 299.92);
   --color-primary-100: oklch(0.916 0.026 297.97);
@@ -23,4 +51,6 @@
   --color-secondary-800: oklch(0.338 0.027 306.14);
   --color-secondary-900: oklch(0.243 0.018 305.28);
   --color-secondary-950: oklch(0.189 0.015 304.52);
+
+  --font-sans: "Roboto", system-ui, sans-serif;
 }

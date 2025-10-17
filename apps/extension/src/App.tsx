@@ -1,12 +1,8 @@
-import { Header } from "@intelli-meeting/shared-ui";
 import "./index.css";
+import { RecordPage } from "./pages";
 
 function App() {
-  return (
-    <div className="w-96">
-      <Header />
-    </div>
-  );
+  return <RecordPage />;
 }
 
 export default App;
