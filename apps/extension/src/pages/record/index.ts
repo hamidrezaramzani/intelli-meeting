@@ -1,1 +1,1 @@
-export * from "./record.component";
+export * from "./record.page";
