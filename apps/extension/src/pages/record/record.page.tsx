@@ -1,14 +1,10 @@
-import { Header } from "@intelli-meeting/shared-ui";
+import { MainLayout } from "@intelli-meeting/shared-ui";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { FaCircle } from "react-icons/fa";
 
 export const RecordPage = () => (
-  <div className="w-96 bg-brand-800">
-    <Header />
-    <div
-      className="flex flex-col justify-center items-center"
-      style={{ height: "500px" }}
-    >
+  <MainLayout>
+    <div className="flex flex-col justify-center items-center">
       <div className="w-2/3 flex justify-center items-center bg-brand-600  rounded-full h-64">
         <button className="w-2/3 h-64 flex items-center justify-center ">
           <HiOutlineMicrophone className="text-9xl text-neutral-50" />
@@ -20,7 +16,9 @@ export const RecordPage = () => (
       </div>
 
       <div className="w-full flex justify-center items-center">
-        <h3 className="text-xl my-3 text-white font-regular">Start recording</h3>
+        <h3 className="text-xl my-3 text-white font-regular">
+          Start recording
+        </h3>
       </div>
       <div className="w-2/3 flex gap-3 justify-center">
         <div className="flex justify-center w-32 items-center">
@@ -30,5 +28,5 @@ export const RecordPage = () => (
         </div>
       </div>
     </div>
-  </div>
+  </MainLayout>
 );
