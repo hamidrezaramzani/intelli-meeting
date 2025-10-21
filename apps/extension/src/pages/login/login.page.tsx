@@ -9,16 +9,16 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="w-96">
+    <div className="w-96 bg-white">
       <MainLayout>
-        <div className="flex justify-center items-center flex-col mt-12">
+        <div className="flex justify-center items-center flex-col mt-6">
           <img src={logo} className="w-24" />
         </div>
         <div className="flex justify-center flex-col mt-3">
-          <h3 className="text-white text-2xl mb-2 font-bold text-center">
+          <h3 className="text-black text-2xl mb-2 font-bold text-center">
             Log in to your account
           </h3>
-          <p className="text-brand-300 text-md font-regular text-center ">
+          <p className="text-gray-600 text-md font-regular text-center ">
             Welcome back, please enter your details
           </p>
         </div>
@@ -28,10 +28,10 @@ export const LoginPage = () => {
             <TextInput type="password" label="Password" />
             <Button>Login</Button>
             <div className="py-3 flex justify-center items-center">
-              <p className="text-white text-regular text-center">
+              <p className="text-gray-600 text-regular text-center">
                 Create an account
                 <a
-                  className="text-brand-300 ml-2"
+                  className="text-gray-300 ml-2"
                   href="http://localhost:3000/sign-in"
                   target="_blank"
                   onClick={handleClick}
