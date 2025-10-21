@@ -6,6 +6,7 @@ import { Button } from "../../components";
 
 export const Header = ({ menus }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const renderMenuItems = (
     getContainer: (menu: HeaderProps["menus"][number]) => ReactNode
@@ -16,7 +17,7 @@ export const Header = ({ menus }: HeaderProps) => {
   return (
     <header className="w-full flex justify-between items-center">
       <nav className="w-full bg-white">
-        <div className="w-full hidden md:flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="w-full hidden md:flex flex-wrap items-center justify-between py-4">
           <div className="flex gap-12">
             {renderMenuItems((menu) => (
               <div key={menu.id}>
@@ -26,15 +27,62 @@ export const Header = ({ menus }: HeaderProps) => {
               </div>
             ))}
           </div>
-          <a href="#" className="flex justify-center items-center">
-            <span className="self-center text-lg font-regular whitespace-nowrap text-black">
+          <div className="flex justify-center items-center">
+            <a href="/" className="text-lg font-regular text-black">
               Intelli Meetings
-            </span>
-          </a>
+            </a>
+          </div>
 
-          <div className="hidden md:flex gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Button>Login</Button>
             <Button>Register</Button>
+            <div className="relative">
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
+              >
+                <img
+                  className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
+                  src="https://avatar.iran.liara.run/public"
+                  alt="user photo"
+                />
+              </button>
+
+              {isUserMenuOpen && (
+                <div
+                  id="dropdownAvatar"
+                  className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100 z-20"
+                >
+                  <ul className="py-2 text-sm text-gray-700">
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                      >
+                        Dashboard
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                      >
+                        Settings
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                      >
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex justify-between md:hidden py-4">
