@@ -2,7 +2,7 @@ import type { TextInputProps } from "./text-input.type";
 
 export const TextInput = ({ label, ...props }: TextInputProps) => (
   <div className="mb-3 rounded-md">
-    <label className="block mb-2 text-sm font-medium text-white font-regular">
+    <label className="block mb-2 text-sm font-medium text-gray-500 font-regular">
       {label}
     </label>
     <input

@@ -1,5 +1,6 @@
 import { Button, MainLayout, TextInput } from "@intelli-meeting/shared-ui";
 import logo from "../../assets/logo-transparent.png";
+import { useNavigate } from "react-router";
 
 export const LoginPage = () => {
   const handleClick = () => {
@@ -8,9 +9,11 @@ export const LoginPage = () => {
     });
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="w-96 bg-white">
-      <MainLayout>
+      <MainLayout navigate={(path) => navigate(path)}>
         <div className="flex justify-center items-center flex-col mt-6">
           <img src={logo} className="w-24" />
         </div>

@@ -4,7 +4,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import type { HeaderProps } from "./header.type";
 import { Button } from "../../components";
 
-export const Header = ({ menus }: HeaderProps) => {
+export const Header = ({ menus, navigate }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -34,8 +34,8 @@ export const Header = ({ menus }: HeaderProps) => {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <Button>Login</Button>
-            <Button>Register</Button>
+            <Button onClick={() => navigate("/sign-in")}>Login</Button>
+            <Button onClick={() => navigate("/sign-up")}>Register</Button>
             <div className="relative">
               <button
                 type="button"

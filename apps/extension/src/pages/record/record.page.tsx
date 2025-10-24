@@ -1,9 +1,11 @@
 import { MainLayout } from "@intelli-meeting/shared-ui";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { FaCircle } from "react-icons/fa";
+import { useNavigate } from "react-router";
 
-export const RecordPage = () => (
-  <MainLayout>
+export const RecordPage = () => {
+const navigate = useNavigate();
+return   <MainLayout navigate={(path) => navigate(path)}>
     <div className="flex flex-col justify-center items-center">
       <div className="w-2/3 flex justify-center items-center bg-brand-600  rounded-full h-64">
         <button className="w-2/3 h-64 flex items-center justify-center ">
@@ -29,4 +31,4 @@ export const RecordPage = () => (
       </div>
     </div>
   </MainLayout>
-);
+};
