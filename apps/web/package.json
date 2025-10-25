@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@intelli-meeting/shared-ui": "*",
     "next": "15.5.5",
     "postcss": "^8.5.6",
     "react": "19.1.0",

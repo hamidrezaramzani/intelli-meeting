@@ -3,4 +3,5 @@ import type { ComponentProps } from "react";
 export type TextInputProps = {
   label: string;
   type: "text" | "password";
+  error?: string;
 } & ComponentProps<"input">;
