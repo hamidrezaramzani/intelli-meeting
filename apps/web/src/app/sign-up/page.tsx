@@ -2,22 +2,34 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema, SignUpInput } from "../../../lib/validations/auth";
+import {
+  getSignUpFormSchema,
+  SignUpInput,
+} from "../../../lib/validations/auth";
 import { TextInput, Button } from "@intelli-meeting/shared-ui";
 import Link from "next/link";
+import { useSignupMutation, useCheckEmailMutation } from "@/services/api";
 
 const SignUpPage = () => {
+  const [signUp] = useSignupMutation();
+  const [checkEmail] = useCheckEmailMutation();
+
+  const checkIsEmailAlreadyUsed = async (email: string) => {
+    const result = await checkEmail({ email }).unwrap();
+    return result.isUnique;
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, touchedFields },
   } = useForm<SignUpInput>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(getSignUpFormSchema(checkIsEmailAlreadyUsed)),
   });
 
   const onSubmit = async (data: SignUpInput) => {
     console.log("✅ Valid data:", data);
-    // handle API call or server action here
+    await signUp(data).unwrap();
   };
 
   return (

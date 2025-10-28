@@ -7,9 +7,15 @@ class UserCreate(BaseModel):
     confirmPassword: str
 
 class UserResponse(BaseModel):
-    id: int
-    name: str
+    success: bool
+    class Config:
+        orm_mode = True
+
+
+class CheckEmailBody(BaseModel):
     email: EmailStr
 
+class CheckEmailResponse(BaseModel):
+    isUnique: bool
     class Config:
         orm_mode = True

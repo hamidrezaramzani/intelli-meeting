@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ReduxProvider } from "@/providers";
 
 export const metadata: Metadata = {
   title: "Intelli meeting",
@@ -13,8 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <ReduxProvider>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </ReduxProvider>
   );
 }

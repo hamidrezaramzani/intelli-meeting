@@ -1,8 +1,24 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from app import database, models, schemas, crud
+from app import database, models, schemas, commands
+
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000", 
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      
+    allow_credentials=True,
+    allow_methods=["*"],     
+    allow_headers=["*"],    
+)
+
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -12,8 +28,16 @@ def get_db():
         yield db
     finally:
         db.close()
+        
 
-@app.post("/signup", response_model=schemas.UserResponse)
-def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    new_user = crud.create_user(db, user)
-    return new_user
+@app.post("/api/signup", response_model=schemas.UserResponse)
+def signup(newUser: schemas.UserCreate, db: Session = Depends(get_db)):
+    commands.create_user(db, newUser); 
+
+@app.post("/api/check-email", response_model=schemas.CheckEmailResponse)
+def signup(body: schemas.CheckEmailBody, db: Session = Depends(get_db)):
+    isUnique = commands.check_is_email_unique(db, body.email)
+    print(isUnique)
+    return {
+        "isUnique": isUnique
+    }
