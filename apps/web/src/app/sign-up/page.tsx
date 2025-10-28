@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -9,9 +9,12 @@ import {
 import { TextInput, Button } from "@intelli-meeting/shared-ui";
 import Link from "next/link";
 import { useSignupMutation, useCheckEmailMutation } from "@/services/api";
+import { toast } from "react-toastify";
 
 const SignUpPage = () => {
-  const [signUp] = useSignupMutation();
+  const router = useRouter();
+
+  const [signUp, { isSuccess }] = useSignupMutation();
   const [checkEmail] = useCheckEmailMutation();
 
   const checkIsEmailAlreadyUsed = async (email: string) => {
@@ -19,17 +22,30 @@ const SignUpPage = () => {
     return result.isUnique;
   };
 
+  const schema = getSignUpFormSchema(checkIsEmailAlreadyUsed);
+
+  // Wrap the resolver for async Zod validation
+  const resolver = zodResolver(schema, undefined, { mode: "async" });
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, touchedFields },
   } = useForm<SignUpInput>({
-    resolver: zodResolver(getSignUpFormSchema(checkIsEmailAlreadyUsed)),
+    resolver,
   });
 
   const onSubmit = async (data: SignUpInput) => {
-    console.log("✅ Valid data:", data);
-    await signUp(data).unwrap();
+    void toast.promise(signUp(data).unwrap(), {
+      pending: "Please wait",
+      error: "We have an error when creating new user, please try again",
+      success: {
+        render: () => {
+          router.push("/sign-in");
+          return "User created successfully";
+        },
+      },
+    });
   };
 
   return (
@@ -89,8 +105,8 @@ const SignUpPage = () => {
               }
             />
 
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Signing up..." : "Sign up"}
+            <Button type="submit" disabled={isSubmitting || isSuccess}>
+              Sign up
             </Button>
 
             <div className="py-3 flex justify-center items-center">

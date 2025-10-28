@@ -32,12 +32,18 @@ def get_db():
 
 @app.post("/api/signup", response_model=schemas.UserResponse)
 def signup(newUser: schemas.UserCreate, db: Session = Depends(get_db)):
-    commands.create_user(db, newUser); 
+    is_created =  commands.create_user(db, newUser); 
+    if not is_created:
+        return {
+            "success": False,
+        }
+    return {
+        "success": True,
+    }
 
 @app.post("/api/check-email", response_model=schemas.CheckEmailResponse)
 def signup(body: schemas.CheckEmailBody, db: Session = Depends(get_db)):
     isUnique = commands.check_is_email_unique(db, body.email)
-    print(isUnique)
     return {
         "isUnique": isUnique
     }

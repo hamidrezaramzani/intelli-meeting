@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ReduxProvider } from "@/providers";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Intelli meeting",
@@ -15,6 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <ReduxProvider>
+      <ToastContainer />
       <html lang="en">
         <body>{children}</body>
       </html>
