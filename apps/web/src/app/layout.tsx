@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+
 import "./globals.css";
-import { ReduxProvider } from "@/providers";
 import { ToastContainer } from "react-toastify";
+
+import { ReduxProvider } from "@/providers";
 
 export const metadata: Metadata = {
   title: "Intelli meeting",

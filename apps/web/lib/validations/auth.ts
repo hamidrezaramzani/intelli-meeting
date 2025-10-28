@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const getSignUpFormSchema = (
-  checkIsEmailAlreadyUsed: (email: string) => Promise<boolean>
+  checkIsEmailAlreadyUsed: (email: string) => Promise<boolean>,
 ) =>
   z
     .object({
@@ -20,7 +20,7 @@ export const getSignUpFormSchema = (
       {
         message: "Email is already used",
         path: ["email"],
-      }
+      },
     )
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords do not match.",

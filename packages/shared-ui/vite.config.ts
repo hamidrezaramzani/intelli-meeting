@@ -1,8 +1,9 @@
-import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import eslintPlugin from "vite-plugin-eslint";
 
 export default defineConfig({
   build: {
@@ -17,6 +18,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    eslintPlugin(),
     tailwindcss(),
     react(),
     dts({

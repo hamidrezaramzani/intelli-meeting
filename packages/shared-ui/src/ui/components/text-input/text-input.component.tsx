@@ -13,8 +13,6 @@ export const TextInput = ({ label, error, ...props }: TextInputProps) => (
       {...props}
     />
 
-    {error && (
-      <p className="mt-1 text-sm text-red-500 font-regular">{error}</p>
-    )}
+    {error && <p className="mt-1 text-sm text-red-500 font-regular">{error}</p>}
   </div>
 );

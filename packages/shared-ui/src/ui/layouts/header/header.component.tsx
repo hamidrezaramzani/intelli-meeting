@@ -1,7 +1,11 @@
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
+
+import { useState } from "react";
 import { HiOutlineBell, HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
+
 import type { HeaderProps } from "./header.type";
+
 import { Button } from "../../components";
 
 export const Header = ({ menus, navigate }: HeaderProps) => {
@@ -9,7 +13,7 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const renderMenuItems = (
-    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode
+    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
   ) => {
     return menus.map((menu) => getContainer(menu));
   };
@@ -28,7 +32,7 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
             ))}
           </div>
           <div className="flex justify-center items-center">
-            <a href="/" className="text-lg font-regular text-black">
+            <a className="text-lg font-regular text-black" href="/">
               Intelli Meetings
             </a>
           </div>
@@ -38,43 +42,43 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
             <Button onClick={() => navigate("/sign-up")}>Register</Button>
             <div className="relative">
               <button
-                type="button"
                 className="cursor-pointer"
+                type="button"
                 onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
               >
                 <img
+                  alt="user"
                   className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
                   src="https://avatar.iran.liara.run/public"
-                  alt="user photo"
                 />
               </button>
 
               {isUserMenuOpen && (
                 <div
-                  id="dropdownAvatar"
                   className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100 z-20"
+                  id="dropdownAvatar"
                 >
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
                       <a
-                        href="#"
                         className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                        href="/"
                       >
                         Dashboard
                       </a>
                     </li>
                     <li>
                       <a
-                        href="#"
                         className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                        href="/settings"
                       >
                         Settings
                       </a>
                     </li>
                     <li>
                       <a
-                        href="#"
                         className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                        href="/logout"
                       >
                         Logout
                       </a>
@@ -87,17 +91,17 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
         </div>
         <div className="flex justify-between md:hidden py-4">
           <button
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-            type="button"
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-black rounded-lg md:hidden hover:text-brand-700 "
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
           >
             <span className="sr-only">Open main menu</span>
             <HiOutlineMenuAlt2 className="text-3xl" />
           </button>
 
           <a
-            href="#"
             className="flex items-center space-x-3 rtl:space-x-reverse"
+            href="/"
           >
             <span className="self-center text-lg font-regular whitespace-nowrap text-black">
               Intelli Meetings
@@ -105,8 +109,8 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
           </a>
 
           <button
-            type="button"
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-black rounded-lg md:hidden hover:text-brand-700 "
+            type="button"
           >
             <span className="sr-only">Open main menu</span>
             <HiOutlineBell className="text-3xl" />
@@ -121,6 +125,7 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
               <li>
                 <button
                   className="cursor-pointer"
+                  type="button"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <IoCloseOutline className="text-3xl" />
@@ -129,8 +134,8 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
               {renderMenuItems((menu) => (
                 <li key={menu.id}>
                   <a
-                    href={menu.title}
                     className="block py-2 px-3 text-black rounded"
+                    href={menu.title}
                   >
                     {menu.title}
                   </a>

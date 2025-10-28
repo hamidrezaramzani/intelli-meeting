@@ -2,6 +2,7 @@
 import "@intelli-meeting/shared-ui/shared-ui.css";
 import { Button, MainLayout } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
+
 export default function Home() {
   const router = useRouter();
   return (

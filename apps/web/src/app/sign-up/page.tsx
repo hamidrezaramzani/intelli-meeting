@@ -1,15 +1,16 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, TextInput } from "@intelli-meeting/shared-ui";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  getSignUpFormSchema,
-  SignUpInput,
-} from "../../../lib/validations/auth";
-import { TextInput, Button } from "@intelli-meeting/shared-ui";
-import Link from "next/link";
-import { useSignupMutation, useCheckEmailMutation } from "@/services/api";
 import { toast } from "react-toastify";
+
+import { useCheckEmailMutation, useSignupMutation } from "@/services/api";
+
+import type { SignUpInput } from "../../../lib/validations/auth";
+
+import { getSignUpFormSchema } from "../../../lib/validations/auth";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -24,7 +25,6 @@ const SignUpPage = () => {
 
   const schema = getSignUpFormSchema(checkIsEmailAlreadyUsed);
 
-  // Wrap the resolver for async Zod validation
   const resolver = zodResolver(schema, undefined, { mode: "async" });
 
   const {
@@ -53,7 +53,7 @@ const SignUpPage = () => {
       <div className="w-96">
         <div className="flex justify-center items-center flex-col mt-6">
           <Link href="/">
-            <img src="/logo.png" alt="logo" className="w-32" />
+            <img alt="logo" className="w-32" src="/logo.png" />
           </Link>
         </div>
 
@@ -70,32 +70,32 @@ const SignUpPage = () => {
         <div className="mt-4 px-3">
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextInput
-              type="text"
               label="Name"
+              type="text"
               placeholder="Enter name"
               {...register("name")}
               error={touchedFields?.name ? errors.name?.message : ""}
             />
 
             <TextInput
-              type="text"
               label="Email"
+              type="text"
               placeholder="Enter email(example@mail.com)"
               {...register("email")}
               error={touchedFields.email ? errors.email?.message : ""}
             />
 
             <TextInput
-              type="password"
               label="Password"
+              type="password"
               placeholder="Enter password"
               {...register("password")}
               error={touchedFields?.password ? errors.password?.message : ""}
             />
 
             <TextInput
-              type="password"
               label="Confirm password"
+              type="password"
               placeholder="Enter confirm password"
               {...register("confirmPassword")}
               error={
@@ -105,14 +105,14 @@ const SignUpPage = () => {
               }
             />
 
-            <Button type="submit" disabled={isSubmitting || isSuccess}>
+            <Button disabled={isSubmitting || isSuccess} type="submit">
               Sign up
             </Button>
 
             <div className="py-3 flex justify-center items-center">
               <p className="text-gray-600 text-regular text-center">
                 Do you have an account?
-                <Link href="/sign-in" className="text-gray-800 ml-2">
+                <Link className="text-gray-800 ml-2" href="/sign-in">
                   Sign in
                 </Link>
               </p>
