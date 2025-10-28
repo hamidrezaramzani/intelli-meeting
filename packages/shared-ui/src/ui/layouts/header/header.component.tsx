@@ -8,7 +8,12 @@ import type { HeaderProps } from "./header.type";
 
 import { Button } from "../../components";
 
-export const Header = ({ menus, navigate }: HeaderProps) => {
+export const Header = ({
+  menus,
+  navigate,
+  isLoggedIn,
+  onLogout,
+}: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -16,6 +21,14 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
     getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
   ) => {
     return menus.map((menu) => getContainer(menu));
+  };
+
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (onLogout) {
+      onLogout();
+      setIsUserMenuOpen(false);
+    }
   };
 
   return (
@@ -41,17 +54,19 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
             <Button onClick={() => navigate("/sign-in")}>Login</Button>
             <Button onClick={() => navigate("/sign-up")}>Register</Button>
             <div className="relative">
-              <button
-                className="cursor-pointer"
-                type="button"
-                onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
-              >
-                <img
-                  alt="user"
-                  className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
-                  src="https://avatar.iran.liara.run/public"
-                />
-              </button>
+              {isLoggedIn && (
+                <button
+                  className="cursor-pointer"
+                  type="button"
+                  onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
+                >
+                  <img
+                    alt="user"
+                    className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
+                    src="https://avatar.iran.liara.run/public"
+                  />
+                </button>
+              )}
 
               {isUserMenuOpen && (
                 <div
@@ -68,20 +83,13 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
                       </a>
                     </li>
                     <li>
-                      <a
-                        className="block px-4 py-2 hover:bg-gray-100 transition-colors"
-                        href="/settings"
-                      >
-                        Settings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="block px-4 py-2 hover:bg-gray-100 transition-colors"
-                        href="/logout"
+                      <button
+                        className="block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
+                        type="button"
+                        onClick={handleLogout}
                       >
                         Logout
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 </div>

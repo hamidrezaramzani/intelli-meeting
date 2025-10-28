@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from app import database, models, schemas, commands
@@ -40,6 +40,20 @@ def signup(newUser: schemas.UserCreate, db: Session = Depends(get_db)):
     return {
         "success": True,
     }
+
+@app.post("/api/signin", response_model=schemas.UserSigninResponse)
+def signin(user: schemas.UserSignin, db: Session = Depends(get_db)):
+    data = commands.authenticate_user(db, user.email, user.password)
+
+    if not data or not data.get("user"):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    user = data["user"]
+    token = data["token"]
+    return {"user": user, "token": token}
+
+
+
 
 @app.post("/api/check-email", response_model=schemas.CheckEmailResponse)
 def signup(body: schemas.CheckEmailBody, db: Session = Depends(get_db)):

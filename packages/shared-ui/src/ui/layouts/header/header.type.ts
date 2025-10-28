@@ -1,8 +1,10 @@
-export type HeaderProps = {
+export interface HeaderProps {
   menus: {
     id: number;
     title: string;
     link: string;
-  }[];  
-  navigate: (path: string) => void
-};
+  }[];
+  isLoggedIn?: boolean;
+  onLogout?: () => void;
+  navigate: (path: string) => void;
+}

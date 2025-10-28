@@ -2,13 +2,24 @@
 import "@intelli-meeting/shared-ui/shared-ui.css";
 import { Button, MainLayout } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+
+import type { RootState } from "@/store";
+
+import { logout } from "@/store/auth";
 
 export default function Home() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth);
   return (
     <div className="w-full flex justify-center h-screen">
       <div className="h-[calc(100vh-120px)]  w-full flex items-center flex-col mt-3">
         <MainLayout
+          isLoggedIn={auth.isLoggedIn}
+          onLogout={() => {
+            dispatch(logout());
+          }}
           navigate={(path) => {
             router.push(path);
           }}

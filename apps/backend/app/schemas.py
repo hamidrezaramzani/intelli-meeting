@@ -6,6 +6,13 @@ class UserCreate(BaseModel):
     password: str
     confirmPassword: str
 
+class User(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+
+    class Config:
+        orm_mode = True
 class UserResponse(BaseModel):
     success: bool
     class Config:
@@ -17,5 +24,17 @@ class CheckEmailBody(BaseModel):
 
 class CheckEmailResponse(BaseModel):
     isUnique: bool
+    class Config:
+        orm_mode = True
+
+class UserSignin(BaseModel):
+    email: EmailStr
+    password: str
+    
+
+class UserSigninResponse(BaseModel):
+    user: User | None = None
+    token: str | None = None
+
     class Config:
         orm_mode = True
