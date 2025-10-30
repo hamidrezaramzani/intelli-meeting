@@ -1,10 +1,20 @@
 import { Route, Routes } from "react-router";
-import { LoginPage } from "./pages";
+
+import { ProtectRoute } from "./components";
+import { LoginPage, RecordPage } from "./pages";
 
 function App() {
   return (
     <Routes>
-      <Route index element={<LoginPage />} />
+      <Route
+        index
+        element={
+          <ProtectRoute>
+            <RecordPage />
+          </ProtectRoute>
+        }
+      />
+      <Route element={<LoginPage />} path="/login" />
     </Routes>
   );
 }

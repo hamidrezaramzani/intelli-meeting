@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@intelli-meeting/shared-ui": "*",
+    "@intelli-meeting/store": "*",
     "@reduxjs/toolkit": "^2.9.2",
     "next": "15.5.5",
     "postcss": "^8.5.6",

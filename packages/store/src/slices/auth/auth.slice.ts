@@ -1,12 +1,9 @@
+"use client";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { createSlice } from "@reduxjs/toolkit";
 
-interface AuthState {
-  user: { id: number; name: string; email: string } | null;
-  token: string | null;
-  isLoggedIn: boolean;
-}
+import type { AuthState } from "./auth.type";
 
 const initialState: AuthState = {
   user: localStorage.getItem("user")

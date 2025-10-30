@@ -1,0 +1,19 @@
+{
+  "name": "@intelli-meeting/store",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fullstacksjs/eslint-config": "^13.9.0",
+    "@reduxjs/toolkit": "^2.9.2",
+    "react": "^19.2.0",
+    "react-redux": "^9.2.0"
+  }
+}

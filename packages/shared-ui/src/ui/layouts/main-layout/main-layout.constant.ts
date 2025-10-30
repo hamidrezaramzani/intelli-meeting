@@ -1,4 +1,4 @@
-import type { HeaderProps } from "../header/header.type";
+import type { HeaderProps } from "../../components/header/header.type";
 
 export const MENU_ITEMS: HeaderProps["menus"] = [
   {

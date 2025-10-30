@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 
-import { ReduxProvider } from "@/providers";
+import ClientRootLayout from "./client-root-layout";
 
 export const metadata: Metadata = {
   title: "Intelli meeting",
@@ -17,11 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReduxProvider>
-      <ToastContainer />
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </ReduxProvider>
+    <html lang="en">
+      <body>
+        <ClientRootLayout>
+          <ToastContainer />
+          {children}
+        </ClientRootLayout>
+      </body>
+    </html>
   );
 }

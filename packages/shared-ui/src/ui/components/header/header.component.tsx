@@ -1,21 +1,23 @@
+/* eslint-disable max-lines-per-function */
+import type { AppDispatch, RootState } from "@intelli-meeting/store";
 import type { ReactNode } from "react";
 
-import { useState } from "react";
-import { HiOutlineBell, HiOutlineMenuAlt2 } from "react-icons/hi";
+import { logout } from "@intelli-meeting/store";
+import { useEffect, useRef, useState } from "react";
+import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 
 import type { HeaderProps } from "./header.type";
 
-import { Button } from "../../components";
+import { Button } from "..";
 
-export const Header = ({
-  menus,
-  navigate,
-  isLoggedIn,
-  onLogout,
-}: HeaderProps) => {
+export const Header = ({ menus, navigate }: HeaderProps) => {
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const renderMenuItems = (
     getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
@@ -23,13 +25,73 @@ export const Header = ({
     return menus.map((menu) => getContainer(menu));
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
+
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (onLogout) {
-      onLogout();
-      setIsUserMenuOpen(false);
-    }
+    dispatch(logout());
   };
+
+  const getUserDropdown = () => (
+    <div className="relative w-12 h-12" ref={menuRef}>
+      {isLoggedIn && (
+        <button
+          className="cursor-pointer w-12 h-12"
+          type="button"
+          onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
+        >
+          <img
+            alt="user"
+            className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
+            src="https://avatar.iran.liara.run/public"
+          />
+        </button>
+      )}
+
+      {isUserMenuOpen && (
+        <div
+          className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100 z-20"
+          id="dropdownAvatar"
+        >
+          <ul className="py-2 text-sm text-gray-700">
+            <li>
+              <a
+                className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                href="/"
+              >
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <button
+                className="block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
+                type="button"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <header className="w-full flex justify-between items-center">
@@ -50,51 +112,14 @@ export const Header = ({
             </a>
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
-            <Button onClick={() => navigate("/sign-in")}>Login</Button>
-            <Button onClick={() => navigate("/sign-up")}>Register</Button>
-            <div className="relative">
-              {isLoggedIn && (
-                <button
-                  className="cursor-pointer"
-                  type="button"
-                  onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
-                >
-                  <img
-                    alt="user"
-                    className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
-                    src="https://avatar.iran.liara.run/public"
-                  />
-                </button>
-              )}
-
-              {isUserMenuOpen && (
-                <div
-                  className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100 z-20"
-                  id="dropdownAvatar"
-                >
-                  <ul className="py-2 text-sm text-gray-700">
-                    <li>
-                      <a
-                        className="block px-4 py-2 hover:bg-gray-100 transition-colors"
-                        href="/"
-                      >
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <button
-                        className="block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
-                        type="button"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+          <div className="md:flex items-center gap-3">
+            {!isLoggedIn && (
+              <div className="hidden md:flex gap-3">
+                <Button onClick={() => navigate("/sign-in")}>Login</Button>
+                <Button onClick={() => navigate("/sign-up")}>Register</Button>
+              </div>
+            )}
+            {getUserDropdown()}
           </div>
         </div>
         <div className="flex justify-between md:hidden py-4">
@@ -116,13 +141,7 @@ export const Header = ({
             </span>
           </a>
 
-          <button
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-black rounded-lg md:hidden hover:text-brand-700 "
-            type="button"
-          >
-            <span className="sr-only">Open main menu</span>
-            <HiOutlineBell className="text-3xl" />
-          </button>
+          {getUserDropdown()}
 
           <div
             className={`${

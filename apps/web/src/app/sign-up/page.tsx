@@ -6,11 +6,10 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
+import type { SignUpInput } from "@/lib";
+
+import { getSignUpFormSchema } from "@/lib";
 import { useCheckEmailMutation, useSignupMutation } from "@/services/api";
-
-import type { SignUpInput } from "../../../lib/validations/auth";
-
-import { getSignUpFormSchema } from "../../../lib/validations/auth";
 
 const SignUpPage = () => {
   const router = useRouter();
