@@ -1,7 +1,7 @@
 import type { AppDispatch } from "@intelli-meeting/store";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, TextInput } from "@intelli-meeting/shared-ui";
+import { Button, TextInput } from "../";
 import { setCredentials, useSigninMutation } from "@intelli-meeting/store";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";

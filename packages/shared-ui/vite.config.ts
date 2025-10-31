@@ -14,8 +14,9 @@ export default defineConfig({
       fileName: (format) => `${format}/index.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@intelli-meeting/store", "@intelli-meeting/design-system"],
     },
+
   },
   plugins: [
     eslintPlugin(),
