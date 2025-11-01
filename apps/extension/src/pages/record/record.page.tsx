@@ -158,15 +158,12 @@ export const RecordPage = () => {
             </button>
           </div>
 
-          {/* waveform */}
           <div className="w-full mt-6" ref={containerRef} />
 
-          {/* تایمر */}
           <div className="w-full flex flex-col justify-center items-center mt-3">
             <h3 className="text-4xl text-brand-400 font-black">{time}</h3>
           </div>
 
-          {/* کنترل‌ها */}
           <div className="w-full flex flex-col gap-3 justify-center items-center mt-5">
             <h3 className="text-xl text-slate-700">
               {!recordedBlob
@@ -178,7 +175,6 @@ export const RecordPage = () => {
                 : "Preview your recording"}
             </h3>
 
-            {/* کنترل ضبط */}
             {!recordedBlob ? (
               <div className="flex justify-center items-center gap-4 mt-3">
                 {isRecording && (
