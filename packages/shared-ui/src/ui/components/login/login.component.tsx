@@ -1,7 +1,6 @@
 import type { AppDispatch } from "@intelli-meeting/store";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, TextInput } from "../";
 import { setCredentials, useSigninMutation } from "@intelli-meeting/store";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -9,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 import type { LoginFormValues, LoginProps } from "./login.type";
 
+import { Button, TextInput } from "..";
 import logo from "../../../assets/logo.png";
 import { getLoginFormSchema } from "./login.schema";
 

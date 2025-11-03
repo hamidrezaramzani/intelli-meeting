@@ -1,158 +1,233 @@
 /* eslint-disable max-lines-per-function */
 import { MainLayout } from "@intelli-meeting/shared-ui";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { useNavigate } from "react-router";
 import WaveSurfer from "wavesurfer.js";
-import RecordPlugin from "wavesurfer.js/dist/plugins/record.esm.js";
+
+import { AudioNameModal } from "./sub-components";
 
 export const RecordPage = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const liveWaveRef = useRef<WaveSurfer | null>(null);
-  const recordRef = useRef<any>(null);
-  const playbackRef = useRef<WaveSurfer | null>(null);
+  const waveRef = useRef<WaveSurfer | null>(null);
 
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [time, setTime] = useState("00:00");
-  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [isStopped, setIsStopped] = useState(false);
+  const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [seconds, setSeconds] = useState<number>(0);
+  const [isSelectAudioNameModalOpen, setIsSelectAudioNameModalOpen] =
+    useState(false);
 
-  const createLiveWave = () => {
-    if (liveWaveRef.current) liveWaveRef.current.destroy();
-
-    const ws = WaveSurfer.create({
-      container: containerRef.current!,
-      waveColor: "rgb(0, 40, 200)",
-      progressColor: "rgb(5, 13, 40)",
-    });
-
-    const record = ws.registerPlugin(
-      RecordPlugin.create({
-        renderRecordedAudio: false,
-        scrollingWaveform: true,
-        continuousWaveform: false,
-      }),
-    );
-
-    liveWaveRef.current = ws;
-    recordRef.current = record;
-
-    record.on("record-progress", (ms: number) => {
-      const m = Math.floor((ms % 3600000) / 60000);
-      const s = Math.floor((ms % 60000) / 1000);
-      setTime(
-        `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`,
-      );
-    });
-
-    record.on("record-end", (blob: Blob) => {
-      setRecordedBlob(blob);
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      renderPlaybackWave(blob);
-    });
-  };
-
-  const renderPlaybackWave = (blob: Blob) => {
-    if (liveWaveRef.current) {
-      liveWaveRef.current.destroy();
-      liveWaveRef.current = null;
+  const formatTime = (inputSeconds: number) => {
+    const h = Math.floor(inputSeconds / 3600);
+    const m = Math.floor((inputSeconds % 3600) / 60);
+    const s = inputSeconds % 60;
+    if (h > 0) {
+      return `${h.toString().padStart(2, "0")}:${m
+        .toString()
+        .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
     }
-    if (playbackRef.current) playbackRef.current.destroy();
-
-    const playback = WaveSurfer.create({
-      container: containerRef.current!,
-      waveColor: "rgb(200, 100, 0)",
-      progressColor: "rgb(100, 50, 0)",
-      url: URL.createObjectURL(blob),
-    });
-
-    playback.on("finish", () => setIsPlaying(false));
-    playbackRef.current = playback;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
+
+  const time = useMemo(() => formatTime(seconds), [seconds]);
 
   useEffect(() => {
-    createLiveWave();
-    return () => {
-      liveWaveRef.current?.destroy();
-      playbackRef.current?.destroy();
-    };
+    chrome.runtime.sendMessage({
+      target: "offscreen",
+      type: "check-status",
+    });
+
+    chrome.runtime.onMessage.addListener((msg) => {
+      if (msg.type === "recording-stopped") {
+        setRecordedUrl(msg.url);
+        setIsRecording(false);
+        setIsStopped(true);
+        setIsPaused(false);
+      }
+
+      if (msg.type === "recording-status") {
+        setRecordedUrl(msg.url);
+        setIsRecording(msg.isRecording);
+      }
+
+      if (msg.type === "check-status-info") {
+        if (msg.isStopped) {
+          setRecordedUrl(msg.url);
+          setIsStopped(true);
+          console.log(msg.time);
+          setSeconds(msg.time);
+        } else {
+          setIsRecording(msg.isRecording);
+          setIsPaused(msg.isPaused);
+          setSeconds(msg.time);
+        }
+      }
+    });
   }, []);
 
-  const handleStartStop = async () => {
-    const record = recordRef.current;
-    if (!record) return;
+  useEffect(() => {
+    if (!containerRef.current) return;
 
-    if (isRecording) {
-      record.stopRecording();
-      setIsRecording(false);
-      setIsPaused(false);
-    } else {
-      await record.startRecording();
-      setIsRecording(true);
-      setRecordedBlob(null);
-      setTime("00:00");
+    if (recordedUrl) {
+      if (waveRef.current) waveRef.current.destroy();
+
+      const ws = WaveSurfer.create({
+        container: containerRef.current,
+        waveColor: "rgb(200, 100, 0)",
+        progressColor: "rgb(100, 50, 0)",
+        url: recordedUrl,
+      });
+
+      ws.on("finish", () => setIsPlaying(false));
+      waveRef.current = ws;
     }
+  }, [recordedUrl]);
+
+  const handleStart = () => {
+    chrome.runtime.sendMessage({ type: "start-recording" });
+    setIsRecording(true);
+    setIsPaused(false);
+    setIsStopped(false);
+    setRecordedUrl(null);
+    setSeconds(0);
+  };
+
+  const handleStop = () => {
+    chrome.runtime.sendMessage({ target: "offscreen", type: "stop-recording" });
+    setIsRecording(false);
+    setIsPaused(false);
   };
 
   const handlePauseResume = () => {
-    const record = recordRef.current;
-    if (!record || !isRecording) return;
-
     if (isPaused) {
-      record.resumeRecording();
+      chrome.runtime.sendMessage({
+        target: "offscreen",
+        type: "resume-recording",
+      });
       setIsPaused(false);
     } else {
-      record.pauseRecording();
+      chrome.runtime.sendMessage({
+        target: "offscreen",
+        type: "pause-recording",
+      });
       setIsPaused(true);
     }
   };
 
-  const handleStop = () => {
-    const record = recordRef.current;
-    if (!record) return;
-
-    record.stopRecording();
-    setIsRecording(false);
-    setIsPaused(false);
-  };
-
   const handlePlayPause = () => {
-    const playback = playbackRef.current;
-    if (!playback) return;
-
-    playback.playPause();
+    const wave = waveRef.current;
+    if (!wave) return;
+    wave.playPause();
     setIsPlaying((prev) => !prev);
   };
-  const handleSave = () => {
-    if (playbackRef.current) {
-      playbackRef.current.destroy();
-      playbackRef.current = null;
+
+  const handleConfirmSelectingAudioName = (name: string) => {
+    console.log(name);
+    // TODO Move audio to backend for procces
+    chrome.storage.local.remove("recordedAudio");
+    waveRef.current?.destroy();
+    waveRef.current = null;
+    setRecordedUrl(null);
+    setIsPlaying(false);
+    setSeconds(0);
+    setIsStopped(false);
+    setIsRecording(false);
+    setIsSelectAudioNameModalOpen(false);
+    chrome.runtime.sendMessage({ target: "offscreen", type: "save-recording" });
+  };
+
+  const handleCancelSelectingAudioName = () => {
+    setIsSelectAudioNameModalOpen(false);
+  };
+
+  const handleSaveClick = () => {
+    setIsSelectAudioNameModalOpen(true);
+  };
+
+  const renderRecordingActions = () => {
+    if (!isRecording && !isStopped) {
+      return (
+        <div className="flex justify-center items-center gap-4 mt-3">
+          <button
+            className="px-6 py-2 rounded-full text-white font-semibold shadow bg-brand-400"
+            type="button"
+            onClick={handleStart}
+          >
+            Start
+          </button>
+        </div>
+      );
     }
 
-    setRecordedBlob(null);
-    setIsPlaying(false);
-    setTime("00:00");
-    setIsRecording(false);
-    setIsPaused(false);
+    if (isRecording && !isStopped) {
+      return (
+        <div className="flex justify-center items-center gap-4 mt-3">
+          <button
+            type="button"
+            onClick={handlePauseResume}
+            className={`px-6 py-2 rounded-full text-white font-semibold shadow ${
+              isPaused ? "bg-yellow-500" : "bg-red-600"
+            }`}
+          >
+            {isPaused ? "Resume" : "Pause"}
+          </button>
 
-    createLiveWave();
+          <button
+            className="px-6 py-2 rounded-full text-white font-semibold shadow bg-gray-600"
+            type="button"
+            onClick={handleStop}
+          >
+            Stop
+          </button>
+        </div>
+      );
+    }
+
+    if (!isRecording && isStopped) {
+      return (
+        <div className="flex justify-center items-center gap-4 mt-3">
+          <button
+            className="px-6 py-2 rounded-full bg-brand-500 text-white font-semibold shadow"
+            type="button"
+            onClick={handlePlayPause}
+          >
+            {isPlaying ? "Pause" : "Play"}
+          </button>
+
+          <button
+            className="px-6 py-2 rounded-full bg-green-600 text-white font-semibold shadow"
+            type="button"
+            onClick={handleSaveClick}
+          >
+            Save
+          </button>
+        </div>
+      );
+    }
   };
 
   return (
     <div className="flex flex-col justify-center items-center max-w-md mx-auto w-96 px-4 pb-4">
+      <AudioNameModal
+        onCancel={handleCancelSelectingAudioName}
+        onConfirm={handleConfirmSelectingAudioName}
+        open={isSelectAudioNameModalOpen}
+      />
       <MainLayout navigate={navigate}>
         <div className="w-full flex flex-col justify-center items-center">
           <div
-            className={`w-48 h-48 rounded-full cursor-pointer flex justify-center items-center ${
+            className={`w-48 h-48 rounded-full cursor-pointer flex justify-center items-center transition-all duration-300 ${
               isRecording ? "bg-red-500" : "bg-brand-600"
-            } transition-all duration-300`}
+            }`}
           >
             <button
               className="flex items-center justify-center"
               type="button"
-              onClick={handleStartStop}
+              onClick={isRecording ? handleStop : handleStart}
             >
               <HiOutlineMicrophone className="text-8xl text-white" />
             </button>
@@ -162,70 +237,13 @@ export const RecordPage = () => {
 
           <div className="w-full flex flex-col justify-center items-center mt-3">
             <h3 className="text-4xl text-brand-400 font-black">{time}</h3>
+            {isPaused && (
+              <p className="text-yellow-500 font-semibold mt-1">Paused</p>
+            )}
           </div>
 
           <div className="w-full flex flex-col gap-3 justify-center items-center mt-5">
-            <h3 className="text-xl text-slate-700">
-              {!recordedBlob
-                ? !isRecording
-                  ? "Tap to start recording"
-                  : isPaused
-                    ? "Paused"
-                    : "Recording..."
-                : "Preview your recording"}
-            </h3>
-
-            {!recordedBlob ? (
-              <div className="flex justify-center items-center gap-4 mt-3">
-                {isRecording && (
-                  <>
-                    <button
-                      className="px-6 py-2 rounded-full bg-yellow-400 text-white font-semibold shadow"
-                      type="button"
-                      onClick={handlePauseResume}
-                    >
-                      {isPaused ? "Resume" : "Pause"}
-                    </button>
-
-                    <button
-                      className="px-6 py-2 rounded-full bg-red-600 text-white font-semibold shadow"
-                      type="button"
-                      onClick={handleStop}
-                    >
-                      Stop
-                    </button>
-                  </>
-                )}
-
-                {!isRecording && (
-                  <button
-                    className="px-6 py-2 rounded-full bg-brand-400 text-white font-semibold shadow"
-                    type="button"
-                    onClick={handleStartStop}
-                  >
-                    Start
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="flex justify-center items-center gap-4 mt-3">
-                <button
-                  className="px-6 py-2 rounded-full bg-brand-500 text-white font-semibold shadow"
-                  type="button"
-                  onClick={handlePlayPause}
-                >
-                  {isPlaying ? "Pause" : "Play"}
-                </button>
-
-                <button
-                  className="px-6 py-2 rounded-full bg-green-600 text-white font-semibold shadow"
-                  type="button"
-                  onClick={handleSave}
-                >
-                  Save
-                </button>
-              </div>
-            )}
+            {renderRecordingActions()}
           </div>
         </div>
       </MainLayout>

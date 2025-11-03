@@ -2,9 +2,26 @@
   "manifest_version": 3,
   "name": "Intelli Meeting",
   "version": "1.0",
-  "description": "AI-powered online meeting assistant that records meetings, analyzes speech, and summarizes who said what.",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "offscreen",
+    "tabCapture",
+    "tabs",
+    "storage",
+    "activeTab",
+    "desktopCapture"
+  ],
+  "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "icons": {
     "16": "icons/icon16.png",
@@ -12,5 +29,10 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["tabs", "microphone", "http://localhost:8000/*"]
+  "web_accessible_resources": [
+    {
+      "resources": ["permission.html", "offscreen.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
