@@ -1,8 +1,7 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from app import database, models, schemas, commands
-
 
 app = FastAPI()
 
@@ -57,4 +56,24 @@ def signup(body: schemas.CheckEmailBody, db: Session = Depends(get_db)):
     isUnique = commands.check_is_email_unique(db, body.email)
     return {
         "isUnique": isUnique
+    }
+
+@app.post("/api/upload-recording", response_model=schemas.UploadAudioResponse)
+async def upload_recording(
+    name: str = Form(...),
+    file: UploadFile = None,
+    db: Session = Depends(get_db)
+):
+    if not file:
+        raise HTTPException(status_code=400, detail="No file uploaded")
+
+    content = await file.read()
+    filename = f"{name}.webm"
+
+    audio = commands.save_audio(db, name, content, filename)
+
+    return {
+        "success": True,
+        "name": audio.name,
+        "file_path": audio.file_path
     }

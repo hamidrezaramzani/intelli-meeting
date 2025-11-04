@@ -38,3 +38,8 @@ class UserSigninResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UploadAudioResponse(BaseModel):
+    success: bool
+    name: str
+    file_path: str

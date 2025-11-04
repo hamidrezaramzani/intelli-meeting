@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
   <StoreProvider>
     <StrictMode>
       <MemoryRouter>
-        <ToastContainer />
+        <ToastContainer position="bottom-right" />
         <App />
       </MemoryRouter>
     </StrictMode>

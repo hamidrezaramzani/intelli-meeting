@@ -39,8 +39,8 @@ chrome.runtime.onMessage.addListener(async (message) => {
         stopRecording();
         break;
 
-      case "save-recording":
-        saveRecording();
+      case "reset-recording":
+        resetRecording();
         break;
 
       case "check-status":
@@ -145,7 +145,7 @@ function stopAllStreams() {
   activeStreams = [];
 }
 
-function saveRecording() {
+function resetRecording() {
   if (interval) clearInterval(interval);
   data = [];
   isRecording = false;

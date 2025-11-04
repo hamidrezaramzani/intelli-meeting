@@ -1,14 +1,19 @@
 /* eslint-disable max-lines-per-function */
-import { MainLayout } from "@intelli-meeting/shared-ui";
+import { MainLayout, confirmation } from "@intelli-meeting/shared-ui";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { useNavigate } from "react-router";
 import WaveSurfer from "wavesurfer.js";
 
 import { AudioNameModal } from "./sub-components";
+import { useUploadRecordingMutation } from "@intelli-meeting/store";
+import { toast } from "react-toastify";
 
 export const RecordPage = () => {
   const navigate = useNavigate();
+
+  const [uploadRecordingFile] = useUploadRecordingMutation();
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const waveRef = useRef<WaveSurfer | null>(null);
 
@@ -125,9 +130,36 @@ export const RecordPage = () => {
     setIsPlaying((prev) => !prev);
   };
 
-  const handleConfirmSelectingAudioName = (name: string) => {
-    console.log(name);
-    // TODO Move audio to backend for procces
+  const uploadRecording = async (name: string) => {
+    if (!recordedUrl) {
+      console.error("Recorded url not found");
+      return false;
+    }
+    const blob = await fetch(recordedUrl).then((res) => res.blob());
+
+    const file = new File([blob], `${name}.webm`, { type: blob.type });
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("file", file);
+
+    const { success } = await toast.promise(
+      uploadRecordingFile(formData).unwrap(),
+      {
+        pending: "Please wait",
+        error: "We have an error",
+        success: {
+          render: () => {
+            navigate("/recording/list");
+            return "Audio file uploaded successfully";
+          },
+        },
+      },
+    );
+    return success;
+  };
+
+  const handleReset = () => {
     chrome.storage.local.remove("recordedAudio");
     waveRef.current?.destroy();
     waveRef.current = null;
@@ -137,7 +169,14 @@ export const RecordPage = () => {
     setIsStopped(false);
     setIsRecording(false);
     setIsSelectAudioNameModalOpen(false);
-    chrome.runtime.sendMessage({ target: "offscreen", type: "save-recording" });
+    chrome.runtime.sendMessage({
+      target: "offscreen",
+      type: "reset-recording",
+    });
+  };
+  const handleConfirmSelectingAudioName = async (name: string) => {
+    const isUploaded = await uploadRecording(name);
+    if (isUploaded) handleReset();
   };
 
   const handleCancelSelectingAudioName = () => {
@@ -146,6 +185,18 @@ export const RecordPage = () => {
 
   const handleSaveClick = () => {
     setIsSelectAudioNameModalOpen(true);
+  };
+
+  const handleCancel = async () => {
+    const confirmed = await confirmation({
+      title: "Cancel recording",
+      message:
+        "Are you sure you want to cancel this recording? Your progress will be lost.",
+      confirmText: "Yes",
+      cancelText: "Back",
+    });
+
+    if (confirmed) handleReset();
   };
 
   const renderRecordingActions = () => {
@@ -204,6 +255,14 @@ export const RecordPage = () => {
             onClick={handleSaveClick}
           >
             Save
+          </button>
+
+          <button
+            className="px-6 py-2 rounded-full bg-red-500 text-white font-semibold shadow"
+            type="button"
+            onClick={handleCancel}
+          >
+            Cancel
           </button>
         </div>
       );
