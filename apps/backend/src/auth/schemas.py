@@ -13,6 +13,8 @@ class User(BaseModel):
 
     class Config:
         orm_mode = True
+        
+        
 class UserResponse(BaseModel):
     success: bool
     class Config:
@@ -38,8 +40,3 @@ class UserSigninResponse(BaseModel):
 
     class Config:
         orm_mode = True
-
-class UploadAudioResponse(BaseModel):
-    success: bool
-    name: str
-    file_path: str

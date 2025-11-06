@@ -1,18 +1,18 @@
 /* eslint-disable max-lines-per-function */
-import { MainLayout, confirmation } from "@intelli-meeting/shared-ui";
+import { confirmation, MainLayout } from "@intelli-meeting/shared-ui";
+import { useUploadAudioMutation } from "@intelli-meeting/store";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import WaveSurfer from "wavesurfer.js";
 
 import { AudioNameModal } from "./sub-components";
-import { useUploadRecordingMutation } from "@intelli-meeting/store";
-import { toast } from "react-toastify";
 
 export const RecordPage = () => {
   const navigate = useNavigate();
 
-  const [uploadRecordingFile] = useUploadRecordingMutation();
+  const [uploadRecordingFile] = useUploadAudioMutation();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const waveRef = useRef<WaveSurfer | null>(null);

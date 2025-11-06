@@ -11,14 +11,14 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation({
       query: (data) => ({
-        url: "/signup",
+        url: "/auth/signup",
         method: "POST",
         body: data,
       }),
     }),
     signin: builder.mutation<SignInResponseBody, SignInRequestBody>({
       query: (data) => ({
-        url: "/signin",
+        url: "/auth/signin",
         method: "POST",
         body: data,
       }),
@@ -28,7 +28,7 @@ export const authApi = baseApi.injectEndpoints({
       CheckIsEmailAlreadyUsedRequestBody
     >({
       query: (data) => ({
-        url: "/check-email",
+        url: "/auth/check-email",
         method: "POST",
         body: data,
       }),
