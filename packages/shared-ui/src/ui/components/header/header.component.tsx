@@ -1,6 +1,5 @@
 /* eslint-disable max-lines-per-function */
 import type { AppDispatch, RootState } from "@intelli-meeting/store";
-import type { ReactNode } from "react";
 
 import { logout } from "@intelli-meeting/store";
 import { useEffect, useRef, useState } from "react";
@@ -20,7 +19,7 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const renderMenuItems = (
-    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
+    getContainer: (menu: HeaderProps["menus"][number]) => React.ReactNode
   ) => {
     return menus.map((menu) => getContainer(menu));
   };

@@ -38,7 +38,7 @@ export const Login = ({ navigate }: LoginProps) => {
             setCredentials({
               user: loggedInUser.user,
               token: loggedInUser.token,
-            }),
+            })
           );
           return "Signed in successfully!";
         },
@@ -55,7 +55,7 @@ export const Login = ({ navigate }: LoginProps) => {
             type="button"
             onClick={() => navigate("http://localhost:3000")}
           >
-            <img alt="logo" className="w-32" src={logo} />
+            {/* <img alt="logo" className="w-32" src={logo} /> */}
           </button>
         </div>
 

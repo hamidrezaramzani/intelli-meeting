@@ -1,7 +1,5 @@
-import type { ComponentProps } from "react";
-
-export type TextInputProps = {
+export type TextInputProps = React.ComponentProps<"input"> & {
   label: string;
   type: "text" | "password";
   error?: string;
-} & ComponentProps<"input">;
+};
