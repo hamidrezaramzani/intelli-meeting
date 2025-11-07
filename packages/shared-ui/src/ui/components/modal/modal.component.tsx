@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from "react";
 
 interface CustomModalProps {
   open: boolean;
@@ -9,13 +8,13 @@ interface CustomModalProps {
   width?: string;
 }
 
-export const Modal: React.FC<CustomModalProps> = ({
+export const Modal = ({
   open,
   title,
   onClose,
   children,
   width = "max-w-md",
-}) => {
+}: CustomModalProps) => {
   if (!open) return null;
 
   return (

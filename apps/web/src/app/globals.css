@@ -1,2 +1,8 @@
+@import "tailwindcss";
+
 @import "@intelli-meeting/design-system/index.css";
 @import "@intelli-meeting/shared-ui/shared-ui.css";
+
+@source "../../../../**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+@source "./**/*.{ts,tsx}";
