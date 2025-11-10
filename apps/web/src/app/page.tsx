@@ -1,5 +1,4 @@
 "use client";
-import "@intelli-meeting/shared-ui/shared-ui.css";
 import { Button, MainLayout } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
 

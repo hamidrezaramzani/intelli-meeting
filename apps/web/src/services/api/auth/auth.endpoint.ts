@@ -6,6 +6,7 @@ import type {
 } from "./auth.type";
 
 export const authApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     signup: builder.mutation({
       query: (data) => ({

@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../shared-ui/**/*.{ts,tsx}";
+@source "../shared-ui/**/*.{ts,tsx,jsx,js}";
 
 @font-face {
   font-family: "Roboto";

@@ -63,7 +63,6 @@ export const RecordPage = () => {
         if (msg.isStopped) {
           setRecordedUrl(msg.url);
           setIsStopped(true);
-          console.log(msg.time);
           setSeconds(msg.time);
         } else {
           setIsRecording(msg.isRecording);

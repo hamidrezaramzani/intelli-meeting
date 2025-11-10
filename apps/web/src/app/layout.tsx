@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ClientRootLayout>
-          <ToastContainer />
+          <ToastContainer closeOnClick position="bottom-right" />
           {children}
         </ClientRootLayout>
       </body>

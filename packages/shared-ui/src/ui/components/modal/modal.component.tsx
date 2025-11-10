@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
+import { MdClose } from "react-icons/md";
+
 interface CustomModalProps {
   open: boolean;
   title?: string;
@@ -27,7 +29,19 @@ export const Modal = ({
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+
+            {onClose && (
+              <button
+                className="text-xl cursor-pointer"
+                type="button"
+                onClick={onClose}
+              >
+                <MdClose />
+              </button>
+            )}
+          </div>
         )}
 
         {children}

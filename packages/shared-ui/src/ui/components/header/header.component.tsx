@@ -1,8 +1,9 @@
 /* eslint-disable max-lines-per-function */
 import type { AppDispatch, RootState } from "@intelli-meeting/store";
+import type { ReactNode } from "react";
 
 import { logout } from "@intelli-meeting/store";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,28 +20,10 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const renderMenuItems = (
-    getContainer: (menu: HeaderProps["menus"][number]) => React.ReactNode
+    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
   ) => {
     return menus.map((menu) => getContainer(menu));
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsUserMenuOpen(false);
-      }
-    };
-
-    if (isUserMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isUserMenuOpen]);
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -70,16 +53,17 @@ export const Header = ({ menus, navigate }: HeaderProps) => {
         >
           <ul className="py-2 text-sm text-gray-700">
             <li>
-              <a
-                className="block px-4 py-2 hover:bg-gray-100 transition-colors"
-                href="/"
+              <button
+                className="cursor-pointer block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
+                type="button"
+                onClick={() => navigate("/dashboard")}
               >
                 Dashboard
-              </a>
+              </button>
             </li>
             <li>
               <button
-                className="block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
+                className="cursor-pointer block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
                 type="button"
                 onClick={handleLogout}
               >

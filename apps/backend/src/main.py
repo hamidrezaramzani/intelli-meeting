@@ -1,5 +1,6 @@
 from src.auth import router as auth_router
 from src.audio import router as audio_router
+from src.meeting import router as meeting_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src import models, database
@@ -23,3 +24,4 @@ models.Base.metadata.create_all(bind=database.engine)
 
 app.include_router(auth_router.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(audio_router.router, prefix="/api/audio", tags=["Audio"])
+app.include_router(meeting_router.router, prefix="/api/meetings", tags=["Meeting"])

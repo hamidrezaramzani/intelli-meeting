@@ -2,7 +2,7 @@ import os
 from sqlalchemy.orm import Session
 from . import models
 
-UPLOAD_DIR = "app/uploads"
+UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def save_audio(db: Session, name: str, file_content: bytes, filename: str):
