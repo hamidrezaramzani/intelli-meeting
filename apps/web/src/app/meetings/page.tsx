@@ -1,6 +1,8 @@
 "use client";
 
 import { Modal } from "@intelli-meeting/shared-ui";
+import { useAuthRedirect } from "@intelli-meeting/store";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdRemoveRedEye } from "react-icons/md";
 
@@ -11,6 +13,7 @@ import { useReadManyMeetingsQuery } from "@/services";
 import { Dashboard, Table } from "@/ui";
 
 const MeetingsPage = () => {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [meetingDetails, setMeetingDetails] = useState<Meeting | null>(null);
   const limit = 10;
@@ -20,6 +23,12 @@ const MeetingsPage = () => {
 
   const meetings = data?.meetings || [];
   const total = data?.total || 0;
+
+  useAuthRedirect({
+    onRedirect: () => router.push("/sign-in"),
+    type: "unlogged",
+  });
+
   return (
     <Dashboard title="Meetings">
       <Modal

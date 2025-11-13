@@ -1,1 +1,1 @@
-export * from "./api-audio.endpoint";
+export * from "./audio-api.endpoint";

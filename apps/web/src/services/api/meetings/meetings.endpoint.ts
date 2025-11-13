@@ -7,7 +7,7 @@ export const meetingsApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/meetings",
         method: "POST",
-        body: data,
+        data,
       }),
     }),
     readManyMeetings: builder.query({

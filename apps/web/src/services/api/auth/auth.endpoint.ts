@@ -12,7 +12,7 @@ export const authApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/signup",
         method: "POST",
-        body: data,
+        data,
       }),
     }),
     checkEmail: builder.mutation<

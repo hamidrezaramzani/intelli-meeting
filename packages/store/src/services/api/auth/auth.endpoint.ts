@@ -13,14 +13,14 @@ export const authApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/auth/signup",
         method: "POST",
-        body: data,
+        data,
       }),
     }),
     signin: builder.mutation<SignInResponseBody, SignInRequestBody>({
       query: (data) => ({
         url: "/auth/signin",
         method: "POST",
-        body: data,
+        data,
       }),
     }),
     checkEmail: builder.mutation<
@@ -30,7 +30,7 @@ export const authApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/auth/check-email",
         method: "POST",
-        body: data,
+        data,
       }),
     }),
   }),

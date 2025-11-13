@@ -2,6 +2,11 @@
   "name": "@intelli-meeting/store",
   "version": "1.0.0",
   "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
   },

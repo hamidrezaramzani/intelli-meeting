@@ -1,7 +1,7 @@
 import type {
   AudioUploadRequestBody,
   AudioUploadRequestResponse,
-} from "./api-audio.type";
+} from "./audio-api.type";
 
 import { baseApi } from "../../baseApi";
 
@@ -11,10 +11,10 @@ export const audioApi = baseApi.injectEndpoints({
       AudioUploadRequestResponse,
       AudioUploadRequestBody
     >({
-      query: (formData) => ({
+      query: (data) => ({
         url: "/audio/upload",
         method: "POST",
-        body: formData,
+        data,
       }),
     }),
   }),

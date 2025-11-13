@@ -13,6 +13,7 @@
     "@intelli-meeting/shared-ui": "*",
     "@intelli-meeting/store": "*",
     "@reduxjs/toolkit": "^2.9.2",
+    "axios": "^1.13.2",
     "next": "15.5.5",
     "postcss": "^8.5.6",
     "react": "19.1.0",
