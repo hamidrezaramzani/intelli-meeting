@@ -19,7 +19,6 @@ def cors_response(content, status_code=200):
 
 
 async def jwt_middleware(request: Request, call_next):
-    print(request.method);
     if request.method == "OPTIONS":
         return await call_next(request)
 
@@ -37,7 +36,6 @@ async def jwt_middleware(request: Request, call_next):
     token = auth_header.split(" ")[1]
     payload = decode_access_token(token)
 
-    print("PAYLOAD", payload)
     if payload is None:
         return cors_response(
             status_code=401,
