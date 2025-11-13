@@ -12,7 +12,7 @@ export const audioApi = baseApi.injectEndpoints({
       AudioUploadRequestBody
     >({
       query: (data) => ({
-        url: "/audio/upload",
+        url: "/audio/upload-recording",
         method: "POST",
         data,
       }),

@@ -10,7 +10,6 @@ router = APIRouter()
 
 @router.post("/signup", response_model=schemas.UserResponse)
 def signup(newUser: schemas.UserCreate, db: Session = Depends(get_db)):
-    pass
     is_created =  service.create_user(db, newUser); 
     if not is_created:
         return {

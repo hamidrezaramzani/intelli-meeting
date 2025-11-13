@@ -26,7 +26,6 @@ async def jwt_middleware(request: Request, call_next):
         return await call_next(request)
 
     auth_header = request.headers.get("Authorization")
-    print(auth_header)
     if not auth_header or not auth_header.startswith("Bearer "):
         return cors_response(
             status_code=401,
@@ -43,6 +42,5 @@ async def jwt_middleware(request: Request, call_next):
         )
 
     request.state.user = payload
-    print(request.state.user)
 
     return await call_next(request)

@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.middleware import jwt_middleware
 from src import models, database
+from database import Base
 
 app = FastAPI(
     title="Intelli meetings"
@@ -23,7 +24,7 @@ app.middleware("http")(jwt_middleware)
 
 
 
-models.Base.metadata.create_all(bind=database.engine)
+Base.metadata.create_all(bind=database.engine)
 
 app.include_router(auth_router.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(audio_router.router, prefix="/api/audio", tags=["Audio"])

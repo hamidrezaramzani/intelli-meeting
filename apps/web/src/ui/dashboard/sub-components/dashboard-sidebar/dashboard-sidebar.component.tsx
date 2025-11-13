@@ -1,11 +1,20 @@
 import Link from "next/link";
-import { MdDashboard, MdEvent, MdGroups, MdSettings } from "react-icons/md";
+import {
+  MdDashboard,
+  MdEvent,
+  MdOutlineRecordVoiceOver,
+  MdSettings,
+} from "react-icons/md";
 
 export const DashboardSidebar = () => {
   const menuItems = [
     { name: "Dashboard", icon: <MdDashboard size={20} />, link: "/dashboard" },
     { name: "Meetings", icon: <MdEvent size={20} />, link: "/meetings" },
-    { name: "Users", icon: <MdGroups size={20} />, link: "/audios" },
+    {
+      name: "Audios",
+      icon: <MdOutlineRecordVoiceOver size={20} />,
+      link: "/audios",
+    },
     { name: "Settings", icon: <MdSettings size={20} />, link: "/settings" },
   ];
 

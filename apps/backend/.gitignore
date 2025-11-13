@@ -24,4 +24,4 @@ dist/
 # Database / SQLite (اگر داری)
 *.db
 
-app/uploads
+src/uploads

@@ -1,15 +1,15 @@
 
-from . import schemas, service
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from sqlalchemy.orm import Session
 from src.database import get_db
-from . import schemas, service
+from src.audio import schemas, service
 
 router = APIRouter()
-@router.post("/api/upload-recording", response_model=schemas.UploadAudioResponse)
+
+@router.post("/upload-recording", response_model=schemas.UploadAudioResponse)
 async def upload_recording(
-    name,
-    file,
+    name: str = Form(...),
+    file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
     if not file:
@@ -19,6 +19,4 @@ async def upload_recording(
     filename = f"{name}.webm"
 
     audio = service.save_audio(db, name, content, filename)
-    return {
-        "success": True,
-    }
+    return {"success": True}
