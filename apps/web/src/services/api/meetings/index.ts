@@ -1,1 +1,1 @@
-export * from "./meetings.endpoint";
+export * from "./api-meetings.endpoint";

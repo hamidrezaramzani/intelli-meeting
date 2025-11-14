@@ -1,7 +1,11 @@
 import os
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
+from sqlalchemy.orm import joinedload
+from fastapi.encoders import jsonable_encoder
 from pydub import AudioSegment
 from . import models
+from src.meeting import models as meeting_models
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -32,3 +36,41 @@ def save_audio(db: Session, name: str, file_content: bytes, filename: str):
     db.refresh(audio)
 
     return audio
+
+    
+
+def get_audios(db: Session, skip: int = 0, limit: int = 10):
+    total = db.query(models.Audio).count()
+    
+    audios = (
+        db.query(models.Audio)
+        .options(joinedload(models.Audio.meeting)) 
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    
+    audios_data = jsonable_encoder(audios)
+    print(audios_data)
+    return {
+        "success": True,
+        "total": total,
+        "page": (skip // limit) + 1,
+        "limit": limit,
+        "audios": audios_data,
+    }
+    
+def assign_audio_to_meeting(db: Session, audio_id: int, meeting_id: int):
+    audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+    meeting = db.query(meeting_models.Meeting).filter(meeting_models.Meeting.id == meeting_id).first()
+
+    if not audio:
+        raise HTTPException(status_code=404, detail="Audio not found")
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+
+    audio.meeting_id = meeting_id
+    db.commit()
+    db.refresh(audio)
+
+    return {"message": f"Audio '{audio.name}' assigned to meeting '{meeting.title}' successfully."}

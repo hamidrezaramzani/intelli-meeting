@@ -75,7 +75,7 @@ export const Table = <T,>({
                   className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
                   key={String(col.key)}
                 >
-                  {col.render ? col.render(row) : String(row[col.key])}
+                  {col.render ? col.render(row) : String(row[col.key] || "")}
                 </td>
               ))}
 

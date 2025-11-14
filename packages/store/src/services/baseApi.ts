@@ -69,6 +69,7 @@ const axiosBaseQuery =
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
+  tagTypes: ["Audios", "Meetings"],
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
 });

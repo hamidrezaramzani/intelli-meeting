@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from src.database import get_db
 from src.audio import schemas, service
@@ -18,5 +18,25 @@ async def upload_recording(
     content = await file.read()
     filename = f"{name}.webm"
 
-    audio = service.save_audio(db, name, content, filename)
+    service.save_audio(db, name, content, filename)
     return {"success": True}
+
+@router.get("/", response_model=schemas.ReadManyAudiosResponse)
+def read_audios(
+    db: Session = Depends(get_db),
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=100)
+):
+    skip = (page - 1) * limit
+    return service.get_audios(db=db, skip=skip, limit=limit)
+
+@router.post("/assign-audio-to-meeting", response_model=schemas.AssignAudioToMeetingResponse)
+def assign_audio_to_meeting(
+    payload: schemas.AssignAudioToMeetingRequest,
+    db: Session = Depends(get_db)
+):
+    return service.assign_audio_to_meeting(
+        db=db,
+        audio_id=payload.audio_id,
+        meeting_id=payload.meeting_id,
+    )

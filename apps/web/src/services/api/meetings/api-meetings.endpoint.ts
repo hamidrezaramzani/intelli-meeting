@@ -9,15 +9,27 @@ export const meetingsApi = baseApi.injectEndpoints({
         method: "POST",
         data,
       }),
+      invalidatesTags: ["Meetings"],
     }),
     readManyMeetings: builder.query({
       query: () => ({
         url: "/meetings",
         method: "GET",
       }),
+      providesTags: ["Meetings"],
+    }),
+    readMeetingCandidates: builder.query({
+      query: () => ({
+        url: "/meetings/candidates",
+        method: "GET",
+      }),
+      providesTags: ["Meetings"],
     }),
   }),
 });
 
-export const { useCreateMeetingMutation, useReadManyMeetingsQuery } =
-  meetingsApi;
+export const {
+  useCreateMeetingMutation,
+  useReadManyMeetingsQuery,
+  useReadMeetingCandidatesQuery,
+} = meetingsApi;

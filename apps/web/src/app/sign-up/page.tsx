@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import type { SignUpInput } from "@/lib";
+import type { SignUpFormValues } from "@/lib/type";
 
 import { getSignUpFormSchema } from "@/lib";
 import { useCheckEmailMutation, useSignupMutation } from "@/services/api";
@@ -30,11 +30,11 @@ const SignUpPage = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, touchedFields },
-  } = useForm<SignUpInput>({
+  } = useForm<SignUpFormValues>({
     resolver,
   });
 
-  const onSubmit = async (data: SignUpInput) => {
+  const onSubmit = async (data: SignUpFormValues) => {
     void toast.promise(signUp(data).unwrap(), {
       pending: "Please wait",
       error: "We have an error when creating new user, please try again",

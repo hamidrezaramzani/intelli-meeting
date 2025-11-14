@@ -16,11 +16,18 @@ async def create_meeting(
         "success": True,
     }
 
-@router.get("/", response_model=schemas.ReadManyMeetingsResponse)
-def read_meetings(
+@router.get("/", response_model=schemas.ReadMeetingCandidatesResponse)
+def read_meeting_candidates(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     limit: int = Query(10, ge=1, le=100)
 ):
     skip = (page - 1) * limit
     return service.get_meetings(db=db, skip=skip, limit=limit)
+
+
+@router.get("/candidates", response_model=schemas.ReadMeetingCandidatesResponse)
+def read_meeting_candidates(
+    db: Session = Depends(get_db),
+):
+    return service.get_meeting_candidates(db=db)

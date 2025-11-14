@@ -1,7 +1,11 @@
 export interface Audio {
   id: string;
-  title: string;
+  name: string;
   date?: string;
   duration: string;
-  meeting?: string;
+  file_path: string;
+  meeting?: {
+    id: number;
+    title: string;
+  };
 }

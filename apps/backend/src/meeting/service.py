@@ -32,3 +32,13 @@ def get_meetings(db: Session, skip: int = 0, limit: int = 10):
         "limit": limit,
         "meetings": meetings,
     }
+
+def get_meeting_candidates(db: Session):
+    meetings = (
+        db.query(models.Meeting)
+        .all()
+    )
+    return {
+        "success": True,
+        "meetings": meetings,
+    }

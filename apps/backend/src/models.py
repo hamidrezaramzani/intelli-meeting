@@ -1,3 +1,4 @@
-from src.database import Base 
-from src.audio import models as audio_models
-from src.auth import models as auth_models
+from src.audio.models import Audio
+from src.meeting.models import Meeting
+
+__all__ = ["Audio", "Meeting"]

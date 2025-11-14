@@ -34,3 +34,7 @@ class ReadManyMeetingsResponse(BaseModel):
     page: int
     limit: int
     meetings: list[MeetingItem] | None
+
+class ReadMeetingCandidatesResponse(BaseModel):
+    success: bool
+    meetings: list[MeetingItem] | None

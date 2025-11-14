@@ -1,11 +1,3 @@
-export interface CheckIsEmailAlreadyUsedResponse {
-  isUnique: boolean;
-}
-
-export interface CheckIsEmailAlreadyUsedRequestBody {
-  email: string;
-}
-
 export interface SignInRequestBody {
   email: string;
   password: string;
