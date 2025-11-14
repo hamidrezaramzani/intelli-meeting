@@ -1,10 +1,29 @@
 
-from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, Query
+from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, Query,BackgroundTasks
 from sqlalchemy.orm import Session
 from src.database import get_db
-from src.audio import schemas, service
-
+from src.audio import schemas, service, models
 router = APIRouter()
+
+
+
+@router.get("/process/{audio_id}")
+def process_audio(
+    audio_id: int,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+    if not audio:
+        raise HTTPException(status_code=404, detail="Audio not found")
+
+    
+    background_tasks.add_task(service.process_audio_to_text, db, audio_id)
+    
+    return {
+        "success": True,
+        "message": f"Processing of audio {audio_id} started"
+    }
 
 @router.post("/upload-recording", response_model=schemas.UploadAudioResponse)
 async def upload_recording(

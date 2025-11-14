@@ -1,4 +1,6 @@
+import whisper
 import os
+import uuid, time
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from sqlalchemy.orm import joinedload
@@ -11,6 +13,7 @@ UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def save_audio(db: Session, name: str, file_content: bytes, filename: str):
+    filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
     file_path = os.path.join(UPLOAD_DIR, filename)
 
     with open(file_path, "wb") as f:
@@ -45,13 +48,13 @@ def get_audios(db: Session, skip: int = 0, limit: int = 10):
     audios = (
         db.query(models.Audio)
         .options(joinedload(models.Audio.meeting)) 
+        .order_by(models.Audio.id.desc())
         .offset(skip)
         .limit(limit)
         .all()
     )
     
     audios_data = jsonable_encoder(audios)
-    print(audios_data)
     return {
         "success": True,
         "total": total,
@@ -74,3 +77,25 @@ def assign_audio_to_meeting(db: Session, audio_id: int, meeting_id: int):
     db.refresh(audio)
 
     return {"message": f"Audio '{audio.name}' assigned to meeting '{meeting.title}' successfully."}
+
+def set_audio_status(db: Session, audio, status):
+    audio.status = status
+    db.commit()
+    db.refresh(audio)
+
+def process_audio_to_text(db:Session, audio_id: int):
+   try:
+    audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+    
+    set_audio_status(db=db, status=models.AudioStatus.PROCESSING, audio=audio)
+    
+    file_path = file_path = os.path.join(UPLOAD_DIR, audio.file_path)
+    model = whisper.load_model("turbo")
+    result = model.transcribe(file_path)
+    set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
+    audio.transcript = result["text"];
+    db.commit()
+    db.refresh(audio)
+   except Exception as e:
+    print(e)
+    set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)

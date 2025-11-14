@@ -18,8 +18,18 @@ export const audioApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Audios"],
     }),
+    startAudioProcessing: builder.mutation<unknown, { audioId: string }>({
+      query: ({ audioId }) => ({
+        url: `/audio/process/${audioId}`,
+        method: "GET",
+      }),
+      invalidatesTags: ["Audios"],
+    }),
   }),
 });
 
-export const { useReadManyAudiosQuery, useAssignAudioToMeetingMutation } =
-  audioApi;
+export const {
+  useReadManyAudiosQuery,
+  useAssignAudioToMeetingMutation,
+  useStartAudioProcessingMutation,
+} = audioApi;

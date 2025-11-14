@@ -11,7 +11,9 @@ class AudioItem(BaseModel):
     date: str
     duration: str
     file_path: str
-    meeting: MeetingItem
+    status: str
+    transcript: str | None
+    meeting: MeetingItem | None
     
 class ReadManyAudiosResponse(BaseModel):
     success: bool
