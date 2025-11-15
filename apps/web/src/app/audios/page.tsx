@@ -4,6 +4,7 @@ import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { MdRemoveRedEye } from "react-icons/md";
 import { PiFileAudio } from "react-icons/pi";
 import { VscDebugStart } from "react-icons/vsc";
 import { toast } from "react-toastify";
@@ -21,7 +22,6 @@ import {
   Dashboard,
   Table,
 } from "@/ui";
-import { MdRemoveRedEye } from "react-icons/md";
 
 const AudiosPage = () => {
   const router = useRouter();

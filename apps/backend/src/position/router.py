@@ -1,0 +1,24 @@
+
+from fastapi import APIRouter, Depends, Query, Body
+from sqlalchemy.orm import Session
+from src.database import get_db
+from src.position import schemas, service
+router = APIRouter()
+
+
+
+@router.post("/",response_model=schemas.CreatePositionResponse)
+async def create_position(
+    position: schemas.CreatePositionRequest = Body(...),
+    db: Session = Depends(get_db)
+):
+    return service.create_position(db, position.title)
+
+@router.get("/", response_model=schemas.ReadManyPositionsResponse)
+def read_positions(
+    db: Session = Depends(get_db),
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=100)
+):
+    skip = (page - 1) * limit
+    return service.read_positions(db=db, skip=skip, limit=limit)

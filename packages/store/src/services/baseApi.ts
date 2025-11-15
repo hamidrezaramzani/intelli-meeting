@@ -39,7 +39,7 @@ const axiosBaseQuery =
           if (error.response?.status === 401) {
             dispatch(logout());
           }
-        },
+        }
       );
 
       const baseUrl =
@@ -69,7 +69,7 @@ const axiosBaseQuery =
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  tagTypes: ["Audios", "Meetings"],
+  tagTypes: ["Audios", "Meetings", "Positions"],
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
 });

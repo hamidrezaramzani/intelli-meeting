@@ -5,7 +5,7 @@ export const meetingsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createMeeting: builder.mutation({
       query: (data) => ({
-        url: "/meetings",
+        url: "/meeting",
         method: "POST",
         data,
       }),
@@ -13,20 +13,20 @@ export const meetingsApi = baseApi.injectEndpoints({
     }),
     readManyMeetings: builder.query({
       query: () => ({
-        url: "/meetings",
+        url: `/meeting`,
         method: "GET",
       }),
       providesTags: ["Meetings"],
     }),
     readMeetingCandidates: builder.query({
       query: () => ({
-        url: "/meetings/candidates",
+        url: "/meeting/candidates",
         method: "GET",
       }),
     }),
     createMeetingSummary: builder.mutation({
       query: ({ meetingId }) => ({
-        url: `/meetings/start-audio-transcript-processing/${meetingId}`,
+        url: `/meeting/start-audio-transcript-processing/${meetingId}`,
         method: "GET",
       }),
       invalidatesTags: ["Meetings"],

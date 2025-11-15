@@ -17,7 +17,7 @@ async def create_meeting(
     }
 
 @router.get("/", response_model=schemas.ReadMeetingCandidatesResponse)
-def read_meeting_candidates(
+def read_many_meetings(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     limit: int = Query(10, ge=1, le=100)
@@ -33,7 +33,7 @@ def read_meeting_candidates(
     return service.get_meeting_candidates(db=db)
 
 @router.get("/start-audio-transcript-processing/{meeting_id}", response_model=schemas.ConvertTranscriptToSummary)
-def read_meeting_candidates(
+def start_audio_transcript_processing(
     meeting_id,
     db: Session = Depends(get_db),
 ):

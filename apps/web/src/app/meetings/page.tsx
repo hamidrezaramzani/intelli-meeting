@@ -21,8 +21,8 @@ const MeetingsPage = () => {
     useCreateMeetingSummaryMutation();
 
   const [page, setPage] = useState(1);
-  const [meetingDetails, setMeetingDetails] = useState<Meeting | null>(null);
   const limit = 10;
+  const [meetingDetails, setMeetingDetails] = useState<Meeting | null>(null);
   const { data } = useReadManyMeetingsQuery({});
   const handleEdit = (meeting: Meeting) => console.log("Edit", meeting);
   const handleDelete = (meeting: Meeting) => console.log("Delete", meeting);
