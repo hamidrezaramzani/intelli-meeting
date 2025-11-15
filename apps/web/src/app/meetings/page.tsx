@@ -1,6 +1,5 @@
 "use client";
 
-import { Modal } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,7 +13,7 @@ import {
   useCreateMeetingSummaryMutation,
   useReadManyMeetingsQuery,
 } from "@/services";
-import { Dashboard, Table } from "@/ui";
+import { Dashboard, MeetingDetailsModal, Table } from "@/ui";
 
 const MeetingsPage = () => {
   const router = useRouter();
@@ -50,39 +49,10 @@ const MeetingsPage = () => {
 
   return (
     <Dashboard title="Meetings">
-      <Modal
-        title="Meeting detail"
+      <MeetingDetailsModal
+        meetingDetails={meetingDetails}
         onClose={() => setMeetingDetails(null)}
-        open={meetingDetails !== null}
-      >
-        {meetingDetails && (
-          <table className="min-w-[300px] border border-gray-200">
-            <tbody>
-              {Object.entries(meetingDetails).map(([key, value]) => (
-                <tr className="border-b border-b-gray-300" key={key}>
-                  <td className="py-2 px-4 font-semibold bg-gray-100 capitalize">
-                    {key.replace("_", " ")}
-                  </td>
-                  <td className="py-2 px-4">
-                    {key === "meeting_link" && value ? (
-                      <a
-                        className="text-blue-500 underline"
-                        href={value}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Link
-                      </a>
-                    ) : (
-                      value || "-"
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </Modal>
+      />
       <Table
         data={meetings}
         title="List of meetings"
