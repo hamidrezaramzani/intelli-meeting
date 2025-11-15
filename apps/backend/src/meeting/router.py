@@ -31,3 +31,10 @@ def read_meeting_candidates(
     db: Session = Depends(get_db),
 ):
     return service.get_meeting_candidates(db=db)
+
+@router.get("/start-audio-transcript-processing/{meeting_id}", response_model=schemas.ConvertTranscriptToSummary)
+def read_meeting_candidates(
+    meeting_id,
+    db: Session = Depends(get_db),
+):
+    return service.start_transcript_processing(db=db, meeting_id=meeting_id)

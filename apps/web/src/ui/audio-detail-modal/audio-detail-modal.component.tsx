@@ -1,6 +1,8 @@
 import { Button, Modal } from "@intelli-meeting/shared-ui";
 import { useState } from "react";
 
+import { formatDuration, formatProcessingDuration } from "@/lib/helpers";
+
 import type { AudioDetailsModalProps } from "./audio-detail-modal.type";
 
 export const AudioDetailsModal = ({
@@ -14,19 +16,6 @@ export const AudioDetailsModal = ({
   const formatDate = (date?: string) => {
     if (!date) return "-";
     return new Date(date).toLocaleString();
-  };
-
-  const formatDuration = (minutesString: string) => {
-    const minutes = Number(minutesString);
-    const totalSeconds = Math.round(minutes * 60);
-
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-
-    return h > 0
-      ? `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
-      : `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
 
   if (!audio) return null;
@@ -72,6 +61,15 @@ export const AudioDetailsModal = ({
               : "-"}
           </p>
         </div>
+
+        {audio.processing_duration && (
+          <div>
+            <h3 className="text-lg font-bold mb-1">Duration</h3>
+            <p className="text-gray-700">
+              {formatProcessingDuration(audio.processing_duration)}
+            </p>
+          </div>
+        )}
 
         {audio.transcript && (
           <div>

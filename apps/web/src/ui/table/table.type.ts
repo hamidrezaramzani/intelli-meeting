@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
-import React from "react";
+import type React from "react";
 
 export interface TableColumn<T> {
   key: keyof T;
   label: string;
   render?: (row: T) => ReactNode;
+  width?: number;
 }
 
 export interface TableProps<T> {

@@ -90,10 +90,14 @@ def process_audio_to_text(db:Session, audio_id: int):
     set_audio_status(db=db, status=models.AudioStatus.PROCESSING, audio=audio)
     
     file_path = file_path = os.path.join(UPLOAD_DIR, audio.file_path)
+    start_time = time.time()
     model = whisper.load_model("turbo")
     result = model.transcribe(file_path)
     set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
     audio.transcript = result["text"];
+    end_time = time.time()
+    processing_duration = end_time - start_time
+    audio.processing_duration = f"{processing_duration}"
     db.commit()
     db.refresh(audio)
    except Exception as e:

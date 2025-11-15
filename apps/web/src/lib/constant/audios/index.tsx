@@ -1,10 +1,16 @@
 import type { Audio } from "@/lib/type";
 import type { TableColumn } from "@/ui";
 
+import { formatDuration } from "@/lib/helpers";
+
 export const AUDIOS_LIST_COLUMNS: TableColumn<Audio>[] = [
   { key: "name", label: "Name" },
   { key: "date", label: "Date" },
-  { key: "duration", label: "Duration" },
+  {
+    key: "duration",
+    label: "Duration",
+    render: (record) => formatDuration(record.duration),
+  },
   {
     key: "status",
     label: "Status",
@@ -36,6 +42,9 @@ export const AUDIOS_LIST_COLUMNS: TableColumn<Audio>[] = [
       );
     },
   },
-  { key: "file_path", label: "File" },
-  { key: "meeting", label: "Meeting", render: (row) => row.meeting?.title },
+  {
+    key: "meeting",
+    label: "Meeting",
+    render: (row) => row.meeting?.title,
+  },
 ];

@@ -12,5 +12,5 @@ class Meeting(Base):
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
     meeting_link = Column(String, nullable=False)
-
+    
     audios = relationship("Audio", back_populates="meeting")

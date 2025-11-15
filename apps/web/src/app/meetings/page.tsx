@@ -4,16 +4,23 @@ import { Modal } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MdRemoveRedEye } from "react-icons/md";
+import { MdRemoveRedEye, MdSend } from "react-icons/md";
+import { toast } from "react-toastify";
 
 import type { Meeting } from "@/lib/type";
 
 import { MEETINGS_LIST_COLUMNS } from "@/lib/constant";
-import { useReadManyMeetingsQuery } from "@/services";
+import {
+  useCreateMeetingSummaryMutation,
+  useReadManyMeetingsQuery,
+} from "@/services";
 import { Dashboard, Table } from "@/ui";
 
 const MeetingsPage = () => {
   const router = useRouter();
+  const [startCreateMeetingSummaryProcessing] =
+    useCreateMeetingSummaryMutation();
+
   const [page, setPage] = useState(1);
   const [meetingDetails, setMeetingDetails] = useState<Meeting | null>(null);
   const limit = 10;
@@ -28,6 +35,18 @@ const MeetingsPage = () => {
     onRedirect: () => router.push("/sign-in"),
     type: "unlogged",
   });
+
+  const handleCreateSummaryClick = async (meetingId: string) => {
+    await toast.promise(
+      startCreateMeetingSummaryProcessing({ meetingId }).unwrap(),
+      {
+        pending: "Starting transcripts processing...",
+        success: "Audio transcripts processing started successfully!",
+        error:
+          "An error occurred while starting the audio transcripts processing. Please try again.",
+      },
+    );
+  };
 
   return (
     <Dashboard title="Meetings">
@@ -71,6 +90,12 @@ const MeetingsPage = () => {
           {
             children: <MdRemoveRedEye />,
             onActionClick: (row) => setMeetingDetails(row),
+            title: "Meeting details",
+          },
+          {
+            children: <MdSend />,
+            onActionClick: (row) => handleCreateSummaryClick(row.id),
+            title: "Send transcript for analysis by the LLM",
           },
         ]}
         columns={MEETINGS_LIST_COLUMNS}

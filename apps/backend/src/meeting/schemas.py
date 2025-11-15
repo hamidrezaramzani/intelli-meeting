@@ -24,7 +24,6 @@ class MeetingItem(BaseModel):
     end_time: str
     meeting_link: str
 
-    # 👈 tell Pydantic it can read from ORM objects
     model_config = ConfigDict(from_attributes=True)
     
 
@@ -38,3 +37,7 @@ class ReadManyMeetingsResponse(BaseModel):
 class ReadMeetingCandidatesResponse(BaseModel):
     success: bool
     meetings: list[MeetingItem] | None
+    
+class ConvertTranscriptToSummary(BaseModel):
+    success: bool
+        

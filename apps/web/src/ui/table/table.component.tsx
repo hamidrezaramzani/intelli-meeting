@@ -72,6 +72,7 @@ export const Table = <T,>({
             <tr className="hover:bg-gray-50" key={rowIndex}>
               {columns.map((col) => (
                 <td
+                  width={col.width}
                   className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
                   key={String(col.key)}
                 >

@@ -21,6 +21,7 @@ class Audio(Base):
     date = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     status = Column(Enum(AudioStatus), default=AudioStatus.PENDING)
     transcript = Column(String, nullable=True)
+    processing_duration = Column(String, nullable=True)
     
     meeting_id = Column(Integer, ForeignKey("meetings.id"), nullable=True, index=True)
 

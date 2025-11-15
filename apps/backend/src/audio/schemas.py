@@ -13,6 +13,7 @@ class AudioItem(BaseModel):
     file_path: str
     status: str
     transcript: str | None
+    processing_duration: str | None
     meeting: MeetingItem | None
     
 class ReadManyAudiosResponse(BaseModel):
