@@ -44,7 +44,6 @@ const NewEmployeeForm = () => {
   });
 
   const onSubmit = async (data: CreateEmployeeFormValues) => {
-    console.log(data);
     await toast.promise(createEmployee(data).unwrap(), {
       pending: "Creating employee...",
       success: {

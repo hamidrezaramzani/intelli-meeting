@@ -1,8 +1,8 @@
 import os
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from . import models, schemas
 from typing import Dict
-
+from src.employee import models as employee_models
 
 
 def create_meeting(db: Session, body: schemas.CreateMeetingBody):
@@ -14,15 +14,19 @@ def create_meeting(db: Session, body: schemas.CreateMeetingBody):
     end_time = body.endTime,
     meeting_link = body.meetingLink,
     )
+    if body.employees:
+        employees = db.query(employee_models.Employee).filter(employee_models.Employee.id.in_(body.employees)).all()
+        meeting.employees = employees
     db.add(meeting)
     db.commit()
     db.refresh(meeting)
     return meeting
 
-def get_meetings(db: Session, skip: int = 0, limit: int = 10):
+def read_meetings(db: Session, skip: int = 0, limit: int = 10):
     total = db.query(models.Meeting).count()
     meetings = (
         db.query(models.Meeting)
+        .options(joinedload(models.Meeting.employees))
         .order_by(models.Meeting.id.desc())
         .offset(skip)
         .limit(limit)

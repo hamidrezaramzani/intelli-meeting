@@ -74,19 +74,9 @@ export const AudioDetailsModal = ({
         {audio.transcript && (
           <div>
             <h3 className="text-lg font-bold mb-1">Transcript</h3>
-            <p className="text-gray-700 whitespace-pre-wrap">
-              {expanded ? audio.transcript : `${preview}...`}
-            </p>
-
-            {audio.transcript.length > 300 && (
-              <button
-                className="text-brand-600 mt-2 underline"
-                type="button"
-                onClick={() => setExpanded(!expanded)}
-              >
-                {expanded ? "Show less" : "Show more"}
-              </button>
-            )}
+            <div className="text-gray-700 whitespace-pre-wrap border p-2 rounded max-h-[300px] overflow-auto">
+              {audio.transcript}
+            </div>
           </div>
         )}
 

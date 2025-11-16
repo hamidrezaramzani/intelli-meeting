@@ -7,4 +7,9 @@ export interface Meeting {
   start_time: string;
   end_time?: string;
   meeting_link?: string;
+  employees?: {
+    id: number;
+    fullName: string;
+    position: { id: number; title: string };
+  }[];
 }

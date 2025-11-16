@@ -16,14 +16,14 @@ async def create_meeting(
         "success": True,
     }
 
-@router.get("/", response_model=schemas.ReadMeetingCandidatesResponse)
+@router.get("/", response_model=schemas.ReadManyMeetingsResponse)
 def read_many_meetings(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     limit: int = Query(10, ge=1, le=100)
 ):
     skip = (page - 1) * limit
-    return service.get_meetings(db=db, skip=skip, limit=limit)
+    return service.read_meetings(db=db, skip=skip, limit=limit)
 
 
 @router.get("/candidates", response_model=schemas.ReadMeetingCandidatesResponse)

@@ -1,6 +1,15 @@
-from sqlalchemy import Column, Integer, String, JSON
+from sqlalchemy import Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from src.database import Base
+
+
+
+meeting_employee = Table(
+    'meeting_employee',
+    Base.metadata,
+    Column('meeting_id', Integer, ForeignKey('meetings.id'), primary_key=True),
+    Column('employee_id', Integer, ForeignKey('employees.id'), primary_key=True)
+)
 
 class Meeting(Base):
     __tablename__ = "meetings"
@@ -13,3 +22,4 @@ class Meeting(Base):
     end_time = Column(String, nullable=False)
     meeting_link = Column(String, nullable=False)    
     audios = relationship("Audio", back_populates="meeting")
+    employees = relationship("Employee", secondary=meeting_employee, back_populates="meetings")

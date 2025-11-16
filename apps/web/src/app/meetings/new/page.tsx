@@ -25,7 +25,7 @@ const NewMeetingForm = () => {
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
   const employeeOptions = employees
     ? employees?.map((employee: any) => ({
-        value: employee.id,
+        value: String(employee.id),
         label: `${employee.fullName} - ${employee.position.id}`,
       }))
     : [];

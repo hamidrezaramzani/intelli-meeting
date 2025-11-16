@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from src.meeting.schemas import MeetingItem
 
 class CreatePositionResponse(BaseModel):
     success: bool

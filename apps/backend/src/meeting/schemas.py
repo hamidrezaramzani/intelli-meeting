@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
-from . import models
-from typing import List
+from typing import List, Optional
+from src.employee import schemas
 
 class CreateMeetingResponse(BaseModel):
     success: bool
@@ -12,7 +12,8 @@ class CreateMeetingBody(BaseModel):
     startTime: str
     endTime: str
     meetingLink: str
-    
+    employees: Optional[List[int]] = []
+
     
     
 class MeetingItem(BaseModel):
@@ -23,9 +24,8 @@ class MeetingItem(BaseModel):
     start_time: str
     end_time: str
     meeting_link: str
-
+    employees: Optional[List[schemas.EmployeeItem]] = None 
     model_config = ConfigDict(from_attributes=True)
-    
 
 class ReadManyMeetingsResponse(BaseModel):
     success: bool
@@ -40,4 +40,4 @@ class ReadMeetingCandidatesResponse(BaseModel):
     
 class ConvertTranscriptToSummary(BaseModel):
     success: bool
-        
+    
