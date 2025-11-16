@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, JSON
 from sqlalchemy.orm import relationship
 from src.database import Base
 
@@ -11,6 +11,5 @@ class Meeting(Base):
     date = Column(String, nullable=False)
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
-    meeting_link = Column(String, nullable=False)
-    
+    meeting_link = Column(String, nullable=False)    
     audios = relationship("Audio", back_populates="meeting")

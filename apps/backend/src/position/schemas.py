@@ -18,3 +18,9 @@ class ReadManyPositionsResponse(BaseModel):
     limit: int
     positions: list[PositionItem] | None
     
+    
+        
+class ReadManyPositionCandidatesResponse(BaseModel):
+    success: bool
+    positions: list[PositionItem] | None
+    

@@ -22,3 +22,9 @@ def read_positions(
 ):
     skip = (page - 1) * limit
     return service.read_positions(db=db, skip=skip, limit=limit)
+
+@router.get("/candidates", response_model=schemas.ReadManyPositionCandidatesResponse)
+def read_position_candidates(
+    db: Session = Depends(get_db),
+):
+    return service.read_position_candidates(db=db)

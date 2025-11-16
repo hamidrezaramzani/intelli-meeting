@@ -39,3 +39,16 @@ def read_positions(db: Session, skip: int = 0, limit: int = 10):
         "positions": positions_data,
     }
     
+def read_position_candidates(db: Session):
+    positions = (
+         db.query(models.Position)
+        .order_by(models.Position.id.desc())
+        .all()
+    )
+    
+    positions_data = jsonable_encoder(positions)
+    return {
+        "success": True,
+        "positions": positions_data,
+    }
+    

@@ -1,4 +1,5 @@
 import { PiCaretDownLight } from "react-icons/pi";
+
 import type { SelectInputProps } from "./select-input.type";
 
 export const SelectInput = ({

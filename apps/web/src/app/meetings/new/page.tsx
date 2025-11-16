@@ -1,25 +1,40 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, TextInput } from "@intelli-meeting/shared-ui";
+import {
+  Button,
+  SelectMultipleInput,
+  TextInput,
+} from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 import type { MeetingFormValues } from "@/lib/type";
 
 import { meetingSchema } from "@/lib";
-import { useCreateMeetingMutation } from "@/services";
+import {
+  useCreateMeetingMutation,
+  useReadManyEmployeeCandidatesQuery,
+} from "@/services";
 import { Dashboard } from "@/ui";
 
+// eslint-disable-next-line complexity
 const NewMeetingForm = () => {
   const [createMeeting, { isLoading }] = useCreateMeetingMutation();
-
+  const { data: employees } = useReadManyEmployeeCandidatesQuery({});
+  const employeeOptions = employees
+    ? employees?.map((employee: any) => ({
+        value: employee.id,
+        label: `${employee.fullName} - ${employee.position.id}`,
+      }))
+    : [];
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, touchedFields },
   } = useForm<MeetingFormValues>({
     resolver: zodResolver(meetingSchema),
@@ -39,7 +54,7 @@ const NewMeetingForm = () => {
   };
 
   return (
-    <Dashboard title="New meeting" backUrl="/meetings">
+    <Dashboard backUrl="/meetings" title="New meeting">
       <div className="w-full">
         <div className="w-3/5 bg-slate-50 p-6">
           <h2 className="text-2xl font-bold text-slate-800 mb-2">
@@ -111,6 +126,21 @@ const NewMeetingForm = () => {
               error={
                 touchedFields.meetingLink ? errors.meetingLink?.message : ""
               }
+            />
+
+            <Controller
+              name="employees"
+              control={control}
+              render={({ field, fieldState }) => (
+                <SelectMultipleInput
+                  label="Employees"
+                  value={field.value || []}
+                  error={fieldState.error?.message}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  options={employeeOptions}
+                />
+              )}
             />
 
             <Button className="mt-2 w-96" disabled={isLoading} type="submit">

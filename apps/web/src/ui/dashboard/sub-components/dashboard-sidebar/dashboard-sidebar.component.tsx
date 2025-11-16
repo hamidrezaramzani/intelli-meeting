@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { HiOutlineUsers } from "react-icons/hi";
 import {
   MdDashboard,
   MdEvent,
@@ -7,6 +11,8 @@ import {
 } from "react-icons/md";
 
 export const DashboardSidebar = () => {
+  const pathname = usePathname();
+
   const menuItems = [
     { name: "Dashboard", icon: <MdDashboard size={20} />, link: "/dashboard" },
     { name: "Meetings", icon: <MdEvent size={20} />, link: "/meetings" },
@@ -15,22 +21,32 @@ export const DashboardSidebar = () => {
       icon: <MdOutlineRecordVoiceOver size={20} />,
       link: "/audios",
     },
+    {
+      name: "Employees",
+      icon: <HiOutlineUsers size={20} />,
+      link: "/employees",
+    },
     { name: "Settings", icon: <MdSettings size={20} />, link: "/settings" },
   ];
 
   return (
     <div className="flex flex-col gap-1">
-      {menuItems.map((item) => (
-        <div
-          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-slate-200 cursor-pointer transition-all"
-          key={item.name}
-        >
-          {item.icon}
-          <Link className="text-sm font-medium" href={item.link}>
+      {menuItems.map((item) => {
+        const isActive = pathname.startsWith(item.link);
+
+        return (
+          <Link
+            href={item.link}
+            key={item.name}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all
+              ${isActive ? "bg-slate-800 text-white" : "text-slate-700 hover:bg-slate-200"}
+            `}
+          >
+            <div className="text-lg">{item.icon}</div>
             {item.name}
           </Link>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

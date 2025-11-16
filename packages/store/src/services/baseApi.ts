@@ -25,7 +25,7 @@ const axiosBaseQuery =
   (): BaseQueryFn<BaseQueryArgs, unknown, BaseQueryError> =>
   async (
     { url, method = "GET", data, responseType = "json" },
-    { getState, dispatch },
+    { getState, dispatch }
   ) => {
     try {
       const state = getState() as RootState;
@@ -69,7 +69,13 @@ const axiosBaseQuery =
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  tagTypes: ["Audios", "Meetings", "Positions"],
+  tagTypes: [
+    "Audios",
+    "Meetings",
+    "Positions",
+    "Employees",
+    "EmployeeCandidates",
+  ],
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
 });

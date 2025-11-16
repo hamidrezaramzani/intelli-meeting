@@ -7,4 +7,5 @@ export const meetingSchema = z.object({
   startTime: z.string().min(1, "Start time is required"),
   endTime: z.string().optional(),
   meetingLink: z.string().url("Invalid URL").optional(),
+  employees: z.array(z.string()).optional(),
 });

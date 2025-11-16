@@ -10,6 +10,12 @@ export const positionApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Positions"],
     }),
+    readManyPositionCandidates: builder.query({
+      query: () => ({
+        url: `/position/candidates`,
+        method: "GET",
+      }),
+    }),
     createPosition: builder.mutation({
       query: (data) => ({
         url: `/position`,
@@ -21,5 +27,8 @@ export const positionApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreatePositionMutation, useReadManyPositionsQuery } =
-  positionApi;
+export const {
+  useCreatePositionMutation,
+  useReadManyPositionsQuery,
+  useReadManyPositionCandidatesQuery,
+} = positionApi;
