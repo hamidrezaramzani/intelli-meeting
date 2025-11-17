@@ -1,8 +1,9 @@
+/* eslint-disable max-lines-per-function */
 "use client";
 
-import { Button } from "@intelli-meeting/shared-ui";
+import { Button, IconButton } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdRefresh } from "react-icons/md";
 
 import type { TableProps } from "./table.type";
 
@@ -16,6 +17,8 @@ export const Table = <T,>({
   formPath,
   pagination,
   actions,
+  error,
+  refetch,
 }: TableProps<T>) => {
   const router = useRouter();
 
@@ -116,7 +119,27 @@ export const Table = <T,>({
             </tr>
           ))}
 
-          {data.length === 0 && (
+          {error && (
+            <tr className="text-center py-4">
+              <td colSpan={columns.length + (onEdit || onDelete ? 1 : 0)}>
+                <span className="px-6 py-6 block text-center text-red-400 text-sm">
+                  Unable to load table data. Please try again later.
+                </span>
+                {refetch && (
+                  <IconButton
+                    className="w-24"
+                    fullWidth={false}
+                    type="button"
+                    variant="secondary"
+                  >
+                    <MdRefresh fontSize={22} />
+                  </IconButton>
+                )}
+              </td>
+            </tr>
+          )}
+
+          {data.length === 0 && !error && (
             <tr>
               <td
                 className="px-6 py-4 text-center text-gray-400 text-sm"

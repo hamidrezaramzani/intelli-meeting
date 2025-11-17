@@ -1,5 +1,6 @@
 export * from "./button";
 export * from "./confirmation-modal";
+export * from "./icon-button";
 export * from "./login";
 export * from "./modal";
 export * from "./select-input";

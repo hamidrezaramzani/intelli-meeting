@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+
+pyannote.audio==2.1.1
+torch==1.13.1
+torchaudio==0.13.1
+whisper
+
+numpy
+
+huggingface_hub<=0.13.4
+
+torchvision==0.14.1

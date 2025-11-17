@@ -1,4 +1,4 @@
-import whisper
+import requests
 import os
 import uuid, time
 from sqlalchemy.orm import Session
@@ -8,6 +8,10 @@ from fastapi.encoders import jsonable_encoder
 from pydub import AudioSegment
 from . import models
 from src.meeting import models as meeting_models
+from src import config
+import json
+from pydub import AudioSegment
+
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -19,8 +23,18 @@ def save_audio(db: Session, name: str, file_content: bytes, filename: str):
     with open(file_path, "wb") as f:
         f.write(file_content)
 
-    try:
+    base_name, ext = os.path.splitext(file_path)
+    wav_path = f"{base_name}.wav"
+    if ext.lower() != ".wav":
+        audio_segment = AudioSegment.from_file(file_path, format=ext.replace(".", ""))
+        audio_segment = audio_segment.set_frame_rate(16000).set_channels(1)
+        audio_segment.export(wav_path, format="wav")
+        final_path = wav_path
+    else:
+        final_path = file_path
         audio_segment = AudioSegment.from_file(file_path)
+
+    try:
         duration_seconds = len(audio_segment) / 1000
         duration_minutes = round(duration_seconds / 60, 2)
         duration_str = f"{duration_minutes}"
@@ -30,7 +44,7 @@ def save_audio(db: Session, name: str, file_content: bytes, filename: str):
 
     audio = models.Audio(
         name=name,
-        file_path=filename,
+        file_path=os.path.basename(final_path),
         duration=duration_str
     )
 
@@ -39,7 +53,6 @@ def save_audio(db: Session, name: str, file_content: bytes, filename: str):
     db.refresh(audio)
 
     return audio
-
     
 
 def get_audios(db: Session, skip: int = 0, limit: int = 10):
@@ -55,12 +68,23 @@ def get_audios(db: Session, skip: int = 0, limit: int = 10):
     )
     
     audios_data = jsonable_encoder(audios)
+    
+    final_audios = [];
+    
+    for audio_obj in audios_data:
+        transcript_array = json.loads(audio_obj["transcript"])
+        final_audios.append({
+            **audio_obj,
+            "transcript":   " ".join(obj["text"] for obj in transcript_array)
+        })
+    
+    
     return {
         "success": True,
         "total": total,
         "page": (skip // limit) + 1,
         "limit": limit,
-        "audios": audios_data,
+        "audios": final_audios,
     }
     
 def assign_audio_to_meeting(db: Session, audio_id: int, meeting_id: int):
@@ -83,23 +107,38 @@ def set_audio_status(db: Session, audio, status):
     db.commit()
     db.refresh(audio)
 
-def process_audio_to_text(db:Session, audio_id: int):
-   try:
-    audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
-    
-    set_audio_status(db=db, status=models.AudioStatus.PROCESSING, audio=audio)
-    
-    file_path = file_path = os.path.join(UPLOAD_DIR, audio.file_path)
-    start_time = time.time()
-    model = whisper.load_model("turbo")
-    result = model.transcribe(file_path)
-    set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
-    audio.transcript = result["text"];
-    end_time = time.time()
-    processing_duration = end_time - start_time
-    audio.processing_duration = f"{processing_duration}"
-    db.commit()
-    db.refresh(audio)
-   except Exception as e:
-    print(e)
-    set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)
+def process_audio_to_text(db: Session, audio_id: int):
+    try:
+        audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+        if not audio:
+            print(f"Audio {audio_id} not found")
+            return
+
+        set_audio_status(db=db, status=models.AudioStatus.PROCESSING, audio=audio)
+
+        file_path = os.path.join(UPLOAD_DIR, audio.file_path)
+        filename = os.path.basename(file_path)
+
+        start_time = time.time()
+
+        response = requests.post(
+            f"{config.settings.FASTAPI_AUDIO_URL}/process-audio",
+            json={"filename": filename},
+            timeout=None 
+        )
+        response.raise_for_status()
+
+        transcript_segments = response.json().get("transcript_segments", [])
+
+        audio.transcript = json.dumps(transcript_segments)
+        audio.processing_duration = str(time.time() - start_time)
+
+        set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
+        db.commit()
+        db.refresh(audio)
+
+    except Exception as e:
+        print(f"Error processing audio {audio_id}: {e}")
+        set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)
+        db.commit()
+        db.refresh(audio)

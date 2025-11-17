@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from jose import jwt
 from passlib.context import CryptContext
-from . import config
+from src import config
 
 
 SECRET_KEY = config.settings.SECRET_KEY

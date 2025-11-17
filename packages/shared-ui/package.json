@@ -20,6 +20,7 @@
     "@intelli-meeting/store": "*",
     "@tailwindcss/vite": "^4.0.7",
     "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.65.0",
@@ -32,8 +33,8 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@fullstacksjs/eslint-config": "^13.9.0",
     "@eslint/js": "^9.36.0",
+    "@fullstacksjs/eslint-config": "^13.9.0",
     "@microsoft/api-extractor": "^7.53.1",
     "@types/node": "^24.6.0",
     "@types/react": "19.1.0",

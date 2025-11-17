@@ -27,7 +27,7 @@ const AudiosPage = () => {
   const router = useRouter();
 
   const [startAudioProccessing] = useStartAudioProcessingMutation();
-  const { data } = useReadManyAudiosQuery({});
+  const { data, error, refetch } = useReadManyAudiosQuery({});
   const [modal, setModal] = useState<"assign" | "details" | null>(null);
   const [page, setPage] = useState(1);
   const [audio, setAudio] = useState<Audio | null>(null);
@@ -95,6 +95,7 @@ const AudiosPage = () => {
       />
       <Table
         data={audios}
+        refetch={refetch}
         title="List of audios"
         actions={[
           {
@@ -120,6 +121,7 @@ const AudiosPage = () => {
         ]}
         columns={AUDIOS_LIST_COLUMNS}
         description="This table show you all of audios that you record before"
+        error={!!error}
         onDelete={handleDelete}
         pagination={{
           currentPage: page,

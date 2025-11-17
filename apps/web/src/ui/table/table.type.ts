@@ -21,6 +21,8 @@ export interface TableProps<T> {
     totalPages: number;
     onPageChange: (page: number) => void;
   };
+  error?: boolean;
+  refetch?: () => void;
   actions?: (React.ButtonHTMLAttributes<HTMLButtonElement> & {
     onActionClick?: (record: T) => void;
   })[];

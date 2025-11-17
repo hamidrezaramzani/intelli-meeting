@@ -1,16 +1,19 @@
 import clsx from "clsx";
 
-import type { ButtonProps } from "./button.type";
+import type { IconButtonProps } from "./icon-button.type";
 
-export const Button = ({
+export const IconButton = ({
   children,
   className,
-  fullWidth = true,
+  size = "md",
   variant = "default",
   ...props
-}: ButtonProps) => {
-  const baseStyles =
-    "px-4 py-2 font-regular text-sm cursor-pointer rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+}: IconButtonProps) => {
+  const sizeStyles = {
+    sm: "w-8 h-8",
+    md: "w-10 h-10",
+    lg: "w-12 h-12",
+  };
 
   const variantStyles = {
     default:
@@ -21,13 +24,16 @@ export const Button = ({
       "bg-gray-200 text-black border-gray-300 hover:bg-gray-300 focus:bg-gray-400",
   };
 
+  const baseStyles =
+    "cursor-pointer inline-flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+
   return (
     <button
       type="button"
       className={clsx(
         baseStyles,
         variantStyles[variant],
-        fullWidth && "w-full",
+        sizeStyles[size],
         className,
       )}
       {...props}

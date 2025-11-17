@@ -1,21 +1,32 @@
-import { Button, Modal } from "@intelli-meeting/shared-ui";
-import { useState } from "react";
+import { Button, IconButton, Modal } from "@intelli-meeting/shared-ui";
+import { MdContentCopy } from "react-icons/md";
 
 import { formatDuration, formatProcessingDuration } from "@/lib/helpers";
 
 import type { AudioDetailsModalProps } from "./audio-detail-modal.type";
+import { toast } from "react-toastify";
 
 export const AudioDetailsModal = ({
   onClose,
   audio,
 }: AudioDetailsModalProps) => {
-  const [expanded, setExpanded] = useState(false);
-
-  const preview = audio?.transcript?.slice(0, 300);
-
   const formatDate = (date?: string) => {
     if (!date) return "-";
     return new Date(date).toLocaleString();
+  };
+
+  const handleTranscriptCopy = async () => {
+    if (!audio?.transcript) {
+      toast.error("No transcript available");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(audio.transcript);
+      toast.info("Transcript copied to clipboard!");
+    } catch {
+      toast.error("Failed to copy transcript");
+    }
   };
 
   if (!audio) return null;
@@ -64,7 +75,7 @@ export const AudioDetailsModal = ({
 
         {audio.processing_duration && (
           <div>
-            <h3 className="text-lg font-bold mb-1">Duration</h3>
+            <h3 className="text-lg font-bold mb-1">Process duration</h3>
             <p className="text-gray-700">
               {formatProcessingDuration(audio.processing_duration)}
             </p>
@@ -73,7 +84,12 @@ export const AudioDetailsModal = ({
 
         {audio.transcript && (
           <div>
-            <h3 className="text-lg font-bold mb-1">Transcript</h3>
+            <div className="flex justify-between items-center py-5">
+              <h3 className="text-lg font-bold mb-1">Transcript</h3>
+              <IconButton onClick={handleTranscriptCopy}>
+                <MdContentCopy />
+              </IconButton>
+            </div>
             <div className="text-gray-700 whitespace-pre-wrap border p-2 rounded max-h-[300px] overflow-auto">
               {audio.transcript}
             </div>
