@@ -25,5 +25,7 @@ export interface TableProps<T> {
   refetch?: () => void;
   actions?: (React.ButtonHTMLAttributes<HTMLButtonElement> & {
     onActionClick?: (record: T) => void;
+    show?: (record: T) => boolean;
   })[];
+  loading?: boolean;
 }

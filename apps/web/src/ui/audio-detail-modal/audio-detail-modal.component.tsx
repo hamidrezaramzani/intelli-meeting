@@ -1,10 +1,10 @@
 import { Button, IconButton, Modal } from "@intelli-meeting/shared-ui";
 import { MdContentCopy } from "react-icons/md";
+import { toast } from "react-toastify";
 
 import { formatDuration, formatProcessingDuration } from "@/lib/helpers";
 
 import type { AudioDetailsModalProps } from "./audio-detail-modal.type";
-import { toast } from "react-toastify";
 
 export const AudioDetailsModal = ({
   onClose,

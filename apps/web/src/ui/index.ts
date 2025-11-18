@@ -3,4 +3,5 @@ export * from "./audio-detail-modal";
 export * from "./dashboard";
 export * from "./meeting-detail-modal";
 export * from "./positions-list";
+export * from "./speakers-modal";
 export * from "./table";

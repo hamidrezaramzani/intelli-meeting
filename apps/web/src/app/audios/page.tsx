@@ -4,7 +4,7 @@ import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MdRemoveRedEye } from "react-icons/md";
+import { MdRecordVoiceOver, MdRemoveRedEye } from "react-icons/md";
 import { PiFileAudio } from "react-icons/pi";
 import { VscDebugStart } from "react-icons/vsc";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ import {
   AssignAudioToMeetingModal,
   AudioDetailsModal,
   Dashboard,
+  SpeakersModal,
   Table,
 } from "@/ui";
 
@@ -28,7 +29,9 @@ const AudiosPage = () => {
 
   const [startAudioProccessing] = useStartAudioProcessingMutation();
   const { data, error, refetch } = useReadManyAudiosQuery({});
-  const [modal, setModal] = useState<"assign" | "details" | null>(null);
+  const [modal, setModal] = useState<
+    "assign" | "assignEmployee" | "details" | null
+  >(null);
   const [page, setPage] = useState(1);
   const [audio, setAudio] = useState<Audio | null>(null);
   const limit = 10;
@@ -45,7 +48,7 @@ const AudiosPage = () => {
 
   const handleStartAudioProcessing = async (
     audioId: string,
-    status: string,
+    status: string
   ) => {
     switch (status) {
       case "processing":
@@ -93,6 +96,10 @@ const AudiosPage = () => {
         audio={modal === "details" ? audio : null}
         onClose={() => setAudio(null)}
       />
+      <SpeakersModal
+        audio={modal === "assignEmployee" ? audio : null}
+        onClose={() => setAudio(null)}
+      />
       <Table
         data={audios}
         refetch={refetch}
@@ -115,6 +122,17 @@ const AudiosPage = () => {
             children: <MdRemoveRedEye />,
             onActionClick: (record) => {
               setModal("details");
+              setAudio(record);
+            },
+          },
+          {
+            show: (record) => {
+              console.log(record.status);
+              return record.status === "success";
+            },
+            children: <MdRecordVoiceOver />,
+            onActionClick: (record) => {
+              setModal("assignEmployee");
               setAudio(record);
             },
           },

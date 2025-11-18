@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable max-lines-per-function */
 "use client";
 
@@ -19,6 +20,7 @@ export const Table = <T,>({
   actions,
   error,
   refetch,
+  loading,
 }: TableProps<T>) => {
   const router = useRouter();
 
@@ -69,55 +71,81 @@ export const Table = <T,>({
             )}
           </tr>
         </thead>
-
         <tbody className="divide-y divide-gray-100">
-          {data.map((row, rowIndex) => (
-            <tr className="hover:bg-gray-50" key={rowIndex}>
-              {columns.map((col) => (
-                <td
-                  width={col.width}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
-                  key={String(col.key)}
-                >
-                  {col.render ? col.render(row) : String(row[col.key] || "")}
-                </td>
-              ))}
-
-              {(onEdit || onDelete) && (
-                <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
-                  {onEdit && (
-                    <button
-                      className="p-1 rounded hover:bg-gray-100"
-                      type="button"
-                      onClick={() => onEdit(row)}
+          {loading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <tr className="hover:bg-gray-50" key={index}>
+                  {columns.map((col) => (
+                    <td
+                      width={col.width}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+                      key={String(col.key)}
                     >
-                      <MdEdit size={20} className="text-blue-600" />
-                    </button>
-                  )}
-                  {onDelete && (
-                    <button
-                      className="p-1 rounded hover:bg-gray-100"
-                      type="button"
-                      onClick={() => onDelete(row)}
-                    >
-                      <MdDelete size={20} className="text-red-600" />
-                    </button>
-                  )}
-
-                  {actions?.map((button, index) => (
-                    <button
-                      type="button"
-                      {...button}
-                      className="text-lg cursor-pointer"
-                      // eslint-disable-next-line @eslint-react/jsx-key-before-spread, @eslint-react/no-array-index-key
-                      key={index}
-                      onClick={() => button.onActionClick?.(row)}
-                    />
+                      <div className="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+                    </td>
                   ))}
-                </td>
-              )}
-            </tr>
-          ))}
+                  {(onEdit || onDelete) && (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
+                      <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse"></div>
+                    </td>
+                  )}
+                </tr>
+              ))
+            : data.map((row, rowIndex) => (
+                <tr className="hover:bg-gray-50" key={rowIndex}>
+                  {columns.map((col) => (
+                    <td
+                      width={col.width}
+                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+                      key={String(col.key)}
+                    >
+                      {col.render
+                        ? col.render(row)
+                        : String(row[col.key] || "")}
+                    </td>
+                  ))}
+
+                  {(onEdit || onDelete) && (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
+                      {onEdit && (
+                        <button
+                          className="p-1 rounded hover:bg-gray-100"
+                          type="button"
+                          onClick={() => onEdit(row)}
+                        >
+                          <MdEdit size={20} className="text-blue-600" />
+                        </button>
+                      )}
+                      {onDelete && (
+                        <button
+                          className="p-1 rounded hover:bg-gray-100"
+                          type="button"
+                          onClick={() => onDelete(row)}
+                        >
+                          <MdDelete size={20} className="text-red-600" />
+                        </button>
+                      )}
+
+                      {actions?.map((button, index) => {
+                        if (button.show && !button?.show(row)) {
+                          return null;
+                        }
+
+                        return (
+                          <button
+                            type="button"
+                            {...button}
+                            className="text-lg cursor-pointer"
+                            // eslint-disable-next-line @eslint-react/jsx-key-before-spread
+                            key={index}
+                            onClick={() => button.onActionClick?.(row)}
+                          />
+                        );
+                      })}
+                    </td>
+                  )}
+                </tr>
+              ))}
 
           {error && (
             <tr className="text-center py-4">
@@ -131,6 +159,7 @@ export const Table = <T,>({
                     fullWidth={false}
                     type="button"
                     variant="secondary"
+                    onClick={refetch}
                   >
                     <MdRefresh fontSize={22} />
                   </IconButton>
@@ -139,7 +168,7 @@ export const Table = <T,>({
             </tr>
           )}
 
-          {data.length === 0 && !error && (
+          {data.length === 0 && !error && !loading && (
             <tr>
               <td
                 className="px-6 py-4 text-center text-gray-400 text-sm"

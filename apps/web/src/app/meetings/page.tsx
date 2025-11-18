@@ -23,7 +23,7 @@ const MeetingsPage = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [meetingDetails, setMeetingDetails] = useState<Meeting | null>(null);
-  const { data } = useReadManyMeetingsQuery({});
+  const { data, isLoading } = useReadManyMeetingsQuery({});
   const handleEdit = (meeting: Meeting) => console.log("Edit", meeting);
   const handleDelete = (meeting: Meeting) => console.log("Delete", meeting);
 
@@ -71,6 +71,7 @@ const MeetingsPage = () => {
         columns={MEETINGS_LIST_COLUMNS}
         description="This table show you all of meetings that you saved before"
         formPath="/meetings/new"
+        loading={isLoading}
         onDelete={handleDelete}
         onEdit={handleEdit}
         pagination={{

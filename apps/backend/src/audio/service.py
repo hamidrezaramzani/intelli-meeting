@@ -8,10 +8,11 @@ from fastapi.encoders import jsonable_encoder
 from pydub import AudioSegment
 from . import models
 from src.meeting import models as meeting_models
+from src.speaker_profile import service as speaker_profile_service
 from src import config
 import json
 from pydub import AudioSegment
-
+import numpy as np
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -68,23 +69,13 @@ def get_audios(db: Session, skip: int = 0, limit: int = 10):
     )
     
     audios_data = jsonable_encoder(audios)
-    
-    final_audios = [];
-    
-    for audio_obj in audios_data:
-        transcript_array = json.loads(audio_obj["transcript"])
-        final_audios.append({
-            **audio_obj,
-            "transcript":   " ".join(obj["text"] for obj in transcript_array)
-        })
-    
-    
+
     return {
         "success": True,
         "total": total,
         "page": (skip // limit) + 1,
         "limit": limit,
-        "audios": final_audios,
+        "audios": audios_data,
     }
     
 def assign_audio_to_meeting(db: Session, audio_id: int, meeting_id: int):
@@ -107,7 +98,7 @@ def set_audio_status(db: Session, audio, status):
     db.commit()
     db.refresh(audio)
 
-def process_audio_to_text(db: Session, audio_id: int):
+def process_audio_to_text(db: Session, audio_id: int, user_id: int):
     try:
         audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
         if not audio:
@@ -126,12 +117,27 @@ def process_audio_to_text(db: Session, audio_id: int):
             json={"filename": filename},
             timeout=None 
         )
+
+        audio.processing_duration = str(time.time() - start_time)
         response.raise_for_status()
 
         transcript_segments = response.json().get("transcript_segments", [])
+        transcript = ""        
+        for segment in transcript_segments:
+            transcript += segment["text"] + " "
+            speaker_profile_service.create_speaker_profile(
+                db,
+                user_id=user_id,
+                initial_speaker_label=segment["speaker"],
+                employee_id=None,
+                audio_id=audio_id,
+                vector=json.dumps(segment["embedding"]),
+                avg_similarity=float(np.mean(segment["embedding"])),
+                sample_audio_path=""
+            )     
 
-        audio.transcript = json.dumps(transcript_segments)
-        audio.processing_duration = str(time.time() - start_time)
+        audio.transcript = transcript
+    
 
         set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
         db.commit()

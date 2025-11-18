@@ -12,3 +12,4 @@ class Employee(Base):
 
     position = relationship("Position", back_populates="employees")
     meetings = relationship("Meeting", secondary=meeting_employee, back_populates="employees")
+    speaker_profiles = relationship("SpeakerProfile", back_populates="employee")

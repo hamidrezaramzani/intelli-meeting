@@ -10,6 +10,12 @@ export const audioApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Audios"],
     }),
+    readAudioSpeakers: builder.query({
+      query: ({ audioId }) => ({
+        url: `/audio/speakers/${audioId}`,
+        method: "GET",
+      }),
+    }),
     assignAudioToMeeting: builder.mutation({
       query: (data) => ({
         url: `/audio/assign-audio-to-meeting`,
@@ -32,4 +38,5 @@ export const {
   useReadManyAudiosQuery,
   useAssignAudioToMeetingMutation,
   useStartAudioProcessingMutation,
+  useReadAudioSpeakersQuery,
 } = audioApi;

@@ -16,6 +16,9 @@ class AudioItem(BaseModel):
     processing_duration: str | None
     meeting: MeetingItem | None
     
+class SpeakerItem(BaseModel):
+    id: int
+    
 class ReadManyAudiosResponse(BaseModel):
     success: bool
     total: int
@@ -30,3 +33,7 @@ class AssignAudioToMeetingRequest(BaseModel):
 
 class AssignAudioToMeetingResponse(BaseModel):
     message: str
+    
+class ReadAudioSpeakers(BaseModel):
+    success: bool
+    speakers: list[SpeakerItem] | None
