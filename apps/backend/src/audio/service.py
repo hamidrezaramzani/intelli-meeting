@@ -17,10 +17,29 @@ from src import config
 import json
 from pydub import AudioSegment
 import numpy as np
-from pydub import AudioSegment
+from sklearn.metrics.pairwise import cosine_similarity
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
+
+def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.6):
+    best_similarity = -1
+    best_employee_id = None
+    segment_embedding_np = np.array(segment_embedding)
+    
+    for profile in speaker_profiles:
+        if profile.vector:
+            profile_embedding = np.array(json.loads(profile.vector))
+            similarity = cosine_similarity([segment_embedding_np], [profile_embedding])[0][0]
+            
+            if similarity >= threshold and similarity > best_similarity:
+                best_similarity = similarity
+                best_employee_id = profile.employee_id
+    
+    return best_employee_id
+
 
 def save_audio(db: Session, name: str, file_content: bytes, filename: str):
     filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
@@ -154,6 +173,12 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
             print(f"Audio {audio_id} not found")
             return
 
+
+        speaker_profiles = db.query(speaker_profile_model.SpeakerProfile).filter(
+                speaker_profile_model.SpeakerProfile.user_id == user_id,
+                speaker_profile_model.SpeakerProfile.employee_id != None
+                ).all()
+
         set_audio_status(db=db, status=models.AudioStatus.PROCESSING, audio=audio)
 
         file_path = os.path.join(UPLOAD_DIR, audio.file_path)
@@ -172,14 +197,17 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
         response.raise_for_status()
 
         transcript_segments = response.json().get("transcript_segments", [])
-        transcript = ""        
+        transcript = ""
         for segment in transcript_segments:
             transcript += segment["text"] + " "
+
+            employee_id = get_similar_employee_id(segment["embedding"], speaker_profiles)
+
             speaker_profile_service.create_speaker_profile(
                 db,
                 user_id=user_id,
                 initial_speaker_label=segment["speaker"],
-                employee_id=None,
+                employee_id=employee_id,
                 audio_id=audio_id,
                 vector=json.dumps(segment["embedding"]),
                 text=segment["text"],

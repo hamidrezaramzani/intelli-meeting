@@ -16,46 +16,59 @@ embedding_model = Model.from_pretrained(
     use_auth_token=config.HF_TOKEN
 )
 embedding_inference = Inference(embedding_model, window="whole")
-whisper_model = whisper.load_model("medium")
+whisper_model = whisper.load_model("small")
 print("[INFO] Models loaded successfully.")
 
+chunk_ms = 10000
+overlap_ms = 2000
 speaker_embeddings = {}
+speaker_embeddings_count = {}
 
-COSINE_THRESHOLD = 0.75 
+COSINE_THRESHOLD = 0.60
 
 def cosine_similarity(a, b):
     a = np.array(a)
     b = np.array(b)
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
-def assign_speaker(new_embedding):
+def cosine_similarity(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+def assign_speaker(new_embedding: np.ndarray):
     if not speaker_embeddings:
         speaker_id = f"SPEAKER_{len(speaker_embeddings)}"
         speaker_embeddings[speaker_id] = new_embedding
+        speaker_embeddings_count[speaker_id] = 1
         return speaker_id
-    
+
     max_sim = -1
     best_speaker = None
     for speaker_id, emb in speaker_embeddings.items():
-        sim = cosine_similarity(new_embedding, emb)
+        emb_array = np.array(emb)
+        sim = cosine_similarity(new_embedding, emb_array)
         if sim > max_sim:
             max_sim = sim
             best_speaker = speaker_id
-    
+
     if max_sim >= COSINE_THRESHOLD:
-        speaker_embeddings[best_speaker] = np.mean([speaker_embeddings[best_speaker], new_embedding], axis=0)
+        n = speaker_embeddings_count[best_speaker]
+        speaker_embeddings[best_speaker] = (np.array(speaker_embeddings[best_speaker]) * n + new_embedding) / (n + 1)
+        speaker_embeddings_count[best_speaker] += 1
         return best_speaker
     else:
         speaker_id = f"SPEAKER_{len(speaker_embeddings)}"
         speaker_embeddings[speaker_id] = new_embedding
+        speaker_embeddings_count[speaker_id] = 1
         return speaker_id
 
-def generate_transcript_segments(chunk_path):
+def generate_transcript_segments(chunk_path, index):
     start_diarization = time.time()
+    print("[INFO] Speaker diarization started.")
     diarization_result = diarization(chunk_path)
     print("[INFO] Speaker diarization completed.", time.time() - start_diarization)
 
     start_transcription = time.time()
+    print("[INFO] Whisper transcription started.")
     transcription = whisper_model.transcribe(
         chunk_path,
         fp16=False,
@@ -67,8 +80,11 @@ def generate_transcript_segments(chunk_path):
 
     transcript_segments = []
     MIN_DURATION = 0.5
+    chunk_sec = chunk_ms / 1000
+    overlap_sec = overlap_ms / 1000
+    offset = index * (chunk_sec - overlap_sec)
 
-    for idx, (turn, _, speaker_label) in enumerate(diarization_result.itertracks(yield_label=True), 1):
+    for turn, _, speaker_label in diarization_result.itertracks(yield_label=True):
         start = turn.start
         end = turn.end
         if end - start < MIN_DURATION:
@@ -82,27 +98,27 @@ def generate_transcript_segments(chunk_path):
         segment = Segment(start, end)
         embedding_vector = embedding_inference.crop(chunk_path, segment)
 
-        real_speaker = assign_speaker(embedding_vector.tolist())
+        real_speaker = assign_speaker(np.array(embedding_vector))
 
         transcript_segments.append({
             "speaker": real_speaker,
-            "start": round(start, 2),
-            "end": round(end, 2),
+            "start": round(start + offset, 2),
+            "end": round(end + offset, 2),
             "text": segment_text,
             "embedding": embedding_vector.tolist()
         })
 
     return transcript_segments
 
-def process_audio(file_path: str, chunk_ms: int = 10000, overlap_ms: int = 2000):
+def process_audio(file_path: str):
     audio = AudioSegment.from_file(file_path)
     transcript_segments = []
 
-    for i in range(0, len(audio), chunk_ms - overlap_ms):
+    for chunk_idx, i in enumerate(range(0, len(audio), chunk_ms - overlap_ms)):
         chunk = audio[i:i + chunk_ms]
         temp_path = f"temp_chunk.wav"
         chunk.export(temp_path, format="wav")
-        transcript_segments.extend(generate_transcript_segments(temp_path))
+        transcript_segments.extend(generate_transcript_segments(temp_path, chunk_idx))
 
     print(f"[INFO] All segments processed. Total segments: {len(transcript_segments)}")
     return {
