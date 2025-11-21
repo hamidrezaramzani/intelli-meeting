@@ -31,7 +31,7 @@ export const AudioDetailsModal = ({
 
   if (!audio) return null;
   return (
-    <Modal title="Audio Details" onClose={onClose} open={!!audio}>
+    <Modal size="lg" title="Audio Details" onClose={onClose} open={!!audio}>
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-bold mb-1">Name</h3>

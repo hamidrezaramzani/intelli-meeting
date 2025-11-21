@@ -48,7 +48,7 @@ const AudiosPage = () => {
 
   const handleStartAudioProcessing = async (
     audioId: string,
-    status: string
+    status: string,
   ) => {
     switch (status) {
       case "processing":
@@ -127,7 +127,6 @@ const AudiosPage = () => {
           },
           {
             show: (record) => {
-              console.log(record.status);
               return record.status === "success";
             },
             children: <MdRecordVoiceOver />,

@@ -9,7 +9,9 @@ def create_speaker_profile(
     employee_id: str | None,
     audio_id: str | None,
     vector: str | None,
-    avg_similarity: float,
+    text: str,
+    start: str,
+    end: str
 ):
     new_profile = SpeakerProfile(
         user_id=user_id,
@@ -17,7 +19,9 @@ def create_speaker_profile(
         employee_id=employee_id,
         audio_id=audio_id,
         vector=vector,
-        avg_similarity=avg_similarity,
+        text=text,
+        start=start,
+        end=end,
     )
     db.add(new_profile)
     db.commit()
@@ -34,11 +38,40 @@ def read_speakers(db: Session, audio_id: str):
         .all()
     )
     
-    print(speakers)
-    # audios_data = jsonable_encoder(speakers)
-
+    speakers_data = []
+    for speaker in jsonable_encoder(speakers):
+        if(len(speaker['text']) > 10 and not any(x["speaker"] == speaker['initial_speaker_label'] for x in speakers_data)):
+            speakers_data.append({
+                'id': speaker['id'],
+                'speaker': speaker['initial_speaker_label'],
+                'transcript': speaker['text'],
+                'employee_id': speaker['employee_id']
+            })
+        
     return {
         "success": True,
-        "speakers": [],
+        "speakers": speakers_data,
     }
    
+def assign_speakers(db: Session, speaker_profile_assignment_payload, audio_id, user_id):
+    labels_in_payload = {}
+    for assignment in speaker_profile_assignment_payload:
+        speaker = db.query(SpeakerProfile).filter(
+            SpeakerProfile.id == assignment["speakerProfileId"]
+        ).first()
+        if not speaker:
+            continue
+        labels_in_payload[speaker.initial_speaker_label] = assignment["employeeId"]
+
+    speakers = db.query(SpeakerProfile).filter(
+        SpeakerProfile.audio_id == audio_id,
+        SpeakerProfile.user_id == user_id
+    ).all()
+
+    for sp in speakers:
+        if sp.initial_speaker_label in labels_in_payload:
+            sp.employee_id = labels_in_payload[sp.initial_speaker_label]
+        else:
+            sp.employee_id = None
+
+    db.commit()

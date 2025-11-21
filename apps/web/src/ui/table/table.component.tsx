@@ -64,8 +64,8 @@ export const Table = <T,>({
                 {col.label}
               </th>
             ))}
-            {(onEdit || onDelete) && (
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
+            {(onEdit || onDelete || actions) && (
+              <th className="px-6 py-3 text-left align-middle text-sm font-medium text-gray-700">
                 Actions
               </th>
             )}
@@ -84,7 +84,7 @@ export const Table = <T,>({
                       <div className="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
                     </td>
                   ))}
-                  {(onEdit || onDelete) && (
+                  {(onEdit || onDelete || actions) && (
                     <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
                       <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse"></div>
                     </td>
@@ -92,11 +92,11 @@ export const Table = <T,>({
                 </tr>
               ))
             : data.map((row, rowIndex) => (
-                <tr className="hover:bg-gray-50" key={rowIndex}>
+                <tr className="hover:bg-gray-50 align-middle" key={rowIndex}>
                   {columns.map((col) => (
                     <td
                       width={col.width}
-                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+                      className="px-6 py-4 align-middle text-sm text-gray-800 "
                       key={String(col.key)}
                     >
                       {col.render
@@ -105,8 +105,8 @@ export const Table = <T,>({
                     </td>
                   ))}
 
-                  {(onEdit || onDelete) && (
-                    <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
+                  {(onEdit || onDelete || actions) && (
+                    <td className="px-6 py-4 align-middle h-full items-center text-sm text-center">
                       {onEdit && (
                         <button
                           className="p-1 rounded hover:bg-gray-100"
@@ -135,10 +135,14 @@ export const Table = <T,>({
                           <button
                             type="button"
                             {...button}
-                            className="text-lg cursor-pointer"
-                            // eslint-disable-next-line @eslint-react/jsx-key-before-spread
+                            className="text-lg cursor-pointer mr-3"
+                            // eslint-disable-next-line @eslint-react/jsx-key-before-spread, @eslint-react/no-array-index-key
                             key={index}
                             onClick={() => button.onActionClick?.(row)}
+                            // eslint-disable-next-line @eslint-react/no-children-prop
+                            children={
+                              button.children || button?.render?.(row) || null
+                            }
                           />
                         );
                       })}

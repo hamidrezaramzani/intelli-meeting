@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, Query,BackgroundTasks, Request
+from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, Query,BackgroundTasks, Request, Body
 from sqlalchemy.orm import Session
 from src.database import get_db
 from src.auth import models as user_models
@@ -8,6 +8,23 @@ from src.speaker_profile import service as speaker_profile_service
 from src.auth import utils
 router = APIRouter()
 
+
+
+def get_user_id(request: Request, db: Session):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=403, detail="Invalid auth header")
+    token = auth_header.split(" ")[1]
+    payload = utils.decode_access_token(token)
+    if not payload:
+        raise HTTPException(status_code=403, detail="Invalid or expired token")
+    user_email = payload.get("sub")
+    if not user_email:
+        raise HTTPException(status_code=403, detail="Email not found in token")
+    
+    user = db.query(user_models.User).filter(user_models.User.email == user_email).first()
+    
+    return user.id
 
 
 @router.get("/process/{audio_id}")
@@ -21,22 +38,8 @@ def process_audio(
     if not audio:
         raise HTTPException(status_code=404, detail="Audio not found")
 
-    auth_header = request.headers.get("Authorization")
-    print(auth_header)
-    if not auth_header or not auth_header.startswith("Bearer "):
-        raise HTTPException(status_code=403, detail="Invalid auth header")
-    token = auth_header.split(" ")[1]
-    payload = utils.decode_access_token(token)
-    print(payload)
-    if not payload:
-        raise HTTPException(status_code=403, detail="Invalid or expired token")
-    user_email = payload.get("sub")
-    print(user_email)
-    if not user_email:
-        raise HTTPException(status_code=403, detail="Email not found in token")
-    
-    user = db.query(user_models.User).filter(user_models.User.email == user_email).first()
-    background_tasks.add_task(service.process_audio_to_text, db, audio_id, user.id)
+    user_id = get_user_id(request=request, db=db)
+    background_tasks.add_task(service.process_audio_to_text, db, audio_id, user_id)
     
     return {
         "success": True,
@@ -77,6 +80,27 @@ def assign_audio_to_meeting(
         audio_id=payload.audio_id,
         meeting_id=payload.meeting_id,
     )
+
+@router.get("/play/{speaker_profile_id}")
+def play_audio(
+    speaker_profile_id: int,
+    db: Session = Depends(get_db)
+):
+    return service.play_audio(
+        db=db,
+        speaker_profile_id=speaker_profile_id,
+    )
+
+@router.post("/assign-audio-speaker/{audio_id}")
+def assignAudioSpeakers(
+    audio_id: str,
+    request: Request,
+    speaker_profile_assignment_payload = Body(...),
+    db: Session = Depends(get_db)
+):
+    user_id = get_user_id(request=request, db=db)
+    return speaker_profile_service.assign_speakers(db, speaker_profile_assignment_payload, audio_id, user_id)
+
 
 @router.get("/speakers/{audio_id}", response_model=schemas.ReadAudioSpeakers)
 def read_speakers(

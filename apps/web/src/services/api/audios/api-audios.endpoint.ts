@@ -16,6 +16,13 @@ export const audioApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    playAudio: builder.mutation({
+      query: ({ speakerProfileId }) => ({
+        url: `/audio/play/${speakerProfileId}`,
+        method: "GET",
+        responseType: "blob",
+      }),
+    }),
     assignAudioToMeeting: builder.mutation({
       query: (data) => ({
         url: `/audio/assign-audio-to-meeting`,
@@ -31,6 +38,13 @@ export const audioApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Audios"],
     }),
+    assignAudioSpeakers: builder.mutation({
+      query: ({ values, audioId }) => ({
+        url: `/audio/assign-audio-speaker/${audioId}`,
+        method: "POST",
+        data: values,
+      }),
+    }),
   }),
 });
 
@@ -39,4 +53,6 @@ export const {
   useAssignAudioToMeetingMutation,
   useStartAudioProcessingMutation,
   useReadAudioSpeakersQuery,
+  usePlayAudioMutation,
+  useAssignAudioSpeakersMutation,
 } = audioApi;

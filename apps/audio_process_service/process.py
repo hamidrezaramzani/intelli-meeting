@@ -35,7 +35,7 @@ def process_audio(file_path: str):
     print(f"[INFO] Whisper transcription completed. Total words: {len(transcription['segments'])}", time.time() - start_transcription)
     print("Extracted text", transcription['text'])
     transcript_segments = []
-    MIN_DURATION = 1.0
+    MIN_DURATION = 0.5
 
     print("[INFO] Start processing diarization segments and creating embeddings...")
     for idx, (turn, _, speaker) in enumerate(diarization_result.itertracks(yield_label=True), 1):

@@ -18,6 +18,9 @@ class AudioItem(BaseModel):
     
 class SpeakerItem(BaseModel):
     id: int
+    speaker: str
+    transcript: str
+    employee_id: int | None
     
 class ReadManyAudiosResponse(BaseModel):
     success: bool
@@ -30,6 +33,8 @@ class AssignAudioToMeetingRequest(BaseModel):
     audio_id: int
     meeting_id: int
 
+class PlayAudioResponse(BaseModel):
+    success: bool
 
 class AssignAudioToMeetingResponse(BaseModel):
     message: str

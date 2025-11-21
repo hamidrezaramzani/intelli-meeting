@@ -1,23 +1,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-
 import { MdClose } from "react-icons/md";
 
-interface CustomModalProps {
-  open: boolean;
-  title?: string;
-  onClose?: () => void;
-  children: React.ReactNode;
-  width?: string;
-}
+import type { ModalProps } from "./modal.type";
 
 export const Modal = ({
   open,
   title,
   onClose,
   children,
-  width = "max-w-md",
-}: CustomModalProps) => {
+  size = "md",
+}: ModalProps) => {
   if (!open) return null;
+
+  const sizeClass = {
+    xs: "max-w-xs",
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    "2xl": "max-w-2xl",
+  }[size];
 
   return (
     <div
@@ -25,13 +27,12 @@ export const Modal = ({
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-2xl shadow-lg w-[90%] ${width} p-6 flex flex-col gap-4`}
+        className={`bg-white rounded-2xl shadow-lg w-[90%] ${sizeClass} p-6 flex flex-col gap-4`}
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-
             {onClose && (
               <button
                 className="text-xl cursor-pointer"
@@ -43,7 +44,6 @@ export const Modal = ({
             )}
           </div>
         )}
-
         {children}
       </div>
     </div>

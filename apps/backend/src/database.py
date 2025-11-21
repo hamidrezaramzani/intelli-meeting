@@ -1,11 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "sqlite:///./app.db"
+DATABASE_URL = "postgresql+psycopg2://postgres@172.17.0.1:5432/myapp"
 
-engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 Base = declarative_base()
@@ -16,4 +14,3 @@ def get_db():
         yield db
     finally:
         db.close()
-        

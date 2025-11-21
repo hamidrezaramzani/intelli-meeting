@@ -1,18 +1,23 @@
+import wave
+import io
 import requests
 import os
 import uuid, time
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import joinedload
 from fastapi.encoders import jsonable_encoder
 from pydub import AudioSegment
 from . import models
 from src.meeting import models as meeting_models
 from src.speaker_profile import service as speaker_profile_service
+from src.speaker_profile import models as speaker_profile_model
 from src import config
 import json
 from pydub import AudioSegment
 import numpy as np
+from pydub import AudioSegment
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -93,6 +98,50 @@ def assign_audio_to_meeting(db: Session, audio_id: int, meeting_id: int):
 
     return {"message": f"Audio '{audio.name}' assigned to meeting '{meeting.title}' successfully."}
 
+def play_audio(db: Session, speaker_profile_id: str):
+    speaker_profile = (
+        db.query(speaker_profile_model.SpeakerProfile)
+        .options(joinedload(speaker_profile_model.SpeakerProfile.audio))
+        .filter(speaker_profile_model.SpeakerProfile.id == speaker_profile_id)
+        .first()
+    )
+
+    if not speaker_profile:
+        raise HTTPException(status_code=404, detail="Speaker profile not found")
+
+    start_sec = speaker_profile.start
+    end_sec   = speaker_profile.end
+
+    audio_file_name = speaker_profile.audio.file_path
+    audio_path = os.path.join(UPLOAD_DIR, audio_file_name)
+
+    if not os.path.exists(audio_path):
+        raise HTTPException(status_code=404, detail="Audio file not found")
+
+    with wave.open(audio_path, "rb") as wf:
+        sample_rate = wf.getframerate()
+        num_channels = wf.getnchannels()
+        sample_width = wf.getsampwidth()
+        total_frames = wf.getnframes()
+
+        start_frame = int(start_sec * sample_rate)
+        end_frame   = int(end_sec * sample_rate)
+        if end_frame > total_frames:
+            end_frame = total_frames
+
+        wf.setpos(start_frame)
+        frames = wf.readframes(end_frame - start_frame)
+
+    buffer = io.BytesIO()
+    with wave.open(buffer, "wb") as out_wf:
+        out_wf.setnchannels(num_channels)
+        out_wf.setsampwidth(sample_width)
+        out_wf.setframerate(sample_rate)
+        out_wf.writeframes(frames)
+
+    buffer.seek(0)
+    return StreamingResponse(buffer, media_type="audio/wav")
+
 def set_audio_status(db: Session, audio, status):
     audio.status = status
     db.commit()
@@ -115,6 +164,7 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
         response = requests.post(
             f"{config.settings.FASTAPI_AUDIO_URL}/process-audio",
             json={"filename": filename},
+            proxies={"http": None, "https": None},
             timeout=None 
         )
 
@@ -132,9 +182,10 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
                 employee_id=None,
                 audio_id=audio_id,
                 vector=json.dumps(segment["embedding"]),
-                avg_similarity=float(np.mean(segment["embedding"])),
-                sample_audio_path=""
-            )     
+                text=segment["text"],
+                start=segment["start"],
+                end=segment["end"],
+            )
 
         audio.transcript = transcript
     

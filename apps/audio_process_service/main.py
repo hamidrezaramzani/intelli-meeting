@@ -3,9 +3,6 @@ from process import process_audio
 import os
 
 app = FastAPI()
-
-os.environ['CURL_CA_BUNDLE'] = ''
-
 @app.post("/process-audio")
 async def process_audio_endpoint(file = Body(...)):
     try:

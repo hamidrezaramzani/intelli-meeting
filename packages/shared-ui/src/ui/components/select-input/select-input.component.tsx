@@ -12,10 +12,12 @@ export const SelectInput = ({
   const widthClass = !width ? "w-full" : width === "full" ? "w-full" : "w-1/2";
 
   return (
-    <div className="mb-5 rounded-md">
-      <label className="block mb-2 text-sm font-medium text-gray-500 font-regular">
-        {label}
-      </label>
+    <div className="rounded-md">
+      {label && (
+        <label className="block mb-2 text-sm font-medium text-gray-500 font-regular">
+          {label}
+        </label>
+      )}
 
       <div className={`relative ${widthClass}`}>
         <select
@@ -24,6 +26,9 @@ export const SelectInput = ({
         `}
           {...props}
         >
+          <option selected value="">
+            Select an option
+          </option>
           {options.map((option) => (
             <option key={`${option.value}-key`} value={option.value}>
               {option.label}
@@ -31,7 +36,7 @@ export const SelectInput = ({
           ))}
         </select>
 
-        <span className="absolute inset-y-0 right-8 flex items-center pointer-events-none">
+        <span className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
           <PiCaretDownLight />
         </span>
       </div>
