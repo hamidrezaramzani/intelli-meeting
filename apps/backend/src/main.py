@@ -10,6 +10,7 @@ from src.models import *
 from src.auth import router as auth_router
 from src.audio import router as audio_router
 from src.meeting import router as meeting_router
+from src.meeting import router_ws as meeting_router_ws
 from src.position import router as positions_router
 from src.employee import router as employees_router
 
@@ -30,5 +31,6 @@ Base.metadata.create_all(bind=database.engine)
 app.include_router(auth_router.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(audio_router.router, prefix="/api/audio", tags=["Audio"])
 app.include_router(meeting_router.router, prefix="/api/meeting", tags=["Meeting"])
+app.include_router(meeting_router_ws.router, prefix="/ws/meeting", tags=["Meeting"])
 app.include_router(positions_router.router, prefix="/api/position", tags=["Position"])
 app.include_router(employees_router.router, prefix="/api/employee", tags=["Employee"])

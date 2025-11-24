@@ -9,16 +9,11 @@ import { toast } from "react-toastify";
 import type { Meeting } from "@/lib/type";
 
 import { MEETINGS_LIST_COLUMNS } from "@/lib/constant";
-import {
-  useCreateMeetingSummaryMutation,
-  useReadManyMeetingsQuery,
-} from "@/services";
+import { useReadManyMeetingsQuery } from "@/services";
 import { Dashboard, MeetingDetailsModal, Table } from "@/ui";
 
 const MeetingsPage = () => {
   const router = useRouter();
-  const [startCreateMeetingSummaryProcessing] =
-    useCreateMeetingSummaryMutation();
 
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -36,14 +31,25 @@ const MeetingsPage = () => {
   });
 
   const handleCreateSummaryClick = async (meetingId: string) => {
-    await toast.promise(
-      startCreateMeetingSummaryProcessing({ meetingId }).unwrap(),
-      {
-        pending: "Starting transcripts processing...",
-        success: "Audio transcripts processing started successfully!",
-        error:
-          "An error occurred while starting the audio transcripts processing. Please try again.",
-      },
+    const ws = new WebSocket(
+      `ws://localhost:8000/ws/meeting/generate-summary?meeting_id=${meetingId}`,
+    );
+
+    const listener = (event: MessageEvent) => {
+      try {
+        const message = JSON.parse(event.data);
+        console.log(message);
+      } catch (e) {
+        console.error("Failed to parse message", e);
+      }
+    };
+
+    ws.addEventListener("message", listener);
+
+    ws.addEventListener("open", () => console.log("WebSocket opened"));
+    ws.addEventListener("close", () => console.log("WebSocket closed"));
+    ws.addEventListener("error", (err) =>
+      console.error("WebSocket error", err),
     );
   };
 

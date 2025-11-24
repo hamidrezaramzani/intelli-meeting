@@ -8,12 +8,10 @@ import time
 
 print("[INFO] Loading models...")
 diarization = Pipeline.from_pretrained(
-    "pyannote/speaker-diarization@2.1",
-    use_auth_token=config.HF_TOKEN
+    "pyannote/speaker-diarization@2.1", use_auth_token=config.HF_TOKEN
 )
 embedding_model = Model.from_pretrained(
-    "pyannote/embedding",
-    use_auth_token=config.HF_TOKEN
+    "pyannote/embedding", use_auth_token=config.HF_TOKEN
 )
 embedding_inference = Inference(embedding_model, window="whole")
 whisper_model = whisper.load_model("small")
@@ -26,13 +24,10 @@ speaker_embeddings_count = {}
 
 COSINE_THRESHOLD = 0.60
 
-def cosine_similarity(a, b):
-    a = np.array(a)
-    b = np.array(b)
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
 
 def assign_speaker(new_embedding: np.ndarray):
     if not speaker_embeddings:
@@ -52,7 +47,9 @@ def assign_speaker(new_embedding: np.ndarray):
 
     if max_sim >= COSINE_THRESHOLD:
         n = speaker_embeddings_count[best_speaker]
-        speaker_embeddings[best_speaker] = (np.array(speaker_embeddings[best_speaker]) * n + new_embedding) / (n + 1)
+        speaker_embeddings[best_speaker] = (
+            np.array(speaker_embeddings[best_speaker]) * n + new_embedding
+        ) / (n + 1)
         speaker_embeddings_count[best_speaker] += 1
         return best_speaker
     else:
@@ -60,6 +57,7 @@ def assign_speaker(new_embedding: np.ndarray):
         speaker_embeddings[speaker_id] = new_embedding
         speaker_embeddings_count[speaker_id] = 1
         return speaker_id
+
 
 def generate_transcript_segments(chunk_path, index):
     start_diarization = time.time()
@@ -74,7 +72,7 @@ def generate_transcript_segments(chunk_path, index):
         fp16=False,
         verbose=False,
         condition_on_previous_text=False,
-        word_timestamps=True
+        word_timestamps=True,
     )
     print("[INFO] Whisper transcription completed.", time.time() - start_transcription)
 
@@ -87,40 +85,62 @@ def generate_transcript_segments(chunk_path, index):
     for turn, _, speaker_label in diarization_result.itertracks(yield_label=True):
         start = turn.start
         end = turn.end
-        if end - start < MIN_DURATION:
+        segment_length = end - start
+
+        if segment_length < MIN_DURATION:
+            print(
+                f"[WARN] Skipping short segment: start={start}, end={end}, length={segment_length}"
+            )
+            continue
+        if segment_length <= 0:
+            print(
+                f"[WARN] Skipping invalid segment with non-positive length: start={start}, end={end}"
+            )
             continue
 
         segment_text = " ".join(
-            word["text"] for word in transcription["segments"]
+            word["text"]
+            for word in transcription["segments"]
             if word["end"] >= start and word["start"] <= end
         ).strip()
 
         segment = Segment(start, end)
-        embedding_vector = embedding_inference.crop(chunk_path, segment)
+
+        try:
+            embedding_vector = embedding_inference.crop(chunk_path, segment)
+        except Exception as e:
+            print(f"[ERROR] Failed to get embedding for segment {start}-{end}: {e}")
+            continue
 
         real_speaker = assign_speaker(np.array(embedding_vector))
 
-        transcript_segments.append({
-            "speaker": real_speaker,
-            "start": round(start + offset, 2),
-            "end": round(end + offset, 2),
-            "text": segment_text,
-            "embedding": embedding_vector.tolist()
-        })
+        transcript_segments.append(
+            {
+                "speaker": real_speaker,
+                "start": round(start + offset, 2),
+                "end": round(end + offset, 2),
+                "text": segment_text,
+                "embedding": embedding_vector.tolist(),
+            }
+        )
 
     return transcript_segments
+
 
 def process_audio(file_path: str):
     audio = AudioSegment.from_file(file_path)
     transcript_segments = []
 
     for chunk_idx, i in enumerate(range(0, len(audio), chunk_ms - overlap_ms)):
-        chunk = audio[i:i + chunk_ms]
+        chunk = audio[i : i + chunk_ms]
+
+        if len(chunk) < chunk_ms:
+            silence = AudioSegment.silent(duration=(chunk_ms - len(chunk)))
+            chunk += silence
+
         temp_path = f"temp_chunk.wav"
         chunk.export(temp_path, format="wav")
         transcript_segments.extend(generate_transcript_segments(temp_path, chunk_idx))
 
     print(f"[INFO] All segments processed. Total segments: {len(transcript_segments)}")
-    return {
-        "transcript_segments": transcript_segments
-    }
+    return {"transcript_segments": transcript_segments}

@@ -6,6 +6,7 @@ PUBLIC_PATHS = [
     "/api/auth/signin",
     "/api/auth/signup",
     "/api/auth/check-email",
+    "/ws"
 ]
 
 def cors_response(content, status_code=200):
@@ -19,12 +20,14 @@ def cors_response(content, status_code=200):
 
 
 async def jwt_middleware(request: Request, call_next):
+    if request.scope["type"] == "websocket":
+        return await call_next(request)
+
     if request.method == "OPTIONS":
         return await call_next(request)
 
     if request.url.path in PUBLIC_PATHS:
         return await call_next(request)
-
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         return cors_response(

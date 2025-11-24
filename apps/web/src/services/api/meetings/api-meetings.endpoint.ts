@@ -24,13 +24,6 @@ export const meetingsApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    createMeetingSummary: builder.mutation({
-      query: ({ meetingId }) => ({
-        url: `/meeting/start-audio-transcript-processing/${meetingId}`,
-        method: "GET",
-      }),
-      invalidatesTags: ["Meetings"],
-    }),
   }),
 });
 
@@ -38,5 +31,4 @@ export const {
   useCreateMeetingMutation,
   useReadManyMeetingsQuery,
   useReadMeetingCandidatesQuery,
-  useCreateMeetingSummaryMutation,
 } = meetingsApi;

@@ -40,9 +40,9 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
 
   const employeeOptions = employees
     ? employees?.map((employee: any) => ({
-        value: String(employee.id),
-        label: `${employee.fullName} - ${employee.position.title}`,
-      }))
+      value: String(employee.id),
+      label: `${employee.fullName} - ${employee.position.title}`,
+    }))
     : [];
 
   const speakers = useMemo(
