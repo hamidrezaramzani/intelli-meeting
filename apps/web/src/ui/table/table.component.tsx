@@ -54,14 +54,14 @@ export const Table = <T,>({
       </div>
 
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-100">
+        <thead>
           <tr>
             {columns.map((col) => (
               <th
                 className="px-6 py-3 text-left text-sm font-medium text-gray-700"
                 key={String(col.key)}
               >
-                {col.label}
+                {col.label.toUpperCase()}
               </th>
             ))}
             {(onEdit || onDelete || actions) && (

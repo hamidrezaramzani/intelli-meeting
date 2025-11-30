@@ -16,9 +16,16 @@ export const audioApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    playAudio: builder.mutation({
+    playSpeakerProfile: builder.mutation({
       query: ({ speakerProfileId }) => ({
-        url: `/audio/play/${speakerProfileId}`,
+        url: `/audio/play/speaker-profile/${speakerProfileId}`,
+        method: "GET",
+        responseType: "blob",
+      }),
+    }),
+    playAudio: builder.mutation({
+      query: ({ audioId }) => ({
+        url: `/audio/play/audio/${audioId}`,
         method: "GET",
         responseType: "blob",
       }),
@@ -44,6 +51,24 @@ export const audioApi = baseApi.injectEndpoints({
         method: "POST",
         data: values,
       }),
+      invalidatesTags: ["Meeting"],
+    }),
+
+    updateAudioText: builder.mutation({
+      query: ({ payload, speakerProfileId }) => ({
+        url: `/audio/update-audio-text/${speakerProfileId}`,
+        method: "POST",
+        data: payload,
+      }),
+      invalidatesTags: ["Meeting"],
+    }),
+
+    deleteAudioText: builder.mutation({
+      query: ({ speakerProfileId }) => ({
+        url: `/audio/delete-audio-text/${speakerProfileId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Meeting"],
     }),
   }),
 });
@@ -54,5 +79,8 @@ export const {
   useStartAudioProcessingMutation,
   useReadAudioSpeakersQuery,
   usePlayAudioMutation,
+  usePlaySpeakerProfileMutation,
   useAssignAudioSpeakersMutation,
+  useUpdateAudioTextMutation,
+  useDeleteAudioTextMutation,
 } = audioApi;

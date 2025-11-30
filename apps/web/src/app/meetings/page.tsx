@@ -4,7 +4,6 @@ import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdRemoveRedEye, MdSend } from "react-icons/md";
-import { toast } from "react-toastify";
 
 import type { Meeting } from "@/lib/type";
 

@@ -1,27 +1,31 @@
 from pydantic import BaseModel
-from src.meeting.schemas import MeetingItem
-
+from typing import Optional
+from datetime import datetime
+from src.employee.schemas import EmployeeItem
 class UploadAudioResponse(BaseModel):
     success: bool
     
     
+class SpeakerItem(BaseModel):
+    id: int
+    initial_speaker_label: str
+    text: str
+    audio_id: int
+    employee: Optional[EmployeeItem]
+
 class AudioItem(BaseModel):
     id: int
     name: str
-    date: str
+    date: datetime
     duration: str
     file_path: str
     status: str
     transcript: str | None
     processing_duration: str | None
-    meeting: MeetingItem | None
+    speaker_profiles: list[SpeakerItem] | None
     
-class SpeakerItem(BaseModel):
-    id: int
-    speaker: str
-    transcript: str
-    employee_id: int | None
     
+
 class ReadManyAudiosResponse(BaseModel):
     success: bool
     total: int

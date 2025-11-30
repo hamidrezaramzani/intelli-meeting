@@ -26,4 +26,4 @@ class Audio(Base):
     meeting_id = Column(Integer, ForeignKey("meetings.id"), nullable=True, index=True)
 
     meeting = relationship("Meeting", back_populates="audios")
-    speaker_profiles = relationship("SpeakerProfile", back_populates="audio")
+    speaker_profiles = relationship("SpeakerProfile", back_populates="audio",order_by="SpeakerProfile.start.asc()")

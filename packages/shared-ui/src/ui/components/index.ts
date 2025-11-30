@@ -1,4 +1,6 @@
+export * from "./audio-player";
 export * from "./button";
+export * from "./chip";
 export * from "./confirmation-modal";
 export * from "./icon-button";
 export * from "./login";

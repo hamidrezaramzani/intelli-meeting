@@ -14,7 +14,7 @@ export const Button = ({
 
   const variantStyles = {
     default:
-      "bg-black text-white border-black hover:bg-slate-900 focus:bg-indigo-900",
+      "bg-slate-800 text-white border-black hover:bg-slate-900 focus:bg-indigo-900",
     primary:
       "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 focus:bg-blue-800",
     secondary:

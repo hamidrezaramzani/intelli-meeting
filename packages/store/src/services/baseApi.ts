@@ -72,6 +72,7 @@ export const baseApi = createApi({
   tagTypes: [
     "Audios",
     "Meetings",
+    "Meeting",
     "Positions",
     "Employees",
     "EmployeeCandidates",

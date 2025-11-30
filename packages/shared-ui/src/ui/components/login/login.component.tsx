@@ -48,7 +48,7 @@ export const Login = ({ navigate }: LoginProps) => {
 
   return (
     <div className="w-96 bg-white">
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <div className="w-full">
         <div className="flex justify-center items-center flex-col mt-6">
           <button

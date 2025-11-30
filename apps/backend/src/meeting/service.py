@@ -1,7 +1,8 @@
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, load_only
 from . import models, schemas
 from src.employee import models as employee_models
 from src.audio import models as audio_models
+from src.speaker_profile import models as speaker_profile_models
 from src.ollama import service as ollama_service
 
 
@@ -46,11 +47,42 @@ def read_meetings(db: Session, skip: int = 0, limit: int = 10):
     }
 
 
-def get_meeting_candidates(db: Session):
+def read_meeting_candidates(db: Session):
     meetings = db.query(models.Meeting).all()
     return {
         "success": True,
         "meetings": meetings,
+    }
+
+
+def read_meeting(db: Session, meeting_id):
+    meeting = (
+        db.query(models.Meeting)
+        .options(
+            joinedload(models.Meeting.audios)
+            .joinedload(audio_models.Audio.speaker_profiles)
+            .load_only(
+                speaker_profile_models.SpeakerProfile.id,
+                speaker_profile_models.SpeakerProfile.initial_speaker_label,
+                speaker_profile_models.SpeakerProfile.audio_id,
+                speaker_profile_models.SpeakerProfile.text,
+            )
+            .joinedload(speaker_profile_models.SpeakerProfile.employee)
+            .load_only(
+                employee_models.Employee.id,
+                employee_models.Employee.fullName,
+            )
+        )
+        .filter(models.Meeting.id == meeting_id)
+        .first()
+    )
+
+    if not meeting:
+        return {"error": "Meeting not found"}
+
+    return {
+        "success": True,
+        "meeting": meeting,
     }
 
 

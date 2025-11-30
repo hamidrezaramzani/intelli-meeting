@@ -25,12 +25,19 @@ def read_many_meetings(
     skip = (page - 1) * limit
     return service.read_meetings(db=db, skip=skip, limit=limit)
 
+@router.get("/{meeting_id}", response_model=schemas.ReadOneMeetingResponse)
+def read_one_meeting(
+    meeting_id,
+    db: Session = Depends(get_db),
+):
+    return service.read_meeting(db, meeting_id)
+
 
 @router.get("/candidates", response_model=schemas.ReadMeetingCandidatesResponse)
 def read_meeting_candidates(
     db: Session = Depends(get_db),
 ):
-    return service.get_meeting_candidates(db=db)
+    return service.read_meeting_candidates(db=db)
 
 @router.get("/start-audio-transcript-processing/{meeting_id}", response_model=schemas.ConvertTranscriptToSummary)
 def start_audio_transcript_processing(

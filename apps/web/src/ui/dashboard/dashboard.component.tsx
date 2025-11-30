@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { MdLogout } from "react-icons/md";
 
 import type { DashboardProps } from "./dashboard.type";
 
@@ -13,15 +12,9 @@ export const Dashboard = ({ children, title, backUrl }: DashboardProps) => {
   };
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full h-screen flex p-5">
-        <div className="w-2/12 relative bg-slate-100 rounded-l-2xl py-5 px-3">
-          <div className="w-11/12 absolute bottom-4">
-            <div className="flex w-full items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-slate-200 cursor-pointer transition-all">
-              <MdLogout />
-              <span className="text-sm font-medium">Logout</span>
-            </div>
-          </div>
-          <button type="button" onClick={goToHome}>
+      <div className="w-full h-auto min-h-screen flex p-5">
+        <div className="w-2/12 relative bg-white border border-slate-800 rounded-l-2xl px-3 h-auto">
+          <button className="py-" type="button" onClick={goToHome}>
             <div className="w-full p-3 flex items-center cursor-pointer">
               <div className="w-3/12 flex justify-start">
                 <img alt="LOGO" className="w-18" src="/logo.png" />
@@ -39,9 +32,9 @@ export const Dashboard = ({ children, title, backUrl }: DashboardProps) => {
             <DashboardSidebar />
           </div>
         </div>
-        <div className="w-5/6 py-5 px-6 bg-slate-50 rounded-r-2xl">
+        <div className="w-5/6 py-4 px-6 bg-white border-slate-800 border-t border-r border-b rounded-r-2xl h-auto">
           <DashboardHeader backUrl={backUrl} title={title} />
-          <div>{children}</div>
+          <div className="h-auto">{children}</div>
         </div>
       </div>
     </div>

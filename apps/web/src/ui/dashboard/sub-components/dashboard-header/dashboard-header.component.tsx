@@ -1,3 +1,5 @@
+import { IconButton } from "@intelli-meeting/shared-ui";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   MdArrowBackIos,
@@ -11,8 +13,8 @@ const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
   const router = useRouter();
 
   return (
-    <header className="w-full flex items-center justify-between py-3 rounded-2xl">
-      <h2 className="text-lg flex items-center gap-4 font-semibold text-slate-800">
+    <header className="px-3 w-full bg-slate-800 flex items-center justify-between py-3 mb-4 rounded-2xl">
+      <h2 className="text-xl flex pl-3 items-center gap-4 font-semibold  text-white">
         {backUrl && (
           <button
             className="cursor-pointer"
@@ -26,22 +28,22 @@ const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
       </h2>
 
       <div className="flex items-center gap-4">
-        <button
-          className="p-2 hover:bg-slate-100 rounded-full transition-colors"
-          type="button"
-        >
-          <MdNotificationsNone size={22} className="text-slate-600" />
-        </button>
+        <IconButton>
+          <MdNotificationsNone size={22} />
+        </IconButton>
 
-        <button
-          className="p-2 hover:bg-slate-100 rounded-full transition-colors"
-          type="button"
-        >
-          <MdSettings size={22} className="text-slate-600" />
-        </button>
+        <IconButton type="button">
+          <MdSettings size={22} />
+        </IconButton>
 
-        <div className="w-9 h-9 rounded-full bg-slate-300 flex items-center justify-center text-sm font-semibold text-white cursor-pointer hover:opacity-90 transition">
-          HR
+        <div className="w-24 rounded-full bg-slate-300 flex items-center justify-center text-sm font-semibold text-white cursor-pointer hover:opacity-90 transition">
+          <Image
+            height={55}
+            width={55}
+            alt="user"
+            className="w-12 rounded-md"
+            src="https://avatar.iran.liara.run/public"
+          />
         </div>
       </div>
     </header>

@@ -125,49 +125,64 @@ def assign_audio_to_meeting(db: Session, audio_id: int, meeting_id: int):
     }
 
 
-def play_audio(db: Session, speaker_profile_id: str):
-    speaker_profile = (
-        db.query(speaker_profile_model.SpeakerProfile)
-        .options(joinedload(speaker_profile_model.SpeakerProfile.audio))
-        .filter(speaker_profile_model.SpeakerProfile.id == speaker_profile_id)
-        .first()
-    )
+def play_audio(
+    db: Session, speaker_profile_id: str | None = None, audio_id: str | None = None
+):
+    if speaker_profile_id:
+        speaker_profile = (
+            db.query(speaker_profile_model.SpeakerProfile)
+            .options(joinedload(speaker_profile_model.SpeakerProfile.audio))
+            .filter(speaker_profile_model.SpeakerProfile.id == speaker_profile_id)
+            .first()
+        )
 
-    if not speaker_profile:
-        raise HTTPException(status_code=404, detail="Speaker profile not found")
+        if not speaker_profile:
+            raise HTTPException(status_code=404, detail="Speaker profile not found")
 
-    start_sec = speaker_profile.start
-    end_sec = speaker_profile.end
+        start_sec = speaker_profile.start
+        end_sec = speaker_profile.end
 
-    audio_file_name = speaker_profile.audio.file_path
-    audio_path = os.path.join(UPLOAD_DIR, audio_file_name)
+        audio_file_name = speaker_profile.audio.file_path
+        audio_path = os.path.join(UPLOAD_DIR, audio_file_name)
 
-    if not os.path.exists(audio_path):
-        raise HTTPException(status_code=404, detail="Audio file not found")
+        if not os.path.exists(audio_path):
+            raise HTTPException(status_code=404, detail="Audio file not found")
 
-    with wave.open(audio_path, "rb") as wf:
-        sample_rate = wf.getframerate()
-        num_channels = wf.getnchannels()
-        sample_width = wf.getsampwidth()
-        total_frames = wf.getnframes()
+        with wave.open(audio_path, "rb") as wf:
+            sample_rate = wf.getframerate()
+            num_channels = wf.getnchannels()
+            sample_width = wf.getsampwidth()
+            total_frames = wf.getnframes()
 
-        start_frame = int(start_sec * sample_rate)
-        end_frame = int(end_sec * sample_rate)
-        if end_frame > total_frames:
-            end_frame = total_frames
+            start_frame = int(start_sec * sample_rate)
+            end_frame = int(end_sec * sample_rate)
+            if end_frame > total_frames:
+                end_frame = total_frames
 
-        wf.setpos(start_frame)
-        frames = wf.readframes(end_frame - start_frame)
+            wf.setpos(start_frame)
+            frames = wf.readframes(end_frame - start_frame)
 
-    buffer = io.BytesIO()
-    with wave.open(buffer, "wb") as out_wf:
-        out_wf.setnchannels(num_channels)
-        out_wf.setsampwidth(sample_width)
-        out_wf.setframerate(sample_rate)
-        out_wf.writeframes(frames)
+        buffer = io.BytesIO()
+        with wave.open(buffer, "wb") as out_wf:
+            out_wf.setnchannels(num_channels)
+            out_wf.setsampwidth(sample_width)
+            out_wf.setframerate(sample_rate)
+            out_wf.writeframes(frames)
 
-    buffer.seek(0)
-    return StreamingResponse(buffer, media_type="audio/wav")
+        buffer.seek(0)
+        return StreamingResponse(buffer, media_type="audio/wav")
+    else:
+        audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+        audio_file_name = audio.file_path
+        audio_file_path = os.path.join(UPLOAD_DIR, audio_file_name)
+        print(audio_file_path)
+        if not os.path.exists(audio_file_path):
+            raise HTTPException(status_code=404, detail="File not found")
+        def iterfile():
+            with open(audio_file_path, mode="rb") as file:
+                yield from file
+
+        return StreamingResponse(iterfile(), media_type="audio/wav")
 
 
 def set_audio_status(db: Session, audio, status):
@@ -219,17 +234,7 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
         for segment in transcript_segments:
             transcript += segment["text"] + " "
 
-            employee_id = get_similar_employee_id(
-                segment["embedding"], speaker_profiles
-            )
-
-            chroma_documents.append(segment["text"])
-            chroma_ids.append(str(uuid.uuid4()))
-            chroma_metadatas.append(
-                {"audio_id": str(audio_id), "employee_id": employee_id}
-            )
-
-            speaker_profile_service.create_speaker_profile(
+            created_speaker_profile_id = speaker_profile_service.create_speaker_profile(
                 db,
                 user_id=str(user_id),
                 initial_speaker_label=segment["speaker"],
@@ -240,6 +245,21 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
                 start=segment["start"],
                 end=segment["end"],
             )
+
+            employee_id = get_similar_employee_id(
+                segment["embedding"], speaker_profiles
+            )
+
+            chroma_documents.append(segment["text"])
+            chroma_ids.append(str(uuid.uuid4()))
+            chroma_metadatas.append(
+                {
+                    "audio_id": str(audio_id),
+                    "employee_id": employee_id,
+                    "speaker_profile_id": created_speaker_profile_id,
+                }
+            )
+
         chroma_collection.delete(where={"audio_id": str(audio_id)})
         chroma_collection.add(
             ids=chroma_ids, documents=chroma_documents, metadatas=chroma_metadatas

@@ -5,4 +5,5 @@ type Variant = "default" | "primary" | "secondary";
 export interface IconButtonProps extends ButtonProps {
   size?: "lg" | "md" | "sm";
   variant?: Variant;
+  isLoading?: boolean;
 }

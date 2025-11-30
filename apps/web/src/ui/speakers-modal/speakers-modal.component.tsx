@@ -27,7 +27,7 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
   } = useReadAudioSpeakersQuery(audio?.id ? { audioId: audio?.id } : skipToken);
 
   const { data: employees } = useReadManyEmployeeCandidatesQuery(
-    audio?.id ? {} : skipToken,
+    audio?.id ? {} : skipToken
   );
 
   const [assignAudioSpeakers] = useAssignAudioSpeakersMutation();
@@ -40,9 +40,9 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
 
   const employeeOptions = employees
     ? employees?.map((employee: any) => ({
-      value: String(employee.id),
-      label: `${employee.fullName} - ${employee.position.title}`,
-    }))
+        value: String(employee.id),
+        label: `${employee.fullName} - ${employee.position.title}`,
+      }))
     : [];
 
   const speakers = useMemo(
@@ -79,10 +79,10 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
 
   const handleSpeakerChange = (
     employeeId: string,
-    speakerProfileId: string,
+    speakerProfileId: string
   ) => {
     const isExistsBefore = values.some(
-      (v) => v.speakerProfileId === speakerProfileId,
+      (v) => v.speakerProfileId === speakerProfileId
     );
 
     if (!isExistsBefore) {
@@ -98,7 +98,7 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
 
     if (!employeeId && isExistsBefore) {
       setValues((prevValues) =>
-        prevValues.filter((v) => v.speakerProfileId !== speakerProfileId),
+        prevValues.filter((v) => v.speakerProfileId !== speakerProfileId)
       );
       return;
     }
@@ -110,7 +110,7 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
           newValue.employeeId = employeeId;
         }
         return newValue;
-      }),
+      })
     );
   };
 
@@ -126,13 +126,13 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
           },
         },
         error: "Failed to assign speakers. Please try again.",
-      },
+      }
     );
   };
 
   const getSelectInputValue = (speakerProfileId: string) => {
     const selectedSpeakerProfile = values.find(
-      (sp) => sp.speakerProfileId === speakerProfileId,
+      (sp) => sp.speakerProfileId === speakerProfileId
     );
     if (selectedSpeakerProfile) return selectedSpeakerProfile.employeeId;
   };
@@ -140,7 +140,7 @@ export const SpeakersModal = ({ onClose, audio }: SpeakersModalProps) => {
   const columns = getSpeakerColumns(
     employeeOptions,
     getSelectInputValue,
-    handleSpeakerChange,
+    handleSpeakerChange
   );
 
   return (

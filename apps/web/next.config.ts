@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     "@intelli-meeting/shared-ui",
     "@intelli-meeting/design-system",
   ],
+  images: {
+    domains: ["avatar.iran.liara.run"],
+  },
 };
 
 export default nextConfig;
