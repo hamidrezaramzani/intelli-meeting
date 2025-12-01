@@ -86,7 +86,7 @@ def read_meeting(db: Session, meeting_id):
     }
 
 
-def start_transcript_processing(db: Session, meeting_id: int):
+def generate_meeting_summary(db: Session, meeting_id: int):
     try:
         meeting = (
             db.query(models.Meeting).filter(models.Meeting.id == meeting_id).first()

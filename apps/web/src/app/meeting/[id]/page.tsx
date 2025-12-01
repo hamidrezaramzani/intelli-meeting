@@ -10,7 +10,7 @@ import { getBounceEffect } from "@/lib/helpers";
 import { useReadOneMeetingQuery } from "@/services";
 import { Dashboard } from "@/ui";
 
-import { MeetingManagementTab } from "../_components";
+import { MeetingManagementTab, MeetingSummaryTab } from "../_components";
 
 const Meeting = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ const Meeting = () => {
   const { id } = useParams();
 
   const { data: meetingData } = useReadOneMeetingQuery(
-    id ? { meetingId: id as string } : skipToken
+    id ? { meetingId: id as string } : skipToken,
   );
 
   const meeting = meetingData?.meeting;
@@ -73,7 +73,10 @@ const Meeting = () => {
                   label: "Management",
                   content: <MeetingManagementTab audios={meeting?.audios} />,
                 },
-                { label: "Summary", content: <div>Summary</div> },
+                {
+                  label: "Summary",
+                  content: <MeetingSummaryTab meetingId={id as string} />,
+                },
               ]}
             />
           </motion.div>

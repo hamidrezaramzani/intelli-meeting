@@ -32,11 +32,21 @@ async def websocket_endpoint(websocket: WebSocket, meeting_id: str = Query(...),
     )
     audio_ids = [str(audio.id) for audio in audios]
 
-    asyncio.create_task(ollama_service.generate_meeting_summary(websocket, audio_ids))
+    summary_task = asyncio.create_task(ollama_service.generate_meeting_summary(websocket, audio_ids, meeting_id, db))
     await asyncio.sleep(0)
 
     try:
-        while True:
-            await asyncio.sleep(1)
+        await summary_task
+        await websocket.send_json({"type": "done", "status": "completed"})
     except WebSocketDisconnect:
-        print("WebSocket disconnected")
+        print("WebSocket disconnected by client")
+        summary_task.cancel()
+        try:
+            await summary_task
+        except asyncio.CancelledError:
+            print("Summary task cancelled due to WebSocket disconnect")
+        except Exception as e:
+            print("Error during summary generation:", e)
+            await websocket.send_json({"type": "done", "status": "error", "message": str(e)})
+    finally:
+            await websocket.close()

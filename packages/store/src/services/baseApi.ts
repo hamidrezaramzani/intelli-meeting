@@ -73,6 +73,7 @@ export const baseApi = createApi({
     "Audios",
     "Meetings",
     "Meeting",
+    "MeetingSummary",
     "Positions",
     "Employees",
     "EmployeeCandidates",

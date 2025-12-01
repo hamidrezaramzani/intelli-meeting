@@ -12,6 +12,13 @@ export const meetingsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Meetings"],
     }),
+    generateMeetingSummary: builder.mutation({
+      query: ({ meetingId }) => ({
+        url: `/meeting/generate-meeting-summary/${meetingId}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Meetings"],
+    }),
     readManyMeetings: builder.query({
       query: () => ({
         url: `/meeting`,
@@ -35,6 +42,14 @@ export const meetingsApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Meeting"],
     }),
+    readMeetingSummaries: builder.query({
+      query: ({ meetingId }) => ({
+        url: `/meeting/summaries/${meetingId}`,
+        method: "GET",
+      }),
+      providesTags: ["MeetingSummary"],
+      transformResponse: (data: any) => data?.data,
+    }),
   }),
 });
 
@@ -43,4 +58,5 @@ export const {
   useReadManyMeetingsQuery,
   useReadMeetingCandidatesQuery,
   useReadOneMeetingQuery,
+  useReadMeetingSummariesQuery,
 } = meetingsApi;

@@ -15,6 +15,7 @@ class Meeting(Base):
     __tablename__ = "meetings"
 
     id = Column(Integer, primary_key=True, index=True)
+    summary = relationship("MeetingSummaryModel", back_populates="meeting", uselist=False)
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     date = Column(String, nullable=False)
@@ -23,3 +24,4 @@ class Meeting(Base):
     meeting_link = Column(String, nullable=False)    
     audios = relationship("Audio", back_populates="meeting")
     employees = relationship("Employee", secondary=meeting_employee, back_populates="meetings")
+

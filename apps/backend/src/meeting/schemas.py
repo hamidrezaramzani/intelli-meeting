@@ -45,6 +45,34 @@ class ReadMeetingCandidatesResponse(BaseModel):
     success: bool
     meetings: list[MeetingItem] | None
     
+class SummaryResponse(BaseModel):
+    summary: Optional[str]
+    key_points: List[str]
+
+
+class DecisionResponse(BaseModel):
+    description: str
+    decided_by: Optional[str] = None
+
+
+class ActionItemResponse(BaseModel):
+    description: str
+    owner: Optional[str] = None
+    deadline: Optional[str] = None
+
+
+class MeetingSummaryResponse(BaseModel):
+    summary: Optional[SummaryResponse] = None
+    decisions: Optional[List[DecisionResponse]] = None
+    actions: Optional[List[ActionItemResponse]] = None
+    empty: Optional[bool] = None
+
+
+class ReadMeetingSummaryResponse(BaseModel):
+    success: bool
+    data: Optional[MeetingSummaryResponse] = None
+    error: Optional[str] = None
+    
 class ConvertTranscriptToSummary(BaseModel):
     success: bool
     

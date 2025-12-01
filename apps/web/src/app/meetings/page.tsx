@@ -3,7 +3,7 @@
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MdRemoveRedEye, MdSend } from "react-icons/md";
+import { MdRemoveRedEye } from "react-icons/md";
 
 import type { Meeting } from "@/lib/type";
 
@@ -29,29 +29,6 @@ const MeetingsPage = () => {
     type: "unlogged",
   });
 
-  const handleCreateSummaryClick = async (meetingId: string) => {
-    const ws = new WebSocket(
-      `ws://localhost:8000/ws/meeting/generate-summary?meeting_id=${meetingId}`,
-    );
-
-    const listener = (event: MessageEvent) => {
-      try {
-        const message = JSON.parse(event.data);
-        console.log(message);
-      } catch (e) {
-        console.error("Failed to parse message", e);
-      }
-    };
-
-    ws.addEventListener("message", listener);
-
-    ws.addEventListener("open", () => console.log("WebSocket opened"));
-    ws.addEventListener("close", () => console.log("WebSocket closed"));
-    ws.addEventListener("error", (err) =>
-      console.error("WebSocket error", err),
-    );
-  };
-
   return (
     <Dashboard title="Meetings">
       <MeetingDetailsModal
@@ -66,11 +43,6 @@ const MeetingsPage = () => {
             children: <MdRemoveRedEye />,
             onActionClick: (row) => setMeetingDetails(row),
             title: "Meeting details",
-          },
-          {
-            children: <MdSend />,
-            onActionClick: (row) => handleCreateSummaryClick(row.id),
-            title: "Send transcript for analysis by the LLM",
           },
         ]}
         columns={MEETINGS_LIST_COLUMNS}
