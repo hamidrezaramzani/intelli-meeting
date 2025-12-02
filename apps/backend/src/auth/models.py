@@ -11,4 +11,9 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     speaker_profiles = relationship("SpeakerProfile", back_populates="user")
-    
+
+    notifications = relationship(
+        "Notification",
+        back_populates="user",
+        foreign_keys="Notification.user_id",
+    )

@@ -25,9 +25,9 @@ const NewMeetingForm = () => {
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
   const employeeOptions = employees
     ? employees?.map((employee: any) => ({
-        value: String(employee.id),
-        label: `${employee.fullName} - ${employee.position.id}`,
-      }))
+      value: String(employee.id),
+      label: `${employee.fullName} - ${employee.position.id}`,
+    }))
     : [];
   const router = useRouter();
 
@@ -41,16 +41,22 @@ const NewMeetingForm = () => {
   });
 
   const onSubmit = async (data: MeetingFormValues) => {
-    void toast.promise(createMeeting(data).unwrap(), {
-      pending: "Please wait",
-      error: "We have an error when creating new user, please try again",
-      success: {
-        render: () => {
-          router.push("/meetings");
-          return "Meeting created successfully";
+    await toast.promise(
+      createMeeting({
+        ...data,
+        date: new Date(data.date).toISOString(),
+      }).unwrap(),
+      {
+        pending: "Please wait",
+        error: "We have an error when creating new user, please try again",
+        success: {
+          render: () => {
+            router.push("/meetings");
+            return "Meeting created successfully";
+          },
         },
       },
-    });
+    );
   };
 
   return (

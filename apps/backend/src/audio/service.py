@@ -19,6 +19,7 @@ import uuid
 import time
 import wave
 from src.chroma.chroma import chroma_collection
+from src.notification import service as notification_service
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -43,7 +44,9 @@ def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.6):
     return best_employee_id
 
 
-def save_audio(db: Session, name: str, file_content: bytes, filename: str):
+def save_audio(
+    db: Session, name: str, file_content: bytes, filename: str, user_id: str
+):
     filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
     file_path = os.path.join(UPLOAD_DIR, filename)
 
@@ -72,7 +75,13 @@ def save_audio(db: Session, name: str, file_content: bytes, filename: str):
     audio = models.Audio(
         name=name, file_path=os.path.basename(final_path), duration=duration_str
     )
-
+    notification_service.create_notification(
+        db=db,
+        title="Audio uploaded",
+        message=f"Your audio({audio.name}) file has been successfully uploaded ",
+        user_id=user_id,
+        type="uploading-audio",
+    )
     db.add(audio)
     db.commit()
     db.refresh(audio)
@@ -175,9 +184,9 @@ def play_audio(
         audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
         audio_file_name = audio.file_path
         audio_file_path = os.path.join(UPLOAD_DIR, audio_file_name)
-        print(audio_file_path)
         if not os.path.exists(audio_file_path):
             raise HTTPException(status_code=404, detail="File not found")
+
         def iterfile():
             with open(audio_file_path, mode="rb") as file:
                 yield from file
@@ -191,7 +200,7 @@ def set_audio_status(db: Session, audio, status):
     db.refresh(audio)
 
 
-def process_audio_to_text(db: Session, audio_id: int, user_id: int):
+def process_audio_to_text(db: Session, audio_id: str, user_id: str):
     try:
         audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
         if not audio:
@@ -267,6 +276,15 @@ def process_audio_to_text(db: Session, audio_id: int, user_id: int):
         audio.transcript = transcript
 
         set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
+
+        notification_service.create_notification(
+            db=db,
+            user_id=user_id,
+            title="Transcription Completed",
+            message="Your audio has been successfully converted to text. You can now review and edit the transcription.",
+            type="audio-processed",
+            audio_id=audio_id,
+        )
         db.commit()
         db.refresh(audio)
 

@@ -58,7 +58,10 @@ def process_audio(
 
 @router.post("/upload-recording", response_model=schemas.UploadAudioResponse)
 async def upload_recording(
-    name: str = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)
+    name: str = Form(...),
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    request: Request = None,
 ):
     if not file:
         raise HTTPException(status_code=400, detail="No file uploaded")
@@ -66,7 +69,9 @@ async def upload_recording(
     content = await file.read()
     filename = f"{name}.webm"
 
-    service.save_audio(db, name, content, filename)
+    user_id = get_user_id(request=request, db=db)
+
+    service.save_audio(db, name, content, filename, user_id)
     return {"success": True}
 
 

@@ -4,12 +4,12 @@ import enum
 from src.database import Base
 
 
-
 class AudioStatus(str, enum.Enum):
     PENDING = "pending"
     PROCESSING = "processing"
     SUCCESS = "success"
     FAILED = "failed"
+
 
 class Audio(Base):
     __tablename__ = "audios"
@@ -22,8 +22,11 @@ class Audio(Base):
     status = Column(Enum(AudioStatus), default=AudioStatus.PENDING)
     transcript = Column(String, nullable=True)
     processing_duration = Column(String, nullable=True)
-    
+
     meeting_id = Column(Integer, ForeignKey("meetings.id"), nullable=True, index=True)
 
     meeting = relationship("Meeting", back_populates="audios")
-    speaker_profiles = relationship("SpeakerProfile", back_populates="audio",order_by="SpeakerProfile.start.asc()")
+    speaker_profiles = relationship(
+        "SpeakerProfile", back_populates="audio", order_by="SpeakerProfile.start.asc()"
+    )
+    notifications = relationship("Notification", back_populates="audio")
