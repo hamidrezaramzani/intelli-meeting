@@ -88,7 +88,6 @@ def read_dashboard_timeline(db: Session, request: Request):
     today = datetime.utcnow().date()
     start_date = datetime.combine(today, datetime.min.time())
     end_date = datetime.combine(today, datetime.max.time())  
-    print(start_date, end_date)
     notifications = (
         db.query(Notification)
         .filter(
