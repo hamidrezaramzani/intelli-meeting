@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 
 import { getBounceEffect } from "@/lib/helpers";
 
-import { DashboardQuickAction } from "./sub-components/dashboard-quick-action.component.tsx";
+import { DashboardQuickAction } from "./sub-components";
 
 export const DashboardQuickActions = () => {
   return (

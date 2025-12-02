@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, joinedload, load_only
+from sqlalchemy.orm import Session, joinedload
 from . import models, schemas
 from src.employee import models as employee_models
 from src.audio import models as audio_models
@@ -6,7 +6,7 @@ from src.speaker_profile import models as speaker_profile_models
 from src.ollama import service as ollama_service
 
 
-def create_meeting(db: Session, body: schemas.CreateMeetingBody):
+def create_meeting(db: Session, body: schemas.CreateMeetingBody, user_id):
     meeting = models.Meeting(
         title=body.title,
         description=body.description,
@@ -14,6 +14,7 @@ def create_meeting(db: Session, body: schemas.CreateMeetingBody):
         start_time=body.startTime,
         end_time=body.endTime,
         meeting_link=body.meetingLink,
+        user_id=user_id
     )
     if body.employees:
         employees = (

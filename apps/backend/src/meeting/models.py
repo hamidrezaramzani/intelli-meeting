@@ -24,6 +24,9 @@ class Meeting(Base):
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
     meeting_link = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    user = relationship("User", back_populates="meetings")
+    
     audios = relationship("Audio", back_populates="meeting")
     employees = relationship(
         "Employee", secondary=meeting_employee, back_populates="meetings"

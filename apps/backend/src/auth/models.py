@@ -17,3 +17,8 @@ class User(Base):
         back_populates="user",
         foreign_keys="Notification.user_id",
     )
+    
+    meetings =  relationship(
+        "Meeting",
+        back_populates="user",
+    )

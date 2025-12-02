@@ -2,10 +2,20 @@ import { motion } from "motion/react";
 import { MdOutlineQuestionMark } from "react-icons/md";
 
 import { getBounceEffect } from "@/lib/helpers";
+import { useReadDashboardStatisticsQuery } from "@/services";
 
-import type { StatisticsProps } from "./dashboard-statistics.type";
+import type { StatItem } from "./dashboard-statistics.type";
 
-export const DashboardStatistics = ({ items }: StatisticsProps) => {
+import { DashboardStatisticsSkeletonLoading } from "../dashboard-statistics-skeleton-loading";
+import { getDashboardStatistics } from "./dashboard-statistics.constant";
+
+export const DashboardStatistics = () => {
+  const { data: statistics, isLoading } = useReadDashboardStatisticsQuery({});
+
+  const items: StatItem[] = getDashboardStatistics(statistics);
+
+  if (isLoading) return <DashboardStatisticsSkeletonLoading />;
+
   return (
     <div className="w-full flex gap-4">
       {items.map((item, index) => (

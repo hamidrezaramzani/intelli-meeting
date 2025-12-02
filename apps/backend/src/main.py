@@ -5,7 +5,7 @@ from src.middleware import jwt_middleware
 from src import database
 from src.database import Base
 
-from src.models import * 
+from src.models import *
 
 from src.auth import router as auth_router
 from src.audio import router as audio_router
@@ -13,7 +13,7 @@ from src.meeting import router as meeting_router
 from src.meeting import router_ws as meeting_router_ws
 from src.position import router as positions_router
 from src.employee import router as employees_router
-
+from src.dashboard import router as dashboard_router
 
 app = FastAPI(title="Intelli meetings")
 
@@ -31,6 +31,7 @@ Base.metadata.create_all(bind=database.engine)
 app.include_router(auth_router.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(audio_router.router, prefix="/api/audio", tags=["Audio"])
 app.include_router(meeting_router.router, prefix="/api/meeting", tags=["Meeting"])
+app.include_router(dashboard_router.router, prefix="/api/dashboard", tags=["Dashboard"])
 app.include_router(meeting_router_ws.router, prefix="/ws/meeting", tags=["Meeting"])
 app.include_router(positions_router.router, prefix="/api/position", tags=["Position"])
 app.include_router(employees_router.router, prefix="/api/employee", tags=["Employee"])

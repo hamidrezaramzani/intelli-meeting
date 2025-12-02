@@ -1,18 +1,20 @@
 from . import schemas, service
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from src.database import get_db
 from . import schemas, service
 from src.meeting_summary import service as meeting_summary_service
-
+from src import utils
 router = APIRouter()
 
 
 @router.post("/", response_model=schemas.CreateMeetingResponse)
 async def create_meeting(
+    request: Request,
     body: schemas.CreateMeetingBody, db: Session = Depends(get_db)
 ):
-    service.create_meeting(db, body)
+    user_id = utils.get_user_id(request, db)
+    service.create_meeting(db, body, user_id)
     return {
         "success": True,
     }

@@ -1,11 +1,8 @@
 import type { FC } from "react";
 
-interface StatItem {
+export interface StatItem {
   title: string;
   value: number | string;
   icon: FC<any>;
 }
 
-export interface StatisticsProps {
-  items: StatItem[];
-}

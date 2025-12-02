@@ -2,6 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 from src.employee import schemas as employee_schemas
 from src.audio import schemas as audio_schemas
+from datetime import datetime
 
 class CreateMeetingResponse(BaseModel):
     success: bool
@@ -21,7 +22,7 @@ class MeetingItem(BaseModel):
     id: int
     title: str
     description: str
-    date: str
+    date: datetime
     start_time: str
     end_time: str
     meeting_link: str

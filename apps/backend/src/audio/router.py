@@ -12,7 +12,6 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 from src.database import get_db
-from src.auth import models as user_models
 from src.audio import schemas, service, models
 from src.speaker_profile import service as speaker_profile_service
 from src.auth import utils
@@ -20,23 +19,6 @@ from src.auth import utils
 router = APIRouter()
 
 
-def get_user_id(request: Request, db: Session):
-    auth_header = request.headers.get("Authorization")
-    if not auth_header or not auth_header.startswith("Bearer "):
-        raise HTTPException(status_code=403, detail="Invalid auth header")
-    token = auth_header.split(" ")[1]
-    payload = utils.decode_access_token(token)
-    if not payload:
-        raise HTTPException(status_code=403, detail="Invalid or expired token")
-    user_email = payload.get("sub")
-    if not user_email:
-        raise HTTPException(status_code=403, detail="Email not found in token")
-
-    user = (
-        db.query(user_models.User).filter(user_models.User.email == user_email).first()
-    )
-
-    return user.id
 
 
 @router.get("/process/{audio_id}")
@@ -50,7 +32,7 @@ def process_audio(
     if not audio:
         raise HTTPException(status_code=404, detail="Audio not found")
 
-    user_id = get_user_id(request=request, db=db)
+    user_id = utils.get_user_id(request=request, db=db)
     background_tasks.add_task(service.process_audio_to_text, db, audio_id, user_id)
 
     return {"success": True, "message": f"Processing of audio {audio_id} started"}
@@ -69,7 +51,7 @@ async def upload_recording(
     content = await file.read()
     filename = f"{name}.webm"
 
-    user_id = get_user_id(request=request, db=db)
+    user_id = utils.get_user_id(request=request, db=db)
 
     service.save_audio(db, name, content, filename, user_id)
     return {"success": True}
@@ -121,7 +103,7 @@ def assigns_audio_speakers(
     speaker_profile_assignment_payload=Body(...),
     db: Session = Depends(get_db),
 ):
-    user_id = get_user_id(request=request, db=db)
+    user_id = utils.get_user_id(request=request, db=db)
     return speaker_profile_service.assign_speakers(
         db, speaker_profile_assignment_payload, audio_id, user_id
     )
