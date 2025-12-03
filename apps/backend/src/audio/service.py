@@ -281,7 +281,7 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             db=db,
             user_id=user_id,
             title="Transcription Completed",
-            message="Your audio has been successfully converted to text. You can now review and edit the transcription.",
+            message="Your audio({audio.name}) has been successfully converted to text. You can now review and edit the transcription.",
             type="audio-processed",
             audio_id=audio_id,
         )
@@ -293,8 +293,8 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
         notification_service.create_notification(
             db=db,
             user_id=user_id,
-            title="Transcription Completed",
-            message="Audio transcripting failed, please try again",
+            title="Transcription Failed",
+            message=f"Audio({audio.name}) transcripting failed, please try again",
             type="audio-processed-failed",
             audio_id=audio_id,
         )
