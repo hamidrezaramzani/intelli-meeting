@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @eslint-react/hooks-extra/no-direct-set-state-in-use-effect */
-import { Button } from "@intelli-meeting/shared-ui";
+import { Button, EmptyState } from "@intelli-meeting/shared-ui";
 import { skipToken } from "@reduxjs/toolkit/query";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -16,11 +16,9 @@ import type {
 } from "./meeting-summary-tab.type";
 
 export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
-  const {
-    data: meetingSummaries,
-    isLoading: isMeetingSummariesLoading,
-    isSuccess: isMeetingSummariesSuccess,
-  } = useReadMeetingSummariesQuery(meetingId ? { meetingId } : skipToken);
+  const { data: meetingSummaries } = useReadMeetingSummariesQuery(
+    meetingId ? { meetingId } : skipToken,
+  );
   const [summaryData, setSummaryData] = useState<MeetingSummary>();
 
   const [decisionsData, setDecisionsData] = useState<MeetingDecision>();
@@ -44,7 +42,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
     setActionsData(undefined);
     setGeneratingSummariesLoading(true);
     const ws = new WebSocket(
-      `${process.env.NEXT_PUBLIC_WS_URL}/meeting/generate-summary?meeting_id=${meetingId}`,
+      `${process.env.NEXT_PUBLIC_WS_URL}/meeting/generate-summary?meeting_id=${meetingId}`
     );
 
     const listener = (event: MessageEvent) => {
@@ -106,25 +104,16 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
   );
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="flex flex-col gap-6">
       {meetingSummaries &&
       meetingSummaries.empty &&
       !isGeneratingSummariesLoading ? (
-        <div className="w-full h-96 bg-slate-100 flex flex-col justify-center items-center rounded-md">
-          <div className="flex flex-col items-center gap-1 mb-3">
-            <h1 className="text-lg text-slate-700">No Summary Available</h1>
-            <p className="text-sm text-slate-500">
-              There are no notes or action items recorded for this session yet
-            </p>
-          </div>
-          <Button
-            fullWidth={false}
-            isLoading={isGeneratingSummariesLoading}
-            onClick={handleGenerateMeetingSummary}
-          >
-            Generate summaries
-          </Button>
-        </div>
+        <EmptyState
+          title="No summary available"
+          actionLabel="Generate"
+          description="There are no notes or action items recorded for this session yet"
+          onAction={handleGenerateMeetingSummary}
+        />
       ) : (
         <>
           <section className="bg-white p-4 rounded-lg">

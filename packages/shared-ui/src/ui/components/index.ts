@@ -2,6 +2,7 @@ export * from "./audio-player";
 export * from "./button";
 export * from "./chip";
 export * from "./confirmation-modal";
+export * from "./empty-state";
 export * from "./icon-button";
 export * from "./login";
 export * from "./modal";

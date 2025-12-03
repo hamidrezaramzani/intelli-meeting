@@ -1,4 +1,4 @@
-import { AudioPlayer } from "@intelli-meeting/shared-ui";
+import { AudioPlayer, EmptyState } from "@intelli-meeting/shared-ui";
 import { useState } from "react";
 
 import {
@@ -22,7 +22,7 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
         ? null
         : selectedId
           ? Number(selectedId)
-          : null,
+          : null
     );
   };
 
@@ -55,9 +55,10 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
           </div>
         ))
       ) : (
-        <div className="w-full h-96 border border-slate-100 rounded-md">
-          There is no audio
-        </div>
+        <EmptyState
+          title="No audio available"
+          description="There are no audios recorded for this meeting yet"
+        />
       )}
     </div>
   );
