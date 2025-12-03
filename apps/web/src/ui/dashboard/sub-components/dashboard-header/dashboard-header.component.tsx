@@ -32,7 +32,7 @@ const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
           <MdNotificationsNone size={22} />
         </IconButton>
 
-        <IconButton type="button">
+        <IconButton type="button" onClick={() => router.push("/settings")}>
           <MdSettings size={22} />
         </IconButton>
 

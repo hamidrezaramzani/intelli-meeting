@@ -45,7 +45,7 @@ def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.6):
 
 
 def save_audio(
-    db: Session, name: str, file_content: bytes, filename: str, user_id: str
+    db: Session, name: str, meeting_id, file_content: bytes, filename: str, user_id: str
 ):
     filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
     file_path = os.path.join(UPLOAD_DIR, filename)
@@ -73,7 +73,7 @@ def save_audio(
         duration_str = "Unknown"
 
     audio = models.Audio(
-        name=name, file_path=os.path.basename(final_path), duration=duration_str
+        name=name, file_path=os.path.basename(final_path), duration=duration_str, meeting_id=meeting_id
     )
     notification_service.create_notification(
         db=db,
@@ -290,6 +290,14 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
 
     except Exception as e:
         print(f"Error processing audio {audio_id}: {e}")
+        notification_service.create_notification(
+            db=db,
+            user_id=user_id,
+            title="Transcription Completed",
+            message="Audio transcripting failed, please try again",
+            type="audio-processed-failed",
+            meeting_id=audio_id,
+    )
         set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)
         db.commit()
         db.refresh(audio)

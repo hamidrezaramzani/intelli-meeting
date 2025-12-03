@@ -129,7 +129,13 @@ export const RecordPage = () => {
     setIsPlaying((prev) => !prev);
   };
 
-  const uploadRecording = async (name: string) => {
+  const uploadRecording = async ({
+    name,
+    meetingId,
+  }: {
+    name: string;
+    meetingId: string;
+  }) => {
     if (!recordedUrl) {
       console.error("Recorded url not found");
       return false;
@@ -140,6 +146,7 @@ export const RecordPage = () => {
 
     const formData = new FormData();
     formData.append("name", name);
+    formData.append("meetingId", meetingId);
     formData.append("file", file);
 
     const { success } = await toast.promise(
@@ -149,7 +156,7 @@ export const RecordPage = () => {
         error: "We have an error",
         success: {
           render: () => {
-            navigate("/recording/list");
+            setIsSelectAudioNameModalOpen(false);
             return "Audio file uploaded successfully";
           },
         },
@@ -173,8 +180,11 @@ export const RecordPage = () => {
       type: "reset-recording",
     });
   };
-  const handleConfirmSelectingAudioName = async (name: string) => {
-    const isUploaded = await uploadRecording(name);
+  const handleConfirmSelectingAudioName = async (
+    name: string,
+    meetingId: string,
+  ) => {
+    const isUploaded = await uploadRecording({ name, meetingId });
     if (isUploaded) handleReset();
   };
 

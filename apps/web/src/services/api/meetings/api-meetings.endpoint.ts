@@ -1,5 +1,6 @@
 import { baseApi } from "@intelli-meeting/store";
-import { Meeting, ReadOneMeetingResponse } from "./api-meetings.type";
+
+import type { ReadOneMeetingResponse } from "./api-meetings.type";
 
 export const meetingsApi = baseApi.injectEndpoints({
   overrideExisting: true,
@@ -31,6 +32,7 @@ export const meetingsApi = baseApi.injectEndpoints({
         url: "/meeting/candidates",
         method: "GET",
       }),
+      transformResponse: (data) => data.meetings,
     }),
     readOneMeeting: builder.query<
       ReadOneMeetingResponse,

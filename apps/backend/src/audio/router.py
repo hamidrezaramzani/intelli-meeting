@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from src.database import get_db
 from src.audio import schemas, service, models
 from src.speaker_profile import service as speaker_profile_service
-from src.auth import utils
+from src import utils
 
 router = APIRouter()
 
@@ -41,6 +41,7 @@ def process_audio(
 @router.post("/upload-recording", response_model=schemas.UploadAudioResponse)
 async def upload_recording(
     name: str = Form(...),
+    meetingId: str = Form(...),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     request: Request = None,
@@ -53,7 +54,7 @@ async def upload_recording(
 
     user_id = utils.get_user_id(request=request, db=db)
 
-    service.save_audio(db, name, content, filename, user_id)
+    service.save_audio(db, name, meetingId, content, filename, user_id)
     return {"success": True}
 
 

@@ -34,6 +34,14 @@ async def websocket_endpoint(
     )
     audio_ids = [str(audio.id) for audio in audios]
 
+    notification_service.create_notification(
+        db=db,
+        user_id=meeting.user_id,
+        title="Generating Summary",
+        message="We are summarizing the conversation. This may take a moment.",
+        type="summary-generating",
+        meeting_id=meeting_id,
+    )
     summary_task = asyncio.create_task(
         ollama_service.generate_meeting_summary(websocket, audio_ids, meeting_id, db)
     )
@@ -43,15 +51,22 @@ async def websocket_endpoint(
         await summary_task
         await websocket.send_json({"type": "done", "status": "completed"})
         notification_service.create_notification(
+                db=db,
+                user_id=meeting.user_id,
+                title="Summary generated",
+                message="We are generated the meeting conversation",
+                type="summary-generated",
+                meeting_id=meeting_id,
+            )
+    except WebSocketDisconnect:
+        notification_service.create_notification(
             db=db,
             user_id=meeting.user_id,
-            title="Generating Summary",
-            message="We are summarizing the conversation. This may take a moment.",
-            type="summary-generating",
+            title="Generating summary failed",
+            message="Generating meeting summary failed, please try again",
+            type="generate-summary-failed",
             meeting_id=meeting_id,
         )
-    except WebSocketDisconnect:
-        print("WebSocket disconnected by client")
         summary_task.cancel()
         try:
             await summary_task

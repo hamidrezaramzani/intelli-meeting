@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session, joinedload
+from fastapi import Request
 from . import models, schemas
 from src.employee import models as employee_models
 from src.audio import models as audio_models
 from src.speaker_profile import models as speaker_profile_models
 from src.ollama import service as ollama_service
-
+from src import utils
 
 def create_meeting(db: Session, body: schemas.CreateMeetingBody, user_id):
     meeting = models.Meeting(
@@ -48,15 +49,16 @@ def read_meetings(db: Session, skip: int = 0, limit: int = 10):
     }
 
 
-def read_meeting_candidates(db: Session):
-    meetings = db.query(models.Meeting).all()
+def read_meeting_candidates(db: Session, request: Request):
+    user_id = utils.get_user_id(request, db)
+    meetings = db.query(models.Meeting).filter(models.Meeting.user_id == user_id).all()
     return {
         "success": True,
         "meetings": meetings,
     }
 
 
-def read_meeting(db: Session, meeting_id):
+def read_meeting(db: Session, meeting_id,):
     meeting = (
         db.query(models.Meeting)
         .options(
@@ -86,25 +88,3 @@ def read_meeting(db: Session, meeting_id):
         "meeting": meeting,
     }
 
-
-def generate_meeting_summary(db: Session, meeting_id: int):
-    try:
-        meeting = (
-            db.query(models.Meeting).filter(models.Meeting.id == meeting_id).first()
-        )
-        if not meeting:
-            return {"error": "Meeting not found"}
-
-        audios = (
-            db.query(audio_models.Audio)
-            .filter(
-                audio_models.Audio.meeting_id == meeting_id,
-                audio_models.Audio.status == audio_models.AudioStatus.SUCCESS,
-            )
-            .all()
-        )
-
-        return ollama_service.generate_meeting_summary(audios)
-    except Exception as e:
-        print(e)
-        return {"success": False}

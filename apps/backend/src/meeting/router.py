@@ -19,6 +19,13 @@ async def create_meeting(
         "success": True,
     }
 
+@router.get("/candidates", response_model=schemas.ReadMeetingCandidatesResponse)
+def read_meeting_candidates(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    return service.read_meeting_candidates(db, request)
+
 
 @router.get("/", response_model=schemas.ReadManyMeetingsResponse)
 def read_many_meetings(
@@ -48,8 +55,3 @@ def read_one_meeting(
     return service.read_meeting(db, meeting_id)
 
 
-@router.get("/candidates", response_model=schemas.ReadMeetingCandidatesResponse)
-def read_meeting_candidates(
-    db: Session = Depends(get_db),
-):
-    return service.read_meeting_candidates(db=db)
