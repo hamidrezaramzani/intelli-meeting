@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import { getBounceEffect } from "@/lib/helpers";
+import { getBounceEffect } from "@/lib";
 
 import { DashboardQuickAction } from "./sub-components";
 

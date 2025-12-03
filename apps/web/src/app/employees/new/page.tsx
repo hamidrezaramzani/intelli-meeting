@@ -7,14 +7,15 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import type { CreateEmployeeFormValues } from "@/lib/type";
-
-import { createEmployeeSchema } from "@/lib";
 import {
   useCreateEmployeeMutation,
   useReadManyPositionCandidatesQuery,
 } from "@/services";
 import { Dashboard } from "@/ui";
+
+import type { CreateEmployeeFormValues } from "./_types";
+
+import { createEmployeeSchema } from "./_schemas";
 
 const NewEmployeeForm = () => {
   const router = useRouter();

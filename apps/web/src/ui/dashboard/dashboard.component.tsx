@@ -13,8 +13,8 @@ export const Dashboard = ({ children, title, backUrl }: DashboardProps) => {
   return (
     <div className="w-full flex justify-center">
       <div className="w-full h-auto min-h-screen flex p-5">
-        <div className="w-2/12 relative bg-white border border-slate-800 rounded-l-2xl px-3 h-auto">
-          <button className="py-" type="button" onClick={goToHome}>
+        <div className="w-2/12 relative bg-white border border-slate-800 rounded-l-2xl px-3">
+          <button className="mt-4" type="button" onClick={goToHome}>
             <div className="w-full p-3 flex items-center cursor-pointer">
               <div className="w-3/12 flex justify-start">
                 <img alt="LOGO" className="w-18" src="/logo.png" />

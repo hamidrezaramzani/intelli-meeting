@@ -10,14 +10,15 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import type { MeetingFormValues } from "@/lib/type";
-
-import { meetingSchema } from "@/lib";
 import {
   useCreateMeetingMutation,
   useReadManyEmployeeCandidatesQuery,
 } from "@/services";
 import { Dashboard } from "@/ui";
+
+import type { MeetingFormValues } from "./_types";
+
+import { meetingSchema } from "./_schemas";
 
 // eslint-disable-next-line complexity
 const NewMeetingForm = () => {
@@ -25,9 +26,9 @@ const NewMeetingForm = () => {
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
   const employeeOptions = employees
     ? employees?.map((employee: any) => ({
-      value: String(employee.id),
-      label: `${employee.fullName} - ${employee.position.id}`,
-    }))
+        value: String(employee.id),
+        label: `${employee.fullName} - ${employee.position.id}`,
+      }))
     : [];
   const router = useRouter();
 

@@ -3,20 +3,19 @@
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MdRemoveRedEye } from "react-icons/md";
 
-import type { Meeting } from "@/lib/type";
-
-import { MEETINGS_LIST_COLUMNS } from "@/lib/constant";
 import { useReadManyMeetingsQuery } from "@/services";
-import { Dashboard, MeetingDetailsModal, Table } from "@/ui";
+import { Dashboard, Table } from "@/ui";
+
+import type { Meeting } from "./_types";
+
+import { MEETINGS_LIST_COLUMNS } from "./_constants";
 
 const MeetingsPage = () => {
   const router = useRouter();
 
   const [page, setPage] = useState(1);
   const limit = 10;
-  const [meetingDetails, setMeetingDetails] = useState<Meeting | null>(null);
   const { data, isLoading } = useReadManyMeetingsQuery({});
   const handleEdit = (meeting: Meeting) => console.log("Edit", meeting);
   const handleDelete = (meeting: Meeting) => console.log("Delete", meeting);
@@ -31,20 +30,9 @@ const MeetingsPage = () => {
 
   return (
     <Dashboard title="Meetings">
-      <MeetingDetailsModal
-        meetingDetails={meetingDetails}
-        onClose={() => setMeetingDetails(null)}
-      />
       <Table
         data={meetings}
         title="List of meetings"
-        actions={[
-          {
-            children: <MdRemoveRedEye />,
-            onActionClick: (row) => setMeetingDetails(row),
-            title: "Meeting details",
-          },
-        ]}
         columns={MEETINGS_LIST_COLUMNS}
         description="This table show you all of meetings that you saved before"
         formPath="/meetings/new"

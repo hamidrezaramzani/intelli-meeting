@@ -6,7 +6,9 @@ import { Tabs } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 
-import { Dashboard, PositionsList } from "@/ui";
+import { Dashboard } from "@/ui";
+
+import { PositionsList } from "./_components";
 
 const SettingsPage = () => {
   const router = useRouter();

@@ -3,12 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiOutlineUsers } from "react-icons/hi";
-import {
-  MdDashboard,
-  MdEvent,
-  MdOutlineRecordVoiceOver,
-  MdSettings,
-} from "react-icons/md";
+import { MdDashboard, MdEvent, MdSettings } from "react-icons/md";
 
 export const DashboardSidebar = () => {
   const pathname = usePathname();
@@ -16,11 +11,6 @@ export const DashboardSidebar = () => {
   const menuItems = [
     { name: "Dashboard", icon: <MdDashboard size={20} />, link: "/dashboard" },
     { name: "Meetings", icon: <MdEvent size={20} />, link: "/meetings" },
-    {
-      name: "Audios",
-      icon: <MdOutlineRecordVoiceOver size={20} />,
-      link: "/audios",
-    },
     {
       name: "Employees",
       icon: <HiOutlineUsers size={20} />,

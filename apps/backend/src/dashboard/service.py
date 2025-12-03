@@ -61,7 +61,7 @@ def read_dashboard_top_players(db: Session, request: Request):
     top_employees = (
         db.query(
             SpeakerProfile.employee_id,
-            (func.sum(SpeakerProfile.start) + func.sum(SpeakerProfile.end)).label("total_time")
+            (func.sum(SpeakerProfile.end - SpeakerProfile.start)).label("total_time")
         )
         .join(Employee, Employee.id == SpeakerProfile.employee_id)
         .filter(SpeakerProfile.user_id == user_id) 

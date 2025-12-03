@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import type { PositionFormValues } from "@/lib/type";
-
-import { positionSchema } from "@/lib";
 import { useCreatePositionMutation } from "@/services";
 import { Dashboard } from "@/ui";
+
+import type { PositionFormValues } from "./_types";
+
+import { positionSchema } from "./_schemas";
 
 const NewPositionForm = () => {
   const [createPosition, { isLoading }] = useCreatePositionMutation();

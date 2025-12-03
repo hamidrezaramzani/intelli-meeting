@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 
-import { EMPLOYEES_LIST_COLUMNS } from "@/lib/constant";
 import { useReadManyEmployeesQuery } from "@/services";
 import { Dashboard, Table } from "@/ui";
+
+import { EMPLOYEES_LIST_COLUMNS } from "./_constants";
 
 const EmployeesPage = () => {
   const router = useRouter();

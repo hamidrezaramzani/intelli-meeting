@@ -1,3 +1,4 @@
+import { Button } from "@intelli-meeting/shared-ui";
 import { motion } from "motion/react";
 import { MdOutlineStars } from "react-icons/md";
 
@@ -10,11 +11,14 @@ export const DashboardTimelineActivity = () => {
   return (
     <div className="relative flex flex-col border border-slate-800 rounded-md w-full bg-white p-5">
       <div className="flex flex-col gap-2 mb-4">
-        <div className="w-full flex justify-between">
+        <div className="w-full flex justify-between items-center">
           <h1 className="text-2xl font-bold text-slate-800">Timeline</h1>
+          {timeline?.length === 10 && (
+            <Button fullWidth={false}>Show all</Button>
+          )}
         </div>
         <p className="text-slate-600">
-          Here are all the activities timeline created for today
+          Here are all the activities timeline for previous today
         </p>
       </div>
       {timeline?.map((item, index) => (
