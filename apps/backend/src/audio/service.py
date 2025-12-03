@@ -296,8 +296,8 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             title="Transcription Completed",
             message="Audio transcripting failed, please try again",
             type="audio-processed-failed",
-            meeting_id=audio_id,
-    )
+            audio_id=audio_id,
+        )
         set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)
         db.commit()
         db.refresh(audio)

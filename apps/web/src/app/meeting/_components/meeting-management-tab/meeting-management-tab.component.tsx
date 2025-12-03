@@ -1,9 +1,17 @@
-import { AudioPlayer, EmptyState } from "@intelli-meeting/shared-ui";
+/* eslint-disable max-lines-per-function */
+import {
+  AudioPlayer,
+  Button,
+  confirmation,
+  EmptyState,
+} from "@intelli-meeting/shared-ui";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 import {
   usePlayAudioMutation,
   useReadManyEmployeeCandidatesQuery,
+  useStartAudioProcessingMutation,
 } from "@/services";
 
 import type { MeetingManagementTabProps } from "./meeting-management-tab.props";
@@ -13,6 +21,8 @@ import { MeetingTranscribeSentence } from "../meeting-transcribe-sentence";
 export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
   const [playAudio] = usePlayAudioMutation();
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
+
+  const [startAudioProcessing] = useStartAudioProcessingMutation();
 
   const [showTextPopover, setShowTextPopover] = useState<number | null>();
 
@@ -32,6 +42,49 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
     return blobWithMime;
   };
 
+  const handleStartAudioProcessing = async (
+    audioId: number,
+    status: string
+  ) => {
+    switch (status) {
+      case "processing":
+        await confirmation({
+          title: "Processing",
+          message:
+            "This audio is already being processed. Please wait until it completes.",
+        });
+        return;
+
+      case "success":
+        await confirmation({
+          title: "Already Processed",
+          message: "This audio has already been processed successfully.",
+        });
+        return;
+
+      case "failed":
+        await confirmation({
+          title: "Processing Failed",
+          message: "Previous processing attempt failed. Do you want to retry?",
+        });
+        break;
+
+      case "pending":
+      default:
+        break;
+    }
+
+    await toast.promise(
+      startAudioProcessing({ audioId: String(audioId) }).unwrap(),
+      {
+        pending: "Starting audio processing...",
+        success: "Audio processing started successfully!",
+        error:
+          "An error occurred while starting the audio processing. Please try again.",
+      }
+    );
+  };
+
   return (
     <div className="text-gray-800 transition-all cursor-pointer leading-9">
       {audios.length ? (
@@ -41,6 +94,60 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
               title={audio.name}
               onPlay={() => getAudioBlob(audio.id)}
             />
+            {audio?.status !== "success" && (
+              <div
+                className={`
+      w-full rounded-md items-center gap-3 p-3 flex flex-col text-sm
+      ${
+        audio.status === "pending"
+          ? "bg-blue-50 text-slate-600"
+          : audio.status === "processing"
+            ? "bg-yellow-50 text-yellow-600"
+            : audio.status === "failed"
+              ? "bg-red-50 text-red-600"
+              : ""
+      }
+    `}
+              >
+                {audio.status === "pending" && (
+                  <>
+                    <p>This recording is waiting to be processed.</p>
+                    <Button
+                      fullWidth={false}
+                      onClick={() =>
+                        handleStartAudioProcessing(audio.id, audio.status)
+                      }
+                    >
+                      Start Processing
+                    </Button>
+                  </>
+                )}
+
+                {audio.status === "processing" && (
+                  <>
+                    <p>The recording is currently being processed...</p>
+                    <Button disabled fullWidth={false}>
+                      Processing...
+                    </Button>
+                  </>
+                )}
+
+                {audio.status === "failed" && (
+                  <>
+                    <p>Processing failed. Please try again.</p>
+                    <Button
+                      fullWidth={false}
+                      onClick={() =>
+                        handleStartAudioProcessing(audio.id, audio.status)
+                      }
+                    >
+                      Retry
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
+
             <div className="mb-4">
               {audio.speaker_profiles.map((text) => (
                 <MeetingTranscribeSentence

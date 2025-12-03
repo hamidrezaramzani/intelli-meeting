@@ -43,7 +43,7 @@ export const audioApi = baseApi.injectEndpoints({
         url: `/audio/process/${audioId}`,
         method: "GET",
       }),
-      invalidatesTags: ["Audios"],
+      invalidatesTags: ["Audios", "Meeting"],
     }),
     assignAudioSpeakers: builder.mutation({
       query: ({ values, audioId }) => ({
