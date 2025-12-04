@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { baseApi } from "./services/baseApi";
-import { authReducer } from "./slices";
+import { authReducer, notificationReducer } from "./slices";
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: authReducer,
+    notification: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware),

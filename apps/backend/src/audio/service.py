@@ -44,7 +44,7 @@ def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.6):
     return best_employee_id
 
 
-def save_audio(
+async def save_audio(
     db: Session, name: str, meeting_id, file_content: bytes, filename: str, user_id: str
 ):
     filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
@@ -73,9 +73,12 @@ def save_audio(
         duration_str = "Unknown"
 
     audio = models.Audio(
-        name=name, file_path=os.path.basename(final_path), duration=duration_str, meeting_id=meeting_id
+        name=name,
+        file_path=os.path.basename(final_path),
+        duration=duration_str,
+        meeting_id=meeting_id,
     )
-    notification_service.create_notification(
+    await notification_service.create_notification(
         db=db,
         title="Audio uploaded",
         message=f"Your audio({audio.name}) file has been successfully uploaded ",
@@ -200,7 +203,7 @@ def set_audio_status(db: Session, audio, status):
     db.refresh(audio)
 
 
-def process_audio_to_text(db: Session, audio_id: str, user_id: str):
+async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
     try:
         audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
         if not audio:
@@ -242,7 +245,10 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
 
         for segment in transcript_segments:
             transcript += segment["text"] + " "
-
+            employee_id = get_similar_employee_id(
+                segment["embedding"], speaker_profiles
+            )
+            print(employee_id)
             created_speaker_profile_id = speaker_profile_service.create_speaker_profile(
                 db,
                 user_id=str(user_id),
@@ -255,21 +261,20 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
                 end=segment["end"],
             )
 
-            employee_id = get_similar_employee_id(
-                segment["embedding"], speaker_profiles
-            )
-
             chroma_documents.append(segment["text"])
             chroma_ids.append(str(uuid.uuid4()))
             chroma_metadatas.append(
                 {
                     "audio_id": str(audio_id),
-                    "employee_id": employee_id,
+                    "employee_id": employee_id
+                    if employee_id is not None
+                    else segment["speaker"],
                     "speaker_profile_id": created_speaker_profile_id,
                 }
             )
 
         chroma_collection.delete(where={"audio_id": str(audio_id)})
+
         chroma_collection.add(
             ids=chroma_ids, documents=chroma_documents, metadatas=chroma_metadatas
         )
@@ -277,7 +282,7 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
 
         set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
 
-        notification_service.create_notification(
+        await notification_service.create_notification(
             db=db,
             user_id=user_id,
             title="Transcription Completed",
@@ -290,7 +295,7 @@ def process_audio_to_text(db: Session, audio_id: str, user_id: str):
 
     except Exception as e:
         print(f"Error processing audio {audio_id}: {e}")
-        notification_service.create_notification(
+        await notification_service.create_notification(
             db=db,
             user_id=user_id,
             title="Transcription Failed",

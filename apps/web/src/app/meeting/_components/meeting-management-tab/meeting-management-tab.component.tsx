@@ -32,7 +32,7 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
         ? null
         : selectedId
           ? Number(selectedId)
-          : null
+          : null,
     );
   };
 
@@ -44,45 +44,44 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
 
   const handleStartAudioProcessing = async (
     audioId: number,
-    status: string
+    status: string,
   ) => {
+    let shouldProcessAudio = false;
     switch (status) {
-      case "processing":
-        await confirmation({
+      case "processing": {
+        shouldProcessAudio = await confirmation({
           title: "Processing",
           message:
             "This audio is already being processed. Please wait until it completes.",
         });
         return;
-
-      case "success":
-        await confirmation({
-          title: "Already Processed",
-          message: "This audio has already been processed successfully.",
-        });
-        return;
+      }
 
       case "failed":
-        await confirmation({
+        shouldProcessAudio = await confirmation({
           title: "Processing Failed",
           message: "Previous processing attempt failed. Do you want to retry?",
         });
         break;
 
       case "pending":
+        shouldProcessAudio = true;
+        break;
       default:
         break;
     }
 
-    await toast.promise(
-      startAudioProcessing({ audioId: String(audioId) }).unwrap(),
-      {
-        pending: "Starting audio processing...",
-        success: "Audio processing started successfully!",
-        error:
-          "An error occurred while starting the audio processing. Please try again.",
-      }
-    );
+    if (shouldProcessAudio) {
+      await toast.promise(
+        startAudioProcessing({ audioId: String(audioId) }).unwrap(),
+        {
+          pending: "Starting audio processing...",
+          success: "Audio processing started successfully!",
+          error:
+            "An error occurred while starting the audio processing. Please try again.",
+        },
+      );
+    }
   };
 
   return (

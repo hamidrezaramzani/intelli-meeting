@@ -12,14 +12,14 @@ def create_user(db: Session, user: schemas.UserCreate):
     return db_user
 
 
-def authenticate_user(db: Session, email: str, password: str):
+async def authenticate_user(db: Session, email: str, password: str):
     user = db.query(models.User).filter(models.User.email == email).first()
     if not user:
         return False
     if not utils.verify_password(password, user.password):
         return False
 
-    notification_service.create_notification(
+    await notification_service.create_notification(
         db=db,
         user_id=user.id,
         title="Welcome Back!",

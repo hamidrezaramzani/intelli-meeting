@@ -14,7 +14,8 @@ from src.meeting import router_ws as meeting_router_ws
 from src.position import router as positions_router
 from src.employee import router as employees_router
 from src.dashboard import router as dashboard_router
-
+from src.notification import router as notification_router
+from src.notification import router_ws as notification_router_ws
 app = FastAPI(title="Intelli meetings")
 
 app.add_middleware(
@@ -35,3 +36,5 @@ app.include_router(dashboard_router.router, prefix="/api/dashboard", tags=["Dash
 app.include_router(meeting_router_ws.router, prefix="/ws/meeting", tags=["Meeting"])
 app.include_router(positions_router.router, prefix="/api/position", tags=["Position"])
 app.include_router(employees_router.router, prefix="/api/employee", tags=["Employee"])
+app.include_router(notification_router.router, prefix="/api/notification", tags=["Notification"])
+app.include_router(notification_router_ws.router, prefix="/ws/notification", tags=["Notification"])

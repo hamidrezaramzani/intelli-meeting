@@ -20,8 +20,8 @@ def signup(newUser: schemas.UserCreate, db: Session = Depends(get_db)):
     }
 
 @router.post("/signin", response_model=schemas.UserSigninResponse)
-def signin(user: schemas.UserSignin, db: Session = Depends(get_db)):
-    data = service.authenticate_user(db, user.email, user.password)
+async def signin(user: schemas.UserSignin, db: Session = Depends(get_db)):
+    data = await service.authenticate_user(db, user.email, user.password)
 
     if not data or not data.get("user"):
         raise HTTPException(status_code=401, detail="Invalid credentials")

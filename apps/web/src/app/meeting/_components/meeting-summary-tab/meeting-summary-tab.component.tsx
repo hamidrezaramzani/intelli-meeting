@@ -6,6 +6,7 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+import { useWebSocket } from "@/lib";
 import { useReadMeetingSummariesQuery } from "@/services";
 
 import type {
@@ -16,6 +17,8 @@ import type {
 } from "./meeting-summary-tab.type";
 
 export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
+  const { connect } = useWebSocket();
+
   const { data: meetingSummaries } = useReadMeetingSummariesQuery(
     meetingId ? { meetingId } : skipToken,
   );
@@ -36,50 +39,31 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
     }
   }, [meetingSummaries]);
 
-  const handleGenerateMeetingSummary = async () => {
+  const handleGenerateMeetingSummary = () => {
     setSummaryData(undefined);
     setDecisionsData(undefined);
     setActionsData(undefined);
     setGeneratingSummariesLoading(true);
-    const ws = new WebSocket(
-      `${process.env.NEXT_PUBLIC_WS_URL}/meeting/generate-summary?meeting_id=${meetingId}`
-    );
 
-    const listener = (event: MessageEvent) => {
+    const path = `/meeting/generate-summary?meeting_id=${meetingId}`;
+
+    connect(path, (event) => {
       try {
         const message = JSON.parse(event.data);
-        if (message.type === "summary") {
-          setSummaryData(message.data.summary);
-        }
 
-        if (message.type === "decisions") {
+        if (message.type === "summary") setSummaryData(message.data.summary);
+        if (message.type === "decisions")
           setDecisionsData(message.data.decisions);
-        }
-
-        if (message.type === "actions") {
-          setActionsData(message.data.actions);
-        }
-
+        if (message.type === "actions") setActionsData(message.data.actions);
         if (message.type === "done") {
-          setGeneratingSummariesLoading(true);
-          toast.success("Generating meeting summary completed succesfully");
+          setGeneratingSummariesLoading(false);
+          toast.success("Meeting summary generated successfully");
         }
       } catch (e) {
-        toast.error("We have an error to generate meeting summary");
         console.error("Failed to parse message", e);
+        toast.error("We have an error generating meeting summary");
+        setGeneratingSummariesLoading(false);
       }
-    };
-
-    ws.addEventListener("message", listener);
-
-    ws.addEventListener("open", () => console.log("WebSocket opened"));
-    ws.addEventListener("close", () => {
-      setGeneratingSummariesLoading(false);
-    });
-    ws.addEventListener("error", (err) => {
-      console.error(err);
-      setGeneratingSummariesLoading(false);
-      toast.error("We have an error to generate meeting summary");
     });
   };
 

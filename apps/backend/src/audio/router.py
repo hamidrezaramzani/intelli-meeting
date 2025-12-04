@@ -54,7 +54,7 @@ async def upload_recording(
 
     user_id = utils.get_user_id(request=request, db=db)
 
-    service.save_audio(db, name, meetingId, content, filename, user_id)
+    await service.save_audio(db, name, meetingId, content, filename, user_id)
     return {"success": True}
 
 

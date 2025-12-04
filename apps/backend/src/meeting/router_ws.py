@@ -34,7 +34,7 @@ async def websocket_endpoint(
     )
     audio_ids = [str(audio.id) for audio in audios]
 
-    notification_service.create_notification(
+    await notification_service.create_notification(
         db=db,
         user_id=meeting.user_id,
         title="Generating Summary",
@@ -50,7 +50,7 @@ async def websocket_endpoint(
     try:
         await summary_task
         await websocket.send_json({"type": "done", "status": "completed"})
-        notification_service.create_notification(
+        await notification_service.create_notification(
                 db=db,
                 user_id=meeting.user_id,
                 title="Summary generated",
@@ -59,7 +59,7 @@ async def websocket_endpoint(
                 meeting_id=meeting_id,
             )
     except WebSocketDisconnect:
-        notification_service.create_notification(
+        await notification_service.create_notification(
             db=db,
             user_id=meeting.user_id,
             title="Generating summary failed",

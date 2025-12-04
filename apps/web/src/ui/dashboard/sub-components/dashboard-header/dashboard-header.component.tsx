@@ -1,13 +1,11 @@
 import { IconButton } from "@intelli-meeting/shared-ui";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  MdArrowBackIos,
-  MdNotificationsNone,
-  MdSettings,
-} from "react-icons/md";
+import { MdArrowBackIos, MdSettings } from "react-icons/md";
 
 import type { DashboardHeaderProps } from "./dashboard-header.type";
+
+import { DashboardNotification } from "../dashboard-notification";
 
 const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
   const router = useRouter();
@@ -28,9 +26,7 @@ const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
       </h2>
 
       <div className="flex items-center gap-4">
-        <IconButton>
-          <MdNotificationsNone size={22} />
-        </IconButton>
+        <DashboardNotification />
 
         <IconButton type="button" onClick={() => router.push("/settings")}>
           <MdSettings size={22} />

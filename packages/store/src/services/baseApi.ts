@@ -77,6 +77,7 @@ export const baseApi = createApi({
     "Positions",
     "Employees",
     "EmployeeCandidates",
+    "Notifications",
   ],
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
