@@ -5,3 +5,8 @@ export interface CheckIsEmailAlreadyUsedResponse {
 export interface CheckIsEmailAlreadyUsedRequestBody {
   email: string;
 }
+
+export interface UserProfileResponse {
+  success: true;
+  user: { id: number; name: string };
+}

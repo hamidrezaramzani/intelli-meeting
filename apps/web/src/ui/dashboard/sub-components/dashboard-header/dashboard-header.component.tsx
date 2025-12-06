@@ -1,7 +1,8 @@
-import { IconButton } from "@intelli-meeting/shared-ui";
-import Image from "next/image";
+import { IconButton, UserMenu } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
 import { MdArrowBackIos, MdSettings } from "react-icons/md";
+
+import { getUserMenuItems } from "@/lib/constants/user-menu";
 
 import type { DashboardHeaderProps } from "./dashboard-header.type";
 
@@ -9,7 +10,7 @@ import { DashboardNotification } from "../dashboard-notification";
 
 const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
   const router = useRouter();
-
+  const menuItems = getUserMenuItems(router);
   return (
     <header className="px-3 w-full bg-slate-800 flex items-center justify-between py-3 mb-4 rounded-2xl">
       <h2 className="text-xl flex pl-3 items-center gap-4 font-semibold  text-white">
@@ -32,15 +33,7 @@ const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
           <MdSettings size={22} />
         </IconButton>
 
-        <div className="w-24 rounded-full bg-slate-300 flex items-center justify-center text-sm font-semibold text-white cursor-pointer hover:opacity-90 transition">
-          <Image
-            height={55}
-            width={55}
-            alt="user"
-            className="w-12 rounded-md"
-            src="https://avatar.iran.liara.run/public"
-          />
-        </div>
+        <UserMenu menuItems={menuItems} />
       </div>
     </header>
   );

@@ -1,78 +1,30 @@
 /* eslint-disable max-lines-per-function */
-import type { AppDispatch, RootState } from "@intelli-meeting/store";
+import type { RootState } from "@intelli-meeting/store";
 import type { ReactNode } from "react";
 
-import { logout } from "@intelli-meeting/store";
 import { useRef, useState } from "react";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import type { HeaderProps } from "./header.type";
 
-import { Button } from "..";
+import { Button, UserMenu } from "..";
 
-export const Header = ({ menus, navigate }: HeaderProps) => {
+export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const renderMenuItems = (
-    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
+    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode
   ) => {
     return menus.map((menu) => getContainer(menu));
   };
 
-  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dispatch(logout());
-  };
-
   const getUserDropdown = () => (
     <div className="relative w-12 h-12" ref={menuRef}>
-      {isLoggedIn && (
-        <button
-          className="cursor-pointer w-12 h-12"
-          type="button"
-          onClick={() => setIsUserMenuOpen((prevOpen) => !prevOpen)}
-        >
-          <img
-            alt="user"
-            className="w-12 h-12 rounded-full border border-gray-200 shadow-sm"
-            src="https://avatar.iran.liara.run/public"
-          />
-        </button>
-      )}
-
-      {isUserMenuOpen && (
-        <div
-          className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100 z-20"
-          id="dropdownAvatar"
-        >
-          <ul className="py-2 text-sm text-gray-700">
-            <li>
-              <button
-                className="cursor-pointer block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
-                type="button"
-                onClick={() => navigate("/dashboard")}
-              >
-                Dashboard
-              </button>
-            </li>
-            <li>
-              <button
-                className="cursor-pointer block px-4 py-2 hover:bg-gray-100 transition-colors w-full text-left"
-                type="button"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </li>
-          </ul>
-        </div>
-      )}
+      {isLoggedIn && menuItems && <UserMenu menuItems={menuItems} />}
     </div>
   );
 

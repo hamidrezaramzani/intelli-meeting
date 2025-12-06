@@ -1,4 +1,8 @@
-import type { SignInRequestBody, SignInResponseBody } from "./auth.type";
+import type {
+  SignInRequestBody,
+  SignInResponseBody,
+  UserProfileResponse,
+} from "./auth.type";
 
 import { baseApi } from "../../baseApi";
 
@@ -11,7 +15,13 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+    readUserProfile: builder.query<UserProfileResponse, unknown>({
+      query: () => ({
+        url: `/auth/profile`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useSigninMutation } = authApi;
+export const { useSigninMutation, useReadUserProfileQuery } = authApi;

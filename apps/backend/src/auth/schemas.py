@@ -40,3 +40,13 @@ class UserSigninResponse(BaseModel):
 
     class Config:
         orm_mode = True
+        
+
+
+class UserProfile(BaseModel):
+    id: int
+    name: str
+
+class UserProfileResponse(BaseModel):
+    success: bool
+    user: UserProfile

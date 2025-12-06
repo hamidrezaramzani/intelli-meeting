@@ -10,3 +10,4 @@ export * from "./select-input";
 export * from "./select-multiple-input";
 export * from "./tabs";
 export * from "./text-input";
+export * from "./user-menu";

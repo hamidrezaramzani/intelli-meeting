@@ -1,3 +1,5 @@
+import type { MenuItem } from "../../layouts/main-layout/main-layout.type";
+
 export interface HeaderProps {
   menus: {
     id: number;
@@ -6,5 +8,6 @@ export interface HeaderProps {
   }[];
   isLoggedIn?: boolean;
   onLogout?: () => void;
-  navigate: (path: string) => void;
+  navigate: (url: string) => void;
+  menuItems?: MenuItem[];
 }

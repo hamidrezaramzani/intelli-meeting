@@ -2,12 +2,18 @@
 import { Button, MainLayout } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
 
+import { getUserMenuItems } from "@/lib/constants/user-menu";
+
 export default function Home() {
   const router = useRouter();
+
+  const menuItems = getUserMenuItems(router);
+
   return (
     <div className="w-full flex justify-center h-screen">
       <div className="h-[calc(100vh-120px)]  w-full flex items-center flex-col mt-3">
         <MainLayout
+          menuItems={menuItems}
           navigate={(path) => {
             router.push(path);
           }}

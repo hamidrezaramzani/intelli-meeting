@@ -12,6 +12,25 @@ import { AudioNameModal } from "./sub-components";
 export const RecordPage = () => {
   const navigate = useNavigate();
 
+  const menuItems = [
+    {
+      label: "Dashboard",
+      onClick: () => window.open(`${process.env.WEBSITE_URL}/dashboard`),
+    },
+    {
+      label: "Profile",
+      onClick: () => window.open(`${process.env.WEBSITE_URL}/profile`),
+    },
+    {
+      label: "Meetings",
+      onClick: () => window.open(`${process.env.WEBSITE_URL}/meeetings`),
+    },
+    {
+      label: "Settings",
+      onClick: () => window.open(`${process.env.WEBSITE_URL}/settings`),
+    },
+  ];
+
   const [uploadRecordingFile] = useUploadAudioMutation();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -285,7 +304,7 @@ export const RecordPage = () => {
         onConfirm={handleConfirmSelectingAudioName}
         open={isSelectAudioNameModalOpen}
       />
-      <MainLayout navigate={navigate}>
+      <MainLayout menuItems={menuItems} navigate={navigate}>
         <div className="w-full flex flex-col justify-center items-center">
           <div
             className={`w-48 h-48 rounded-full cursor-pointer flex justify-center items-center transition-all duration-300 ${

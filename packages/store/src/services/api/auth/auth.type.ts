@@ -11,3 +11,11 @@ export interface SignInResponseBody {
   };
   token: string;
 }
+
+export interface UserProfileResponse {
+  success: boolean;
+  user: {
+    id: number;
+    name: string;
+  };
+}

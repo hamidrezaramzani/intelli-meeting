@@ -1,5 +1,5 @@
 from . import schemas, service
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from src.database import get_db
 from . import schemas, service
@@ -39,4 +39,10 @@ def signup(body: schemas.CheckEmailBody, db: Session = Depends(get_db)):
     return {
         "isUnique": isUnique
     }
+
+
+@router.get("/profile", response_model=schemas.UserProfileResponse)
+def signup(request: Request, db: Session = Depends(get_db)):
+    return service.read_user_profile(db, request)
+
 
