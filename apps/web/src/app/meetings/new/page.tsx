@@ -63,7 +63,7 @@ const NewMeetingForm = () => {
   return (
     <Dashboard backUrl="/meetings" title="New meeting">
       <div className="w-full">
-        <div className="w-3/5 bg-slate-50 p-6">
+        <div className="w-3/5 p-6">
           <h2 className="text-2xl font-bold text-slate-800 mb-2">
             Add new meeting
           </h2>

@@ -38,13 +38,10 @@ export const Table = <T,>({
 
   return (
     <div className="overflow-x-auto w-full">
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between items-center my-5">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">{title}</h2>
-
-          <p className="font-body text-sm pt-1 pb-5 text-slate-600">
-            {description}
-          </p>
+          <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
+          <p className="font-body text-sm text-slate-500 mt-2">{description}</p>
         </div>
         <div>
           {formPath && (
@@ -106,7 +103,7 @@ export const Table = <T,>({
                   ))}
 
                   {(onEdit || onDelete || actions) && (
-                    <td className="px-6 py-4 flex gap-4 items-center align-middle h-full items-center text-sm text-center">
+                    <td className="px-6 py-4 flex gap-2 align-middle h-full items-center text-sm text-center">
                       {onEdit && (
                         <IconButton
                           size="sm"
