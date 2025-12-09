@@ -67,6 +67,7 @@ class MeetingSummaryResponse(BaseModel):
     decisions: Optional[List[DecisionResponse]] = None
     actions: Optional[List[ActionItemResponse]] = None
     empty: Optional[bool] = None
+    isGenerating: Optional[bool] = None
 
 
 class ReadMeetingSummaryResponse(BaseModel):

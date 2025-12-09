@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from src.database import Base
 
@@ -24,6 +24,7 @@ class Meeting(Base):
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
     meeting_link = Column(String, nullable=False)
+    is_generating = Column(Boolean, nullable=True, default=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     user = relationship("User", back_populates="meetings")
     

@@ -22,7 +22,7 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
     return menus.map((menu) => getContainer(menu));
   };
 
-  const getUserDropdown = () => (
+  const renderUserDropdown = () => (
     <div className="relative w-12 h-12" ref={menuRef}>
       {isLoggedIn && menuItems && <UserMenu menuItems={menuItems} />}
     </div>
@@ -54,7 +54,7 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
                 <Button onClick={() => navigate("/sign-up")}>Register</Button>
               </div>
             )}
-            {getUserDropdown()}
+            {renderUserDropdown()}
           </div>
         </div>
         <div className="flex justify-between md:hidden py-4">
@@ -76,7 +76,7 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
             </span>
           </a>
 
-          {getUserDropdown()}
+          {renderUserDropdown()}
 
           <div
             className={`${

@@ -1,5 +1,7 @@
 import { baseApi, store } from "@intelli-meeting/store";
 
+import { normalizeWebsocketResponse } from "@/lib/helpers/normalize-websocket-response";
+
 export interface Notification {
   id: number;
   title: string;
@@ -16,7 +18,7 @@ export const notificationApi = baseApi.injectEndpoints({
         url: `/notification?limit=${limit}`,
       }),
       async onCacheEntryAdded(
-        arg,
+        _,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
       ) {
         await cacheDataLoaded;
@@ -27,7 +29,8 @@ export const notificationApi = baseApi.injectEndpoints({
         );
 
         ws.onmessage = (event) => {
-          const newNotification: Notification = JSON.parse(event.data);
+          const newNotification =
+            normalizeWebsocketResponse<Notification>(event);
           const audio = new Audio("/notif.mp3");
           audio
             .play()

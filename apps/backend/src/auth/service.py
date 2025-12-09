@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from src.notification import service as notification_service
 from fastapi import Request, HTTPException
 
+
 def create_user(db: Session, user: schemas.UserCreate):
     hashed_password = utils.hash_password(user.password)
     db_user = models.User(name=user.name, email=user.email, password=hashed_password)
@@ -23,8 +24,8 @@ async def authenticate_user(db: Session, email: str, password: str):
     await notification_service.create_notification(
         db=db,
         user_id=user.id,
-        title="Welcome Back!",
-        message="You have successfully logged into your account",
+        title="Login Successful",
+        message="You have logged in successfully",
         type="user-login",
         logged_by_id=user.id,
     )
@@ -39,6 +40,7 @@ def check_is_email_unique(db: Session, email: str):
     else:
         return True
 
+
 def read_user_profile(db: Session, request: Request):
     user_id = main_utils.get_user_id(request, db)
     user = db.query(models.User).filter(models.User.id == user_id).first()
@@ -46,10 +48,4 @@ def read_user_profile(db: Session, request: Request):
     if user == None:
         raise HTTPException(status_code=500, detail=str("User not found"))
 
-    return { 
-            "success": True,
-            "user": {
-                "id": user.id,
-                "name": user.name
-            }
-        }
+    return {"success": True, "user": {"id": user.id, "name": user.name}}

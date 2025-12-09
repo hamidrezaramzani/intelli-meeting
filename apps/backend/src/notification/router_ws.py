@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.websocket("/{user_id}")
 async def websocket_notifications(websocket: WebSocket, user_id: str):
-    await manager.connect(websocket, user_id)
+    await manager.connect(websocket, f"{user_id}:notification")
     try:
         while True:
             await asyncio.sleep(1)

@@ -3,7 +3,6 @@ from src.notification import models
 from src.websocket.websocket import manager
 import asyncio
 from src import utils
-from fastapi import HTTPException
 
 
 async def create_notification(
@@ -30,7 +29,7 @@ async def create_notification(
 
     db.refresh(notification)
     
-    asyncio.create_task(manager.send_personal_message(user_id, {
+    asyncio.create_task(manager.send_personal_message(f"{user_id}:notification", {
         "id": notification.id,
         "title": title,
         "message": message,
@@ -70,10 +69,8 @@ def marks_all_as_read(db: Session, request):
     user_id = utils.get_user_id(request, db)
     notifications = db.query(models.Notification).filter(
         models.Notification.user_id == user_id,
-        # models.Notification.is_read == False
+        models.Notification.is_read == False
     ).all()
-
-    print(len(notifications), user_id)
 
     for n in notifications:
         n.is_read = True

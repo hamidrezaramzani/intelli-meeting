@@ -4,7 +4,11 @@ export const useWebSocket = () => {
   const wsRef = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  const connect = (path: string, onMessage?: (msg: MessageEvent) => void) => {
+  const connect = (
+    path: string,
+    onMessage?: (msg: MessageEvent) => void,
+    onError?: (msg: Event) => void,
+  ) => {
     if (wsRef.current) wsRef.current.close();
 
     const url = `${process.env.NEXT_PUBLIC_WS_URL}${path}`;
@@ -13,7 +17,7 @@ export const useWebSocket = () => {
 
     ws.onopen = () => {
       setIsConnected(true);
-      console.log("🔗 WebSocket connected");
+      console.log("WebSocket connected");
     };
 
     ws.onmessage = (event) => {
@@ -22,10 +26,13 @@ export const useWebSocket = () => {
 
     ws.onclose = () => {
       setIsConnected(false);
-      console.log("❌ WebSocket disconnected");
+      console.log("WebSocket disconnected");
     };
 
-    ws.onerror = (err) => console.error("WebSocket error:", err);
+    ws.onerror = (err) => {
+      console.error("WebSocket error:", err);
+      if (onError) onError(err);
+    };
   };
 
   const sendMessage = (msg: string) => {

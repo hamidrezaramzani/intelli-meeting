@@ -47,49 +47,68 @@ def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.6):
 async def save_audio(
     db: Session, name: str, meeting_id, file_content: bytes, filename: str, user_id: str
 ):
-    filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
-    file_path = os.path.join(UPLOAD_DIR, filename)
-
-    with open(file_path, "wb") as f:
-        f.write(file_content)
-
-    base_name, ext = os.path.splitext(file_path)
-    wav_path = f"{base_name}.wav"
-    if ext.lower() != ".wav":
-        audio_segment = AudioSegment.from_file(file_path, format=ext.replace(".", ""))
-        audio_segment = audio_segment.set_frame_rate(16000).set_channels(1)
-        audio_segment.export(wav_path, format="wav")
-        final_path = wav_path
-    else:
-        final_path = file_path
-        audio_segment = AudioSegment.from_file(file_path)
-
     try:
-        duration_seconds = len(audio_segment) / 1000
-        duration_minutes = round(duration_seconds / 60, 2)
-        duration_str = f"{duration_minutes}"
-    except Exception as e:
-        print("Error calculating duration:", e)
-        duration_str = "Unknown"
+        await notification_service.create_notification(
+            db=db,
+            title="Upload Started",
+            message=f"Your audio file({name}) is now uploading",
+            user_id=user_id,
+            type="uploading-audio",
+        )
 
-    audio = models.Audio(
-        name=name,
-        file_path=os.path.basename(final_path),
-        duration=duration_str,
-        meeting_id=meeting_id,
-    )
-    await notification_service.create_notification(
-        db=db,
-        title="Audio uploaded",
-        message=f"Your audio({audio.name}) file has been successfully uploaded ",
-        user_id=user_id,
-        type="uploading-audio",
-    )
-    db.add(audio)
-    db.commit()
-    db.refresh(audio)
+        filename = f"{int(time.time())}_{uuid.uuid4().hex}_{filename}"
+        file_path = os.path.join(UPLOAD_DIR, filename)
 
-    return audio
+        with open(file_path, "wb") as f:
+            f.write(file_content)
+
+        base_name, ext = os.path.splitext(file_path)
+        wav_path = f"{base_name}.wav"
+        if ext.lower() != ".wav":
+            audio_segment = AudioSegment.from_file(
+                file_path, format=ext.replace(".", "")
+            )
+            audio_segment = audio_segment.set_frame_rate(16000).set_channels(1)
+            audio_segment.export(wav_path, format="wav")
+            final_path = wav_path
+        else:
+            final_path = file_path
+            audio_segment = AudioSegment.from_file(file_path)
+
+        try:
+            duration_seconds = len(audio_segment) / 1000
+            duration_minutes = round(duration_seconds / 60, 2)
+            duration_str = f"{duration_minutes}"
+        except Exception as e:
+            print("Error calculating duration:", e)
+            duration_str = "Unknown"
+
+        audio = models.Audio(
+            name=name,
+            file_path=os.path.basename(final_path),
+            duration=duration_str,
+            meeting_id=meeting_id,
+        )
+        await notification_service.create_notification(
+            db=db,
+            title="Upload Complete",
+            message=f"Your audio({name}) file has been uploaded successfully",
+            user_id=user_id,
+            type="audio-uploaded",
+        )
+        db.add(audio)
+        db.commit()
+        db.refresh(audio)
+
+        return audio
+    except Exception:
+        await notification_service.create_notification(
+            db=db,
+            title="Upload Failed",
+            message=f"There was an error uploading the audio({name}) file",
+            user_id=user_id,
+            type="uploading-audio-failed",
+        )
 
 
 def get_audios(db: Session, skip: int = 0, limit: int = 10):
@@ -206,6 +225,16 @@ def set_audio_status(db: Session, audio, status):
 async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
     try:
         audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+
+        await notification_service.create_notification(
+            db=db,
+            user_id=user_id,
+            title="Transcription Started",
+            message=f"Converting your audio({audio.name}) to text",
+            type="audio-transcription-started",
+            audio_id=audio_id,
+        )
+
         if not audio:
             print(f"Audio {audio_id} not found")
             return
@@ -248,7 +277,6 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             employee_id = get_similar_employee_id(
                 segment["embedding"], speaker_profiles
             )
-            print(employee_id)
             created_speaker_profile_id = speaker_profile_service.create_speaker_profile(
                 db,
                 user_id=str(user_id),
@@ -285,9 +313,9 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
         await notification_service.create_notification(
             db=db,
             user_id=user_id,
-            title="Transcription Completed",
-            message="Your audio({audio.name}) has been successfully converted to text. You can now review and edit the transcription.",
-            type="audio-processed",
+            title="Transcription Complete",
+            message=f"Your audio({audio.name}) has been successfully transcribed",
+            type="audio-transcription-completed",
             audio_id=audio_id,
         )
         db.commit()
@@ -299,8 +327,8 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             db=db,
             user_id=user_id,
             title="Transcription Failed",
-            message=f"Audio({audio.name}) transcripting failed, please try again",
-            type="audio-processed-failed",
+            message=f"Unable to transcribe the audio({audio.name}). Please try again",
+            type="audio-transcription-failed",
             audio_id=audio_id,
         )
         set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)

@@ -40,11 +40,11 @@ def read_many_meetings(
 @router.get(
     "/summaries/{meeting_id}", response_model=schemas.ReadMeetingSummaryResponse
 )
-def read_meeting_summaries(
+async def read_meeting_summaries(
     meeting_id,
     db: Session = Depends(get_db),
 ):
-    return meeting_summary_service.read_meeting_summaries(db=db, meeting_id=meeting_id)
+    return await meeting_summary_service.read_meeting_summaries(db=db,  meeting_id=meeting_id)
 
 
 @router.get("/{meeting_id}", response_model=schemas.ReadOneMeetingResponse)

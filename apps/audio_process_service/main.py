@@ -10,5 +10,4 @@ async def process_audio_endpoint(file = Body(...)):
         result = process_audio(file_path)
         return result
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=500, detail=str(e))
