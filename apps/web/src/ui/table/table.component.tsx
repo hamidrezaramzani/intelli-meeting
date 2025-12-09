@@ -106,24 +106,24 @@ export const Table = <T,>({
                   ))}
 
                   {(onEdit || onDelete || actions) && (
-                    <td className="px-6 py-4 align-middle h-full items-center text-sm text-center">
+                    <td className="px-6 py-4 flex gap-4 items-center align-middle h-full items-center text-sm text-center">
                       {onEdit && (
-                        <button
-                          className="p-1 rounded hover:bg-gray-100"
+                        <IconButton
+                          size="sm"
                           type="button"
                           onClick={() => onEdit(row)}
                         >
-                          <MdEdit size={20} className="text-blue-600" />
-                        </button>
+                          <MdEdit size={17} />
+                        </IconButton>
                       )}
                       {onDelete && (
-                        <button
-                          className="p-1 rounded hover:bg-gray-100"
+                        <IconButton
+                          size="sm"
                           type="button"
                           onClick={() => onDelete(row)}
                         >
-                          <MdDelete size={20} className="text-red-600" />
-                        </button>
+                          <MdDelete size={17} />
+                        </IconButton>
                       )}
 
                       {actions?.map((button, index) => {
@@ -132,7 +132,7 @@ export const Table = <T,>({
                         }
 
                         return (
-                          <button
+                          <IconButton
                             type="button"
                             {...button}
                             className="text-lg cursor-pointer mr-3"
