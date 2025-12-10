@@ -2,20 +2,22 @@ import { baseApi, store } from "@intelli-meeting/store";
 
 import { normalizeWebsocketResponse } from "@/lib/helpers/normalize-websocket-response";
 
-export interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  type: string;
-  timeAgo: string;
-}
+import type {
+  Notification,
+  ReadDashboardNotificationsResponse,
+  ReadManyNotificationsRequest,
+  ReadManyNotificationsResponse,
+} from "./api-notifications.type";
 
 export const notificationApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getNotifications: builder.query<Notification[], unknown>({
+    readDashboardNotifications: builder.query<
+      ReadDashboardNotificationsResponse,
+      unknown
+    >({
       query: ({ limit = 5 }) => ({
-        url: `/notification?limit=${limit}`,
+        url: `/notification/dashboard/?limit=${limit}`,
       }),
       async onCacheEntryAdded(
         _,
@@ -50,6 +52,15 @@ export const notificationApi = baseApi.injectEndpoints({
       transformResponse: (data: any) => data.notifications,
       providesTags: ["Notifications"],
     }),
+    readManyNotifications: builder.query<
+      ReadManyNotificationsResponse,
+      ReadManyNotificationsRequest
+    >({
+      query: ({ query }) => ({
+        url: `/notification?limit=${query.limit}&page=${query.page}`,
+      }),
+      providesTags: ["Notifications"],
+    }),
     markAllNotificationsAsRead: builder.mutation({
       query: () => ({
         url: `/notification/marks-all-as-read`,
@@ -62,6 +73,7 @@ export const notificationApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetNotificationsQuery,
+  useReadDashboardNotificationsQuery,
   useMarkAllNotificationsAsReadMutation,
+  useReadManyNotificationsQuery,
 } = notificationApi;

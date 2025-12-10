@@ -21,6 +21,7 @@ export const Table = <T,>({
   error,
   refetch,
   loading,
+  rowStyles,
 }: TableProps<T>) => {
   const router = useRouter();
 
@@ -89,7 +90,10 @@ export const Table = <T,>({
                 </tr>
               ))
             : data.map((row, rowIndex) => (
-                <tr className="hover:bg-gray-50 align-middle" key={rowIndex}>
+                <tr
+                  className={`hover:bg-gray-50 align-middle ${rowStyles ? rowStyles(row) : ""}`}
+                  key={rowIndex}
+                >
                   {columns.map((col) => (
                     <td
                       width={col.width}

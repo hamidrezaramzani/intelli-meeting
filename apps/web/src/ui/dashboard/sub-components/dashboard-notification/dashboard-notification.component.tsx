@@ -1,4 +1,5 @@
 import { EmptyState, IconButton } from "@intelli-meeting/shared-ui";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BiCheckDouble } from "react-icons/bi";
 import { MdNotificationsNone } from "react-icons/md";
@@ -6,12 +7,14 @@ import { RiExpandDiagonalLine } from "react-icons/ri";
 import { toast } from "react-toastify";
 
 import {
-  useGetNotificationsQuery,
   useMarkAllNotificationsAsReadMutation,
+  useReadDashboardNotificationsQuery,
 } from "@/services";
 
 export const DashboardNotification = () => {
-  const { data: notifications = [] } = useGetNotificationsQuery({});
+  const router = useRouter();
+
+  const { data: notifications = [] } = useReadDashboardNotificationsQuery({});
 
   const [markAllNotificationsAsRead] = useMarkAllNotificationsAsReadMutation();
 
@@ -23,6 +26,10 @@ export const DashboardNotification = () => {
       error: "Failed to mark notifications as read. Please try again.",
       success: "All notifications marked as read",
     });
+  };
+
+  const handleOpenNotificationsListClick = () => {
+    router.push("/notifications");
   };
 
   return (
@@ -49,7 +56,11 @@ export const DashboardNotification = () => {
                 </IconButton>
               )}
 
-              <IconButton size="sm" title="All notification">
+              <IconButton
+                size="sm"
+                title="All notification"
+                onClick={handleOpenNotificationsListClick}
+              >
                 <RiExpandDiagonalLine className="text-xl" />
               </IconButton>
             </div>

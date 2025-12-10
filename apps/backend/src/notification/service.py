@@ -39,14 +39,49 @@ async def create_notification(
     return notification
 
 
-def read_notifications(db: Session, request):
+
+def read_notifications(db: Session, request, skip: int, limit: int):
+    user_id = utils.get_user_id(request, db)
+    
+    total = db.query(models.Notification).filter(models.Notification.user_id == user_id).count()
+    
+    notifications = (
+        db.query(models.Notification)
+        .filter(models.Notification.user_id == user_id)
+        .order_by(models.Notification.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    
+    notifications = [
+        {
+            "id": n.id,
+            "title": n.title,
+            "message": n.message,
+            "type": n.type,
+            "timeAgo": utils.time_ago(n.created_at),
+            "isRead": n.is_read
+        }
+        for n in notifications
+    ]
+    return {
+        "success": True,
+        "notifications": notifications,
+        "total": total,
+        "page": (skip // limit) + 1,
+        "limit": limit,
+    }
+
+
+def read_dashboard_notifications(db: Session, request, limit = "5"):
     user_id = utils.get_user_id(request, db)
     
     notifications = (
         db.query(models.Notification)
         .filter(models.Notification.user_id == user_id, models.Notification.is_read == False)
         .order_by(models.Notification.created_at.desc())
-        .limit(5)
+        .limit(limit)
         .all()
     )
     

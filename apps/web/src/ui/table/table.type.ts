@@ -13,6 +13,7 @@ export interface TableProps<T> {
   data: T[];
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
+  rowStyles?: (row: T) => string;
   title: string;
   description: string;
   formPath?: string;
