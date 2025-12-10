@@ -1,9 +1,13 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @eslint-react/no-array-index-key */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+import { IconButton } from "@intelli-meeting/shared-ui";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
+import { LuCalendar1, LuCalendarCheck2 } from "react-icons/lu";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { Calendar } from "react-multi-date-picker";
 
 import { getBounceEffect } from "@/lib/helpers";
 import { useReadDashboardMeetingsScheduleQuery } from "@/services";
@@ -12,6 +16,7 @@ import { Table } from "@/ui";
 export const DashboardDailySchedule = () => {
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const { data: meetings, isLoading } = useReadDashboardMeetingsScheduleQuery({
     candidateDate: currentDate.toISOString(),
@@ -80,6 +85,8 @@ export const DashboardDailySchedule = () => {
     setCurrentDate(selectedDate);
   };
 
+  const changeDateToToday = () => setCurrentDate(new Date());
+
   return (
     <motion.div
       className="bg-white border border-slate-800 w-full my-5 rounded-md p-5"
@@ -102,7 +109,10 @@ export const DashboardDailySchedule = () => {
           >
             <MdChevronLeft />
           </button>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
+            <IconButton title="Go to today" onClick={changeDateToToday}>
+              <LuCalendar1 className="text-xl" />
+            </IconButton>
             {visibleDays.map((day, idx) => (
               <div
                 key={idx}
@@ -123,6 +133,23 @@ export const DashboardDailySchedule = () => {
                 </div>
               </div>
             ))}
+            <div className="relative">
+              <IconButton
+                title="Select a date from date picker"
+                onClick={() => setShowCalendar((prevShow) => !prevShow)}
+              >
+                <LuCalendarCheck2 className="text-xl" />
+              </IconButton>
+              {showCalendar ? (
+                <Calendar
+                  className="top-15 right-0 absolute"
+                  value={currentDate}
+                  onChange={(date) =>
+                    handleScheduleDateSelect("select", date?.toDate())
+                  }
+                />
+              ) : null}
+            </div>
           </div>
           <button
             className="px-3 py-1 text-slate-600 text-2xl cursor-pointer"
