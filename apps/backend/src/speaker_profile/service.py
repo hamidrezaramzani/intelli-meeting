@@ -57,6 +57,17 @@ def read_speakers(db: Session, audio_id: str):
         "success": True,
         "speakers": speakers_data,
     }
+    
+def read_all_speakers(db: Session, audio_id: str):
+    speakers = (
+        db.query(SpeakerProfile)
+        .filter(SpeakerProfile.audio_id == audio_id)
+        .options(joinedload(SpeakerProfile.employee))
+        .order_by(SpeakerProfile.id.desc())
+        .all()
+    )
+
+    return speakers
 
 
 def assign_speakers(db: Session, speaker_profile_assignment_payload, audio_id, user_id):
@@ -83,15 +94,34 @@ def assign_speakers(db: Session, speaker_profile_assignment_payload, audio_id, u
 
     db.commit()
 
-
 def update_audio_text(db: Session, speaker_profile_id, payload):
-    newText = payload["newText"]
+    new_text = payload["newText"]
+
     speaker_profile = (
-        db.query(SpeakerProfile).filter(SpeakerProfile.id == speaker_profile_id).first()
+        db.query(SpeakerProfile)
+        .filter(SpeakerProfile.id == speaker_profile_id)
+        .first()
     )
-    speaker_profile.text = newText
+
+    if not speaker_profile:
+        raise ValueError("SpeakerProfile not found")
+
+    speaker_profile.text = new_text
     db.commit()
     db.refresh(speaker_profile)
+
+    chroma_collection.upsert(
+        ids=[str(speaker_profile.id)],
+        documents=[new_text],
+        metadatas=[{
+            "speaker_profile_id": str(speaker_profile.id),
+            "audio_id": str(speaker_profile.audio_id),
+            "speaker_id": speaker_profile.employee_id,
+        }]
+    )
+
+    return speaker_profile
+
 
 
 def delete_audio_text(db: Session, speaker_profile_id):

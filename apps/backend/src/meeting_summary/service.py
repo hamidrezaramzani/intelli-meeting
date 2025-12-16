@@ -10,7 +10,7 @@ from .models import (
 from src.meeting.models import Meeting
 
 
-def create_meeting_summuries(db: Session, meeting_id: str, section_type: str, data):
+def create_meeting_summaries(db: Session, meeting_id: str, section_type: str, data):
     meeting = (
         db.query(MeetingSummaryModel)
         .filter(MeetingSummaryModel.meeting_id == meeting_id)

@@ -37,9 +37,10 @@ def read_dashboard_meeting_schedules(
     dt = datetime.fromisoformat(candidate_date)
     candidate_date_obj = dt.date() 
     
+    candidate_date_obj_str = candidate_date_obj.isoformat()
     meetings = db.query(Meeting).filter(
         Meeting.user_id == user_id,
-        Meeting.date == candidate_date_obj
+        Meeting.date == candidate_date_obj_str
     ).all()
     
     response = [

@@ -36,7 +36,7 @@ const SignUpPage = () => {
   });
 
   const onSubmit = async (data: SignUpFormValues) => {
-    void toast.promise(signUp(data).unwrap(), {
+    await toast.promise(signUp(data).unwrap(), {
       pending: "Please wait",
       error: "We have an error when creating new user, please try again",
       success: {

@@ -4,3 +4,11 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 HF_TOKEN = os.getenv("HF_TOKEN")
+
+SEGMENTATION_MODEL_PATH = os.getenv("SEGMENTATION_MODEL_PATH")
+EMBEDDING_MODEL_PATH = os.getenv("EMBEDDING_MODEL_PATH")
+
+CHUNK_MS = 10000
+OVERLAP_MS = 2000
+MIN_DURATION = 0.5
+COSINE_THRESHOLD = 0.78

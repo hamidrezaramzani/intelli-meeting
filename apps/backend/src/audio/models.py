@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func, Enum
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func, Enum, Boolean
 from sqlalchemy.orm import relationship
 import enum
 from src.database import Base
@@ -22,6 +22,7 @@ class Audio(Base):
     status = Column(Enum(AudioStatus), default=AudioStatus.PENDING)
     transcript = Column(String, nullable=True)
     processing_duration = Column(String, nullable=True)
+    is_processing = Column(Boolean, nullable=True)
 
     meeting_id = Column(Integer, ForeignKey("meetings.id"), nullable=True, index=True)
 

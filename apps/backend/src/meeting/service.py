@@ -4,7 +4,6 @@ from . import models, schemas
 from src.employee import models as employee_models
 from src.audio import models as audio_models
 from src.speaker_profile import models as speaker_profile_models
-from src.ollama import service as ollama_service
 from src import utils
 
 def create_meeting(db: Session, body: schemas.CreateMeetingBody, user_id):

@@ -11,6 +11,7 @@ import { useReadOneMeetingQuery } from "@/services";
 import { Dashboard } from "@/ui";
 
 import { MeetingManagementTab, MeetingSummaryTab } from "../_components";
+import { useAudioProcessing } from "../_hooks";
 
 const Meeting = () => {
   const router = useRouter();
@@ -20,6 +21,8 @@ const Meeting = () => {
   const { data: meetingData } = useReadOneMeetingQuery(
     id ? { meetingId: id as string } : skipToken,
   );
+
+  const { startAudioProcessing } = useAudioProcessing(id as string);
 
   const meeting = meetingData?.meeting;
   useAuthRedirect({
@@ -71,7 +74,12 @@ const Meeting = () => {
               tabs={[
                 {
                   label: "Management",
-                  content: <MeetingManagementTab audios={meeting?.audios} />,
+                  content: (
+                    <MeetingManagementTab
+                      audios={meeting?.audios}
+                      onStartAudioProcessing={startAudioProcessing}
+                    />
+                  ),
                 },
                 {
                   label: "Summary",

@@ -23,6 +23,7 @@ class AudioItem(BaseModel):
     transcript: str | None
     processing_duration: str | None
     speaker_profiles: list[SpeakerItem] | None
+    is_processing: bool | None
     
     
 

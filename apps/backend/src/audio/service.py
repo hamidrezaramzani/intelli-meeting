@@ -20,12 +20,15 @@ import time
 import wave
 from src.chroma.chroma import chroma_collection
 from src.notification import service as notification_service
+from src.redis.redis import publisher
+from src.database import SessionLocal
+import httpx
 
 UPLOAD_DIR = "src/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
-def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.6):
+def get_similar_employee_id(segment_embedding, speaker_profiles, threshold=0.78):
     best_similarity = -1
     best_employee_id = None
     segment_embedding_np = np.array(segment_embedding)
@@ -216,13 +219,30 @@ def play_audio(
         return StreamingResponse(iterfile(), media_type="audio/wav")
 
 
-def set_audio_status(db: Session, audio, status):
-    audio.status = status
-    db.commit()
-    db.refresh(audio)
+async def set_audio_status(status, audio_id,  key, doc):
+    try:
+        db = SessionLocal()
+        audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
+        if status == models.AudioStatus.PROCESSING:
+            await publisher(key, doc)
+            audio.is_processing = True
+        
+        if status == models.AudioStatus.SUCCESS:
+            await publisher(key, doc)
+            audio.is_processing = False
+
+        if status == models.AudioStatus.FAILED:
+            await publisher(key, doc)
+            audio.is_processing = False
+
+        audio.status = status
+        db.commit()
+    except Exception as e:
+        print(e)
+        raise
 
 
-async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
+async def process_audio_to_text(db: Session, audio_id: str, user_id: str, key: str):
     try:
         audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
 
@@ -248,19 +268,17 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             .all()
         )
 
-        set_audio_status(db=db, status=models.AudioStatus.PROCESSING, audio=audio)
-
         file_path = os.path.join(UPLOAD_DIR, audio.file_path)
         filename = os.path.basename(file_path)
 
         start_time = time.time()
 
-        response = requests.post(
-            f"{config.settings.FASTAPI_AUDIO_URL}/process-audio",
-            json={"filename": filename},
-            proxies={"http": None, "https": None},
-            timeout=None,
-        )
+        await set_audio_status(status=models.AudioStatus.PROCESSING, audio_id=audio_id, key=key, doc={ "type": "audio_progress", "audioId": audio_id })    
+        async with httpx.AsyncClient(timeout=None) as client:
+            response = await client.post(
+                f"{config.settings.FASTAPI_AUDIO_URL}/process-audio",
+                json={"filename": filename},
+            )
 
         audio.processing_duration = str(time.time() - start_time)
         response.raise_for_status()
@@ -274,10 +292,12 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
 
         for segment in transcript_segments:
             transcript += segment["text"] + " "
+
             employee_id = get_similar_employee_id(
                 segment["embedding"], speaker_profiles
             )
-            created_speaker_profile_id = speaker_profile_service.create_speaker_profile(
+
+            speaker_profile_id = speaker_profile_service.create_speaker_profile(
                 db,
                 user_id=str(user_id),
                 initial_speaker_label=segment["speaker"],
@@ -290,36 +310,42 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             )
 
             chroma_documents.append(segment["text"])
-            chroma_ids.append(str(uuid.uuid4()))
-            chroma_metadatas.append(
-                {
-                    "audio_id": str(audio_id),
-                    "employee_id": employee_id
-                    if employee_id is not None
-                    else segment["speaker"],
-                    "speaker_profile_id": created_speaker_profile_id,
-                }
-            )
+
+            chroma_ids.append(str(speaker_profile_id))
+
+            metadata = {
+                "audio_id": str(audio_id),
+                "speaker_label": segment["speaker"],
+            }
+
+            if employee_id is not None:
+                metadata["employee_id"] = int(employee_id)
+
+            chroma_metadatas.append(metadata)
+
 
         chroma_collection.delete(where={"audio_id": str(audio_id)})
 
         chroma_collection.add(
-            ids=chroma_ids, documents=chroma_documents, metadatas=chroma_metadatas
+            ids=chroma_ids,
+            documents=chroma_documents,
+            metadatas=chroma_metadatas
         )
+
         audio.transcript = transcript
 
-        set_audio_status(db=db, status=models.AudioStatus.SUCCESS, audio=audio)
+        created_speaker_profiles = speaker_profile_service.read_all_speakers(db=db, audio_id=audio_id)
+        await set_audio_status(status=models.AudioStatus.SUCCESS, audio_id=audio_id, key=key, doc={ "type": "audio_done", "audioId": audio_id, "transcript": transcript, "speakerProfiles": jsonable_encoder(created_speaker_profiles) })
 
         await notification_service.create_notification(
             db=db,
             user_id=user_id,
             title="Transcription Complete",
-            message=f"Your audio({audio.name}) has been successfully transcribed",
+            message=f"Your audio has been successfully transcribed",
             type="audio-transcription-completed",
             audio_id=audio_id,
         )
         db.commit()
-        db.refresh(audio)
 
     except Exception as e:
         print(f"Error processing audio {audio_id}: {e}")
@@ -331,6 +357,4 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str):
             type="audio-transcription-failed",
             audio_id=audio_id,
         )
-        set_audio_status(db=db, status=models.AudioStatus.FAILED, audio=audio)
-        db.commit()
-        db.refresh(audio)
+        await set_audio_status(status=models.AudioStatus.FAILED, audio_id=audio_id, key=key, doc={ "type": "audio_failed", "audioId": audio_id})

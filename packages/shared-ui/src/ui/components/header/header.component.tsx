@@ -17,7 +17,7 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const renderMenuItems = (
-    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode
+    getContainer: (menu: HeaderProps["menus"][number]) => ReactNode,
   ) => {
     return menus.map((menu) => getContainer(menu));
   };
@@ -77,34 +77,34 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
           </a>
 
           {renderUserDropdown()}
+        </div>
 
-          <div
-            className={`${
-              isMenuOpen ? "block" : "hidden"
-            } w-full md:hidden md:w-auto absolute top-0 left-0 h-screen bg-white`}
-          >
-            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4  gap-5 md:space-x-8 rtl:space-x-reverse">
-              <li>
-                <button
-                  className="cursor-pointer"
-                  type="button"
-                  onClick={() => setIsMenuOpen(false)}
+        <div
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } w-full md:hidden md:w-auto absolute top-0 left-0 h-screen bg-white`}
+        >
+          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4  gap-5 md:space-x-8 rtl:space-x-reverse">
+            <li>
+              <button
+                className="cursor-pointer"
+                type="button"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <IoCloseOutline className="text-3xl" />
+              </button>
+            </li>
+            {renderMenuItems((menu) => (
+              <li key={menu.id}>
+                <a
+                  className="block py-2 px-3 text-black rounded"
+                  href={menu.title}
                 >
-                  <IoCloseOutline className="text-3xl" />
-                </button>
+                  {menu.title}
+                </a>
               </li>
-              {renderMenuItems((menu) => (
-                <li key={menu.id}>
-                  <a
-                    className="block py-2 px-3 text-black rounded"
-                    href={menu.title}
-                  >
-                    {menu.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+            ))}
+          </ul>
         </div>
       </nav>
     </header>

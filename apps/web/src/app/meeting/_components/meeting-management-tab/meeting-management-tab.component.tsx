@@ -6,23 +6,22 @@ import {
   EmptyState,
 } from "@intelli-meeting/shared-ui";
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 import {
   usePlayAudioMutation,
   useReadManyEmployeeCandidatesQuery,
-  useStartAudioProcessingMutation,
 } from "@/services";
 
 import type { MeetingManagementTabProps } from "./meeting-management-tab.props";
 
 import { MeetingTranscribeSentence } from "../meeting-transcribe-sentence";
 
-export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
+export const MeetingManagementTab = ({
+  audios,
+  onStartAudioProcessing,
+}: MeetingManagementTabProps) => {
   const [playAudio] = usePlayAudioMutation();
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
-
-  const [startAudioProcessing] = useStartAudioProcessingMutation();
 
   const [showTextPopover, setShowTextPopover] = useState<number | null>();
 
@@ -72,15 +71,7 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
     }
 
     if (shouldProcessAudio) {
-      await toast.promise(
-        startAudioProcessing({ audioId: String(audioId) }).unwrap(),
-        {
-          pending: "Starting audio processing...",
-          success: "Audio processing started successfully!",
-          error:
-            "An error occurred while starting the audio processing. Please try again.",
-        },
-      );
+      onStartAudioProcessing(audioId);
     }
   };
 
@@ -146,18 +137,19 @@ export const MeetingManagementTab = ({ audios }: MeetingManagementTabProps) => {
                 )}
               </div>
             )}
-
-            <div className="mb-4">
-              {audio.speaker_profiles.map((text) => (
-                <MeetingTranscribeSentence
-                  key={text.id}
-                  text={text}
-                  employees={employees}
-                  onTranscribeSelect={handleMeetingSummarySelect}
-                  openedTextPopoverId={showTextPopover}
-                />
-              ))}
-            </div>
+            {audio.status === "success" && (
+              <div className="mb-4">
+                {audio.speaker_profiles.map((text) => (
+                  <MeetingTranscribeSentence
+                    key={text.id}
+                    text={text}
+                    employees={employees}
+                    onTranscribeSelect={handleMeetingSummarySelect}
+                    openedTextPopoverId={showTextPopover}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         ))
       ) : (

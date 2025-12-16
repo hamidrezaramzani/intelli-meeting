@@ -19,25 +19,6 @@ from src import utils
 router = APIRouter()
 
 
-
-
-@router.get("/process/{audio_id}")
-def process_audio(
-    audio_id: int,
-    background_tasks: BackgroundTasks,
-    request: Request,
-    db: Session = Depends(get_db),
-):
-    audio = db.query(models.Audio).filter(models.Audio.id == audio_id).first()
-    if not audio:
-        raise HTTPException(status_code=404, detail="Audio not found")
-
-    user_id = utils.get_user_id(request=request, db=db)
-    background_tasks.add_task(service.process_audio_to_text, db, audio_id, user_id)
-
-    return {"success": True, "message": f"Processing of audio {audio_id} started"}
-
-
 @router.post("/upload-recording", response_model=schemas.UploadAudioResponse)
 async def upload_recording(
     name: str = Form(...),

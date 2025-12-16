@@ -42,7 +42,7 @@ export const useMeetingSummaryManager = (meetingId?: string) => {
   const { connect } = useWebSocket();
 
   const { data: meetingSummaries, isFetching } = useReadMeetingSummariesQuery(
-    meetingId ? { meetingId } : skipToken,
+    meetingId ? { meetingId } : skipToken
   );
 
   const [state, setState] = useState<SummaryState>({
@@ -134,7 +134,7 @@ export const useMeetingSummaryManager = (meetingId?: string) => {
           resetState();
         }
       },
-      () => resetState(false),
+      () => resetState(false)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

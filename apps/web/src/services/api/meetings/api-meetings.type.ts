@@ -26,6 +26,7 @@ interface Audio {
   speaker_profiles: SpeakerProfile[];
   status: string;
   transcript: string;
+  is_processing?: boolean;
 }
 
 export interface Meeting {
