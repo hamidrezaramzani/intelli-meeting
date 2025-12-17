@@ -31,7 +31,7 @@ const EmployeesPage = () => {
     type: "unlogged",
   });
 
-  const handleEdit = () => console.log("Edit");
+  const handleEdit = (id: string) => router.push(`/employees/${id}`);
   const handleDelete = () => console.log("Delete");
 
   return (
@@ -42,7 +42,7 @@ const EmployeesPage = () => {
         actions={[
           {
             children: <MdEdit />,
-            onActionClick: () => handleEdit(),
+            onActionClick: ({ id }) => handleEdit(id),
             title: "Edit employee",
           },
           {

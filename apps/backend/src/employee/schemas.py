@@ -26,3 +26,8 @@ class ReadManyEmployeeCandidatesResponse(BaseModel):
     success: bool
     employees: list[EmployeeItem] | None
     
+
+class ReadOneEmployeeResponse(BaseModel):
+    success: bool
+    employee: EmployeeItem | None
+    

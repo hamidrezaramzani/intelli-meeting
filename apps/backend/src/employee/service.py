@@ -1,3 +1,4 @@
+from fastapi import Body
 from sqlalchemy.orm import Session, joinedload
 from fastapi.encoders import jsonable_encoder
 from . import models
@@ -53,5 +54,39 @@ def read_employee_candidates(db: Session):
     return {
         "success": True,
         "employees": employees_data,
+    }
+    
+
+def read_one_employee(db: Session, employee_id: str):
+    employee = (
+         db.query(models.Employee, )
+         .filter(models.Employee.id == employee_id)
+        .options(joinedload(models.Employee.position)) 
+        .first()
+    )
+    
+    employee_data = jsonable_encoder(employee)
+
+    print(employee_data)
+    return {
+        "success": True,
+        "employee": employee_data,
+    }
+    
+
+
+def update_employee(db: Session, employee_id: str, body):
+    employee = (
+         db.query(models.Employee, )
+         .filter(models.Employee.id == employee_id)
+        .options(joinedload(models.Employee.position)) 
+        .first()
+    )
+    
+    employee.fullName = body['fullName']
+    employee.position_id = body['position']
+    db.commit()
+    return {
+        "success": True,
     }
     

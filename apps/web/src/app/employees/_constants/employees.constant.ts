@@ -1,6 +1,7 @@
 import type { TableColumn } from "@/ui";
 
 export const EMPLOYEES_LIST_COLUMNS: TableColumn<{
+  id: string;
   fullName: string;
   position: { id: string; title: string };
 }>[] = [

@@ -30,3 +30,20 @@ def read_employee_candidates(
     db: Session = Depends(get_db),
 ):
     return service.read_employee_candidates(db=db)
+
+@router.get("/{employee_id}")
+def read_employee_candidates(
+    employee_id: str,
+    db: Session = Depends(get_db),
+):
+    print(employee_id)
+    return service.read_one_employee(db=db, employee_id=employee_id)
+
+
+@router.put("/{employee_id}")
+def update_employee(
+    employee_id: str,
+    body = Body(...),
+    db: Session = Depends(get_db),
+):
+    return service.update_employee(db=db, employee_id=employee_id, body=body)

@@ -17,10 +17,25 @@ export const employeeApi = baseApi.injectEndpoints({
       }),
       transformResponse: (data) => data.employees,
     }),
+    readOneEmployee: builder.query({
+      query: ({ params }) => ({
+        url: `/employee/${params.id}`,
+        method: "GET",
+      }),
+      transformResponse: (employee) => employee.employee,
+    }),
     createEmployee: builder.mutation({
       query: (data: any) => ({
         url: `/employee`,
         method: "POST",
+        data,
+      }),
+      invalidatesTags: ["Employees"],
+    }),
+    updateEmployee: builder.mutation({
+      query: ({ data, params }) => ({
+        url: `/employee/${params.id}`,
+        method: "PUT",
         data,
       }),
       invalidatesTags: ["Employees"],
@@ -32,4 +47,6 @@ export const {
   useCreateEmployeeMutation,
   useReadManyEmployeeCandidatesQuery,
   useReadManyEmployeesQuery,
+  useReadOneEmployeeQuery,
+  useUpdateEmployeeMutation,
 } = employeeApi;
