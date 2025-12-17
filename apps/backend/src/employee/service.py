@@ -67,6 +67,9 @@ def read_one_employee(db: Session, employee_id: str):
     
     employee_data = jsonable_encoder(employee)
 
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
     print(employee_data)
     return {
         "success": True,
@@ -82,6 +85,10 @@ def update_employee(db: Session, employee_id: str, body):
         .options(joinedload(models.Employee.position)) 
         .first()
     )
+
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
     
     employee.fullName = body['fullName']
     employee.position_id = body['position']

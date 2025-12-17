@@ -1,10 +1,15 @@
 "use client";
 
+import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-import { useReadManyPositionsQuery } from "@/services";
+import {
+  useDeletePositionMutation,
+  useReadManyPositionsQuery,
+} from "@/services";
 import { Table } from "@/ui";
 
 import type { Position } from "./positions-list.type";
@@ -14,7 +19,10 @@ import { POSITIONS_COLUMNS } from "./positions-list.constant";
 export const PositionsList = () => {
   const router = useRouter();
 
+  const [deletePosition] = useDeletePositionMutation();
+
   const [page, setPage] = useState(1);
+
   const limit = 10;
   const { data } = useReadManyPositionsQuery({
     query: {
@@ -29,7 +37,30 @@ export const PositionsList = () => {
 
   const handleEdit = (position: Position) =>
     router.push(`/positions/edit/${position.id}`);
-  const handleDelete = (position: Position) => console.log("Delete", position);
+  const handleDelete = async (position: Position) => {
+    const isConfirmed = await confirmation({
+      title: "Delete position",
+      message: "Do you want to delete this position?",
+      confirmText: "Yes",
+      cancelText: "No",
+    });
+
+    if (!isConfirmed) return;
+
+    await toast.promise(
+      deletePosition({ params: { id: position.id } }).unwrap(),
+      {
+        pending: "Deleting employee...",
+        success: {
+          render: () => {
+            router.push("/settings?tab=positions");
+            return "Employee deleted successfully!";
+          },
+        },
+        error: "Error while deleting employee. Please try again.",
+      },
+    );
+  };
 
   useAuthRedirect({
     onRedirect: () => router.push("/sign-in"),

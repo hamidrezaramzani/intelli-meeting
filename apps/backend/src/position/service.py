@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
 from . import models
@@ -79,6 +80,25 @@ def update_position(db: Session, position_id: str, body):
     
     position.title = body["title"]
 
+    db.commit()
+    return {
+        "success": True,
+    }
+    
+
+def delete_position(db: Session, position_id: str):
+    position = (
+         db.query(models.Position)
+         .filter(models.Position.id == position_id)
+        .order_by(models.Position.id.desc())
+        .first()
+    )
+
+    if not position:
+        raise HTTPException(status_code=404, detail="Position not found")
+
+    
+    db.delete(position)
     db.commit()
     return {
         "success": True,

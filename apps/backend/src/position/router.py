@@ -39,6 +39,13 @@ def update_position(
     return service.update_position(db=db, position_id=position_id, body=body)
 
 
+@router.delete("/{position_id}")
+def delete_position(
+    position_id: str,
+    db: Session = Depends(get_db),
+):
+    return service.delete_position(db=db, position_id=position_id)
+
 
 @router.get("/{position_id}", response_model=schemas.ReadOnePositionResponse)
 def read_one_position(

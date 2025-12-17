@@ -39,6 +39,14 @@ export const positionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Positions"],
     }),
+
+    deletePosition: builder.mutation({
+      query: ({ params }) => ({
+        url: `/position/${params.id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Positions"],
+    }),
   }),
 });
 
@@ -48,4 +56,5 @@ export const {
   useReadManyPositionCandidatesQuery,
   useReadOnePositionQuery,
   useEditPositionMutation,
+  useDeletePositionMutation,
 } = positionApi;
