@@ -1,17 +1,24 @@
 "use client";
 
+import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { toast } from "react-toastify";
 
-import { useReadManyEmployeesQuery } from "@/services";
+import {
+  useDeleteEmployeeMutation,
+  useReadManyEmployeesQuery,
+} from "@/services";
 import { Dashboard, Table } from "@/ui";
 
 import { EMPLOYEES_LIST_COLUMNS } from "./_constants";
 
 const EmployeesPage = () => {
   const router = useRouter();
+
+  const [deleteEmployee] = useDeleteEmployeeMutation();
 
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -32,7 +39,36 @@ const EmployeesPage = () => {
   });
 
   const handleEdit = (id: string) => router.push(`/employees/${id}`);
-  const handleDelete = () => console.log("Delete");
+  const handleDelete = async (row: {
+    id: string;
+    fullName: string;
+    position: { id: string; title: string };
+  }) => {
+    const isConfirmed = await confirmation({
+      title: "Delete employee",
+      message: "Do you want to delete this employee?",
+      confirmText: "Yes",
+      cancelText: "No",
+    });
+
+    if (!isConfirmed) return;
+
+    await toast.promise(
+      deleteEmployee({
+        params: { id: row.id },
+      }).unwrap(),
+      {
+        pending: "Updating audio text...",
+        success: {
+          render: () => {
+            router.push("/employees");
+            return "Deleting employee was successfully!";
+          },
+        },
+        error: "Failed to delete employee. Please try again.",
+      },
+    );
+  };
 
   return (
     <Dashboard title="Employees">
@@ -47,7 +83,7 @@ const EmployeesPage = () => {
           },
           {
             children: <MdDelete />,
-            onActionClick: () => handleDelete(),
+            onActionClick: handleDelete,
             title: "Delete employee",
           },
         ]}

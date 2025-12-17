@@ -47,3 +47,11 @@ def update_employee(
     db: Session = Depends(get_db),
 ):
     return service.update_employee(db=db, employee_id=employee_id, body=body)
+
+
+@router.delete("/{employee_id}")
+def delete_employee(
+    employee_id: str,
+    db: Session = Depends(get_db),
+):
+    return service.delete_employee(db=db, employee_id=employee_id)

@@ -1,4 +1,4 @@
-from fastapi import Body
+from fastapi import HTTPException
 from sqlalchemy.orm import Session, joinedload
 from fastapi.encoders import jsonable_encoder
 from . import models
@@ -90,3 +90,19 @@ def update_employee(db: Session, employee_id: str, body):
         "success": True,
     }
     
+
+def delete_employee(db: Session, employee_id: str):
+    employee = (
+         db.query(models.Employee, )
+         .filter(models.Employee.id == employee_id)
+        .first()
+    )
+
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
+    db.delete(employee)
+    db.commit()
+    return {
+        "success": True,
+    }
