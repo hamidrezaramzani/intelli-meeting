@@ -28,3 +28,21 @@ def read_position_candidates(
     db: Session = Depends(get_db),
 ):
     return service.read_position_candidates(db=db)
+
+
+@router.put("/{position_id}")
+def update_position(
+    position_id: str,
+    body = Body(...),
+    db: Session = Depends(get_db),
+):
+    return service.update_position(db=db, position_id=position_id, body=body)
+
+
+
+@router.get("/{position_id}", response_model=schemas.ReadOnePositionResponse)
+def read_one_position(
+    position_id: str,
+    db: Session = Depends(get_db),
+):
+    return service.read_one_position(db=db, position_id=position_id)

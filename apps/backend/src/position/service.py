@@ -52,3 +52,35 @@ def read_position_candidates(db: Session):
         "positions": positions_data,
     }
     
+
+def read_one_position(db: Session, position_id: str):
+    position = (
+         db.query(models.Position)
+         .filter(models.Position.id == position_id)
+        .order_by(models.Position.id.desc())
+        .first()
+    )
+    
+    position_data = jsonable_encoder(position)
+
+    return {
+        "success": True,
+        "position": position_data,
+    }
+    
+
+def update_position(db: Session, position_id: str, body):
+    position = (
+         db.query(models.Position)
+         .filter(models.Position.id == position_id)
+        .order_by(models.Position.id.desc())
+        .first()
+    )
+    
+    position.title = body["title"]
+
+    db.commit()
+    return {
+        "success": True,
+    }
+    

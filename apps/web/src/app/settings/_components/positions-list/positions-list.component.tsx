@@ -4,10 +4,10 @@ import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import type { Meeting } from "@/lib/type";
-
 import { useReadManyPositionsQuery } from "@/services";
 import { Table } from "@/ui";
+
+import type { Position } from "./positions-list.type";
 
 import { POSITIONS_COLUMNS } from "./positions-list.constant";
 
@@ -27,8 +27,9 @@ export const PositionsList = () => {
 
   const positions = data?.positions || [];
 
-  const handleEdit = (meeting: Meeting) => console.log("Edit", meeting);
-  const handleDelete = (meeting: Meeting) => console.log("Delete", meeting);
+  const handleEdit = (position: Position) =>
+    router.push(`/positions/edit/${position.id}`);
+  const handleDelete = (position: Position) => console.log("Delete", position);
 
   useAuthRedirect({
     onRedirect: () => router.push("/sign-in"),

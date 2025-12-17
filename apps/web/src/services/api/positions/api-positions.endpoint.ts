@@ -16,10 +16,25 @@ export const positionApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    readOnePosition: builder.query({
+      query: ({ params }) => ({
+        url: `/position/${params.id}`,
+        method: "GET",
+      }),
+      transformResponse: (position) => position.position,
+    }),
     createPosition: builder.mutation({
       query: (data) => ({
         url: `/position`,
         method: "POST",
+        data,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    editPosition: builder.mutation({
+      query: ({ data, params }) => ({
+        url: `/position/${params.id}`,
+        method: "PUT",
         data,
       }),
       invalidatesTags: ["Positions"],
@@ -31,4 +46,6 @@ export const {
   useCreatePositionMutation,
   useReadManyPositionsQuery,
   useReadManyPositionCandidatesQuery,
+  useReadOnePositionQuery,
+  useEditPositionMutation,
 } = positionApi;

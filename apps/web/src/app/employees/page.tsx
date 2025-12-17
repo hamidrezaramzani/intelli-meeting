@@ -38,7 +38,7 @@ const EmployeesPage = () => {
     type: "unlogged",
   });
 
-  const handleEdit = (id: string) => router.push(`/employees/${id}`);
+  const handleEdit = (id: string) => router.push(`/employees/edit/${id}`);
   const handleDelete = async (row: {
     id: string;
     fullName: string;

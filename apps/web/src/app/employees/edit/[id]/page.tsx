@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 import { useReadOneEmployeeQuery, useUpdateEmployeeMutation } from "@/services";
 import { Dashboard } from "@/ui";
 
-import type { EmployeeFormValues } from "../_components";
+import type { EmployeeFormValues } from "../../_components";
 
-import { EmployeeForm } from "../_components";
+import { EmployeeForm } from "../../_components";
 
 const EditEmployeePage = () => {
   const { id } = useParams();

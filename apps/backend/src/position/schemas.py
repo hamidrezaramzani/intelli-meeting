@@ -23,3 +23,9 @@ class ReadManyPositionCandidatesResponse(BaseModel):
     success: bool
     positions: list[PositionItem] | None
     
+
+  
+class ReadOnePositionResponse(BaseModel):
+    success: bool
+    position: PositionItem | None
+    
