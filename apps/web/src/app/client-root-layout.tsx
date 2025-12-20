@@ -15,7 +15,7 @@ export default function ClientRootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const i18n = initI18n("fa");
+  const i18n = initI18n("en");
   return (
     <I18nextProvider i18n={i18n}>
       <StoreProvider>{children}</StoreProvider>
