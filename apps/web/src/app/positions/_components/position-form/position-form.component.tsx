@@ -35,7 +35,9 @@ export const PositionForm = ({
   return (
     <div className="w-full">
       <div className="w-3/5 bg-slate-50 p-6">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">{title}</h2>
+        <h2 className="text-2xl font-roboto font-bold text-slate-800 mb-2">
+          {title}
+        </h2>
         <p className="text-slate-600 mb-6">{description}</p>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>

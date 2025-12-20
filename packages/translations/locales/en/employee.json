@@ -1,0 +1,9 @@
+{
+    "employee": "Employee",
+    "title": "Employees",
+    "description": "This table shows all employees inside your organization",
+    "column": {
+        "fullName": "Fullname",
+        "position": "Position"
+    }
+}

@@ -13,7 +13,7 @@ export const Chip = ({
   ...props
 }: ChipProps) => {
   const baseStyles =
-    "inline-flex items-center px-3 py-1 text-xs font-medium cursor-default select-none border transition-colors";
+    "inline-flex items-center px-3 py-1 text-xs font-roboto  font-medium cursor-default select-none border transition-colors";
 
   const variantStyles = {
     default:

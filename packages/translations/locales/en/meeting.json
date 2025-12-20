@@ -1,0 +1,10 @@
+{
+  "title": "Meetings",
+  "meeting": "Meeting",
+  "description": "This table show you all of meetings that you saved before",
+  "column": {
+    "date": "Date",
+    "startTime": "Start time",
+    "endTime": "End time"
+  }
+}

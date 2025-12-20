@@ -3,16 +3,19 @@
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useReadManyMeetingsQuery } from "@/services";
 import { Dashboard, Table } from "@/ui";
 
 import type { Meeting } from "./_types";
 
-import { MEETINGS_LIST_COLUMNS } from "./_constants";
+import { getMeetingColumns } from "./_constants";
 
 const MeetingsPage = () => {
   const router = useRouter();
+
+  const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -32,9 +35,10 @@ const MeetingsPage = () => {
     <Dashboard title="Meetings">
       <Table
         data={meetings}
-        title="List of meetings"
-        columns={MEETINGS_LIST_COLUMNS}
-        description="This table show you all of meetings that you saved before"
+        thing={t("meeting:meeting")}
+        title={t("meeting:meeting")}
+        columns={getMeetingColumns(t)}
+        description={t("meeting:description")}
         formPath="/meetings/new"
         loading={isLoading}
         onDelete={handleDelete}

@@ -323,7 +323,7 @@ export const RecordPage = () => {
           <div className="w-full mt-6" ref={containerRef} />
 
           <div className="w-full flex flex-col justify-center items-center mt-3">
-            <h3 className="text-4xl text-brand-400 font-black">{time}</h3>
+            <h3 className="text-4xl font-roboto  text-brand-400 font-black">{time}</h3>
             {isPaused && (
               <p className="text-yellow-500 font-semibold mt-1">Paused</p>
             )}

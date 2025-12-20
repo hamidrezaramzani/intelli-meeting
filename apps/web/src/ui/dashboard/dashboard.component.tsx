@@ -23,7 +23,9 @@ export const Dashboard = ({ children, title, backUrl }: DashboardProps) => {
                 <h1 className="text-xl text-slate-800 font-bold">
                   Intelli Meeting
                 </h1>
-                <p className="text-xs font-body text-slate-600">AI-powered</p>
+                <p className="text-xs font-roboto  font-body text-slate-600">
+                  AI-powered
+                </p>
               </div>
             </div>
           </button>

@@ -60,10 +60,10 @@ export const Login = ({ navigate }: LoginProps) => {
         </div>
 
         <div className="flex justify-center flex-col mt-3">
-          <h3 className="text-black text-2xl mb-2 font-bold text-center">
+          <h3 className="text-black text-2xl font-roboto mb-2 font-bold text-center">
             Sign in
           </h3>
-          <p className="text-gray-600 text-md font-regular text-center">
+          <p className="text-gray-600 text-md font-roboto  font-regular text-center">
             Sign in to access your account and all features.
           </p>
         </div>

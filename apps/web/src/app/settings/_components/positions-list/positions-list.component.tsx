@@ -4,6 +4,7 @@ import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import {
@@ -14,9 +15,11 @@ import { Table } from "@/ui";
 
 import type { Position } from "./positions-list.type";
 
-import { POSITIONS_COLUMNS } from "./positions-list.constant";
+import { getPositionColumns } from "./positions-list.constant";
 
 export const PositionsList = () => {
+  const { t } = useTranslation();
+
   const router = useRouter();
 
   const [deletePosition] = useDeletePositionMutation();
@@ -39,10 +42,14 @@ export const PositionsList = () => {
     router.push(`/positions/edit/${position.id}`);
   const handleDelete = async (position: Position) => {
     const isConfirmed = await confirmation({
-      title: "Delete position",
-      message: "Do you want to delete this position?",
-      confirmText: "Yes",
-      cancelText: "No",
+      title: t("common:deleteThing", {
+        thing: t("setting:positions.position"),
+      }),
+      message: t("common:deleteThingConfirmation", {
+        thing: t("setting:positions.position"),
+      }),
+      confirmText: t("common:yes"),
+      cancelText: t("common:no"),
     });
 
     if (!isConfirmed) return;
@@ -50,14 +57,18 @@ export const PositionsList = () => {
     await toast.promise(
       deletePosition({ params: { id: position.id } }).unwrap(),
       {
-        pending: "Deleting employee...",
+        pending: t("common:thingDeleted", {
+          thing: t("setting:positions.position"),
+        }),
         success: {
           render: () => {
             router.push("/settings?tab=positions");
-            return "Employee deleted successfully!";
+            return t("common:thingDeleted", {
+              thing: t("setting:positions.position"),
+            });
           },
         },
-        error: "Error while deleting employee. Please try again.",
+        error: t("common:operationFailed"),
       },
     );
   };
@@ -70,9 +81,9 @@ export const PositionsList = () => {
   return (
     <Table
       data={positions}
-      title="List of positions"
-      columns={POSITIONS_COLUMNS}
-      description="This table show you all of positions that you saved before"
+      title={t("setting:positions.title")}
+      columns={getPositionColumns(t)}
+      description={t("setting:positions.description")}
       formPath="/positions/new"
       onDelete={handleDelete}
       onEdit={handleEdit}

@@ -41,21 +41,21 @@ const Meeting = () => {
             <div className="flex flex-col gap-3 justify-center">
               <div className="flex justify-between">
                 <div>
-                  <h1 className="text-slate-800 text-4xl font-bold flex items-center gap-4">
+                  <h1 className="text-slate-800 text-4xl font-roboto  font-bold flex items-center gap-4">
                     {meeting.title}
                     <a
-                      className="text-md"
+                      className="text-md font-roboto "
                       href={meeting.meeting_link}
                       rel="noreferrer"
                       target="_blank"
                     >
-                      <TiPinOutline className="text-md" />
+                      <TiPinOutline className="text-md font-roboto " />
                     </a>
                   </h1>
                 </div>
               </div>
               <div>
-                <h4 className="text-md text-slate-500">
+                <h4 className="text-md font-roboto  text-slate-500">
                   {meeting.date} - {meeting.start_time} - {meeting.end_time}
                 </h4>
               </div>

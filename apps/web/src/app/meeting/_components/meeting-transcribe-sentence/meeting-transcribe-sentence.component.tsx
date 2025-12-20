@@ -154,10 +154,10 @@ export const MeetingTranscribeSentence = ({
                 src="https://ui-avatars.com/api/?name=HamidrezaRamzani"
               />
               <div className="flex flex-col px-3 justify-center">
-                <h3 className="text-slate-300 text-md inline leading-6">
+                <h3 className="text-slate-300 text-md font-roboto  inline leading-6">
                   {text.employee?.fullName || text.initial_speaker_label}
                 </h3>
-                <span className="text-slate-400 text-xs inline">
+                <span className="text-slate-400 text-xs font-roboto  inline">
                   {text.employee?.position.title || "Unknown"}
                 </span>
               </div>
@@ -165,16 +165,16 @@ export const MeetingTranscribeSentence = ({
             <div className="flex items-center gap-2">
               <IconButton onClick={handleShowEmployeesClick}>
                 {!showEmployeesDropdown ? (
-                  <LuUserRoundCheck className="text-2xl" />
+                  <LuUserRoundCheck className="text-2xl font-roboto" />
                 ) : (
-                  <LuUserRoundMinus className="text-2xl" />
+                  <LuUserRoundMinus className="text-2xl font-roboto" />
                 )}
               </IconButton>
               <IconButton onClick={handleTextDelete}>
-                <FiTrash2 className="text-2xl" />
+                <FiTrash2 className="text-2xl font-roboto" />
               </IconButton>
               <IconButton onClick={() => handlePlayClick(text.id)}>
-                <MdPlayCircle className="text-2xl" />
+                <MdPlayCircle className="text-2xl font-roboto" />
               </IconButton>
             </div>
           </div>
@@ -182,8 +182,8 @@ export const MeetingTranscribeSentence = ({
           {showEmployeesDropdown ? (
             <div className="flex flex-col gap-4 py-4">
               <div className="flex flex-col">
-                <h3 className="text-white text-md">Select employee</h3>
-                <span className="text-sm text-slate-400">
+                <h3 className="text-white text-md font-roboto ">Select employee</h3>
+                <span className="text-sm font-roboto  text-slate-400">
                   Please select an employee for this voice
                 </span>
               </div>
@@ -201,10 +201,10 @@ export const MeetingTranscribeSentence = ({
                         src="https://ui-avatars.com/api/?name=HamidrezaRamzani"
                       />
                       <div className="flex flex-col px-3 justify-center">
-                        <h3 className="text-slate-300 text-md inline leading-6">
+                        <h3 className="text-slate-300 text-md font-roboto  inline leading-6">
                           {employee?.fullName}
                         </h3>
-                        <span className="text-slate-400 text-xs inline">
+                        <span className="text-slate-400 text-xs font-roboto  inline">
                           {employee?.position
                             ? employee?.position.title
                             : "Unknown"}

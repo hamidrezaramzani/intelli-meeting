@@ -12,7 +12,7 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const baseStyles =
-    "px-4 py-2 font-regular text-sm cursor-pointer rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+    "font-roboto px-4 py-2 font-regular text-sm font-roboto  cursor-pointer rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-50";
 
   const variantStyles = {
     default:

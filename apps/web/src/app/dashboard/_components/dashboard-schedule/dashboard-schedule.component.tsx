@@ -12,9 +12,13 @@ import { Calendar } from "react-multi-date-picker";
 import { getBounceEffect } from "@/lib/helpers";
 import { useReadDashboardMeetingsScheduleQuery } from "@/services";
 import { Table } from "@/ui";
+import { useTranslation } from "react-i18next";
 
 export const DashboardDailySchedule = () => {
   const today = new Date();
+
+  const { t } = useTranslation();
+
   const [currentDate, setCurrentDate] = useState(today);
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -94,16 +98,18 @@ export const DashboardDailySchedule = () => {
     >
       <div className="flex flex-col gap-2 mb-8">
         <div className="w-full flex justify-between">
-          <h1 className="text-2xl font-bold text-slate-800">Daily Schedule</h1>
+          <h1 className="text-2xl font-roboto font-bold text-slate-800">
+            {t("dashboard:dailySchedule.title")}
+          </h1>
         </div>
         <p className="text-slate-600">
-          Here are all the sessions scheduled for the selected day
+          {t("dashboard:dailySchedule.description")}
         </p>
       </div>
       <div className="flex flex-col items-center w-full">
         <div className="flex items-center gap-4 w-full justify-between">
           <button
-            className="px-3 py-1 text-slate-600 text-2xl cursor-pointer"
+            className="px-3 py-1 text-slate-600 text-2xl font-roboto cursor-pointer"
             type="button"
             onClick={() => handleScheduleDateSelect("prev")}
           >
@@ -128,7 +134,7 @@ export const DashboardDailySchedule = () => {
                       : "bg-gray-200 text-gray-700"
                   }`}
                 >
-                  <div className="text-xs">{DAYS[day.getDay()]}</div>
+                  <div className="text-xs font-roboto ">{DAYS[day.getDay()]}</div>
                   {formatDay(day)}
                 </div>
               </div>
@@ -152,7 +158,7 @@ export const DashboardDailySchedule = () => {
             </div>
           </div>
           <button
-            className="px-3 py-1 text-slate-600 text-2xl cursor-pointer"
+            className="px-3 py-1 text-slate-600 text-2xl font-roboto cursor-pointer"
             type="button"
             onClick={() => handleScheduleDateSelect("next")}
           >
@@ -167,14 +173,20 @@ export const DashboardDailySchedule = () => {
           columns={[
             {
               key: "title",
-              label: "Title",
+              label: t("dashboard:dailySchedule.columns.title"),
               render: (row) => (
                 <Link href={`/meeting/${row.id}`}>{row.title}</Link>
               ),
             },
-            { key: "date", label: "Start date" },
-            { key: "startTime", label: "Start time" },
-            { key: "endTime", label: "End time" },
+            { key: "date", label: t("dashboard:dailySchedule.columns.date") },
+            {
+              key: "startTime",
+              label: t("dashboard:dailySchedule.columns.startTime"),
+            },
+            {
+              key: "endTime",
+              label: t("dashboard:dailySchedule.columns.endTime"),
+            },
           ]}
           description="..."
           loading={isLoading}

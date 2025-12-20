@@ -16,6 +16,7 @@ export interface TableProps<T> {
   rowStyles?: (row: T) => string;
   title: string;
   description: string;
+  thing?: string;
   formPath?: string;
   pagination?: {
     currentPage: number;

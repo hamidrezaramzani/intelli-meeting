@@ -15,7 +15,7 @@ export const UserMenu = ({ menuItems }: UserMenuProps) => {
   return (
     <div className="relative">
       <div
-        className="rounded-full bg-slate-300 flex items-center justify-center text-sm font-semibold text-white cursor-pointer hover:opacity-90 transition"
+        className="rounded-full bg-slate-300 flex items-center justify-center text-sm font-roboto  font-semibold text-white cursor-pointer hover:opacity-90 transition"
         onClick={() => setOpen(!open)}
       >
         <img
@@ -30,11 +30,11 @@ export const UserMenu = ({ menuItems }: UserMenuProps) => {
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-slate-50 border border-slate-200 rounded-lg overflow-hidden z-10">
           <div className="px-4 py-3 border-b border-slate-200 bg-slate-100">
-            <p className="text-sm text-gray-800 font-medium">
+            <p className="text-sm font-roboto  text-gray-800 font-medium">
               Hello, {employeeName}!
             </p>
           </div>
-          <ul className="text-sm text-gray-700">
+          <ul className="text-sm font-roboto  text-gray-700">
             {menuItems?.map((item, idx) => (
               <li
                 className="px-4 py-2 hover:bg-slate-200 cursor-pointer transition"

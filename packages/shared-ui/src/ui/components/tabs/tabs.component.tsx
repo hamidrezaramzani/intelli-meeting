@@ -16,7 +16,7 @@ export const Tabs = ({ tabs, onChange, defaultIndex = 0 }: TabsProps) => {
               setActiveIndex(index);
               onChange?.(tab.name);
             }}
-            className={`py-2 px-4 -mb-px font-medium text-sm border-b-2 transition-colors duration-200 cursor-pointer outline-none
+            className={`py-2 px-4 -mb-px font-medium text-sm font-roboto  border-b-2 transition-colors duration-200 cursor-pointer outline-none
               ${
                 activeIndex === index
                   ? "border-blue-500 text-blue-600"

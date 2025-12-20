@@ -1,8 +1,12 @@
-import type { TableColumn } from "../../../../ui/table";
+import type { TFunction } from "i18next";
 
-export const POSITIONS_COLUMNS: TableColumn<{ title: string }>[] = [
+import type { TableColumn } from "@/ui";
+
+export const getPositionColumns = (
+  t: TFunction,
+): TableColumn<{ title: string }>[] => [
   {
-    label: "Title",
+    label: t("common:column.title"),
     key: "title",
   },
 ];

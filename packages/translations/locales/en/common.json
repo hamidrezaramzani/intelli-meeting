@@ -1,0 +1,48 @@
+{
+  "yes": "Yes",
+  "no": "No",
+  "column": {
+    "title": "Title"
+  },
+  "title": "Intelli Meeting",
+  "areYouSureToDeleteThing": "Are you sure to delete {{thing, lowercase}}",
+  "table": {
+    "notDataFound": "No data found",
+    "unableToFetchData": "Unable to load table data. Please try again later."
+  },
+  "actions": "Actions",
+
+  "addThing": "Add {{thing, lowercase}}",
+  "addingThing": "Adding {{thing, lowercase}}...",
+  "thingAdded": "{{thing}} added successfully",
+
+  "viewThing": "View {{thing, lowercase}}",
+  "loadingThing": "Loading {{thing, lowercase}}...",
+  "thingLoaded": "{{thing}} loaded successfully",
+
+  "editThing": "Edit {{thing, lowercase}}",
+  "updatingThing": "Updating {{thing, lowercase}}...",
+  "thingUpdated": "{{thing}} updated successfully",
+
+  "deleteThing": "Delete {{thing, lowercase}}",
+  "deletingThing": "Deleting {{thing, lowercase}}...",
+  "thingDeleted": "{{thing}} deleted successfully",
+
+  "thingsList": "{{thing, plural}} list",
+  "loadingThings": "Loading {{thing, plural}}...",
+  "thingsLoaded": "{{thing, plural}} loaded",
+  "noThingsFound": "No {{thing, plural}} found",
+
+  "areYouSure": "Are you sure?",
+  "deleteThingConfirmation": "Are you sure you want to delete this {{thing, lowercase}}?",
+  "thisActionCannotBeUndone": "This action cannot be undone",
+
+  "thingNotFound": "{{thing}} not found",
+  "thingAlreadyExists": "{{thing}} already exists",
+  "invalidThing": "Invalid {{thing, lowercase}}",
+  "permissionDenied": "You do not have permission to perform this action",
+
+  "operationSuccessful": "Operation completed successfully",
+  "operationFailed": "Operation failed",
+  "tryAgain": "Please try again"
+}

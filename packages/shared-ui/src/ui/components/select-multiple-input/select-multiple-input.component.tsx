@@ -28,7 +28,7 @@ export const SelectMultipleInput = ({
   return (
     <div className="mb-5 rounded-md">
       {label && (
-        <label className="block mb-2 text-sm font-medium text-gray-500">
+        <label className="block mb-2 text-sm font-roboto  font-medium text-gray-500">
           {label}
         </label>
       )}
@@ -38,7 +38,7 @@ export const SelectMultipleInput = ({
           tabIndex={0}
           onBlur={onBlur}
           onClick={() => setOpen((prev) => !prev)}
-          className={`bg-white border rounded-xl p-2.5 text-sm min-h-[40px] cursor-pointer flex flex-wrap gap-2 items-center
+          className={`bg-white border rounded-xl p-2.5 text-sm font-roboto  min-h-[40px] cursor-pointer flex flex-wrap gap-2 items-center
             ${error ? "border-red-500" : "border-black"}
           `}
         >
@@ -49,7 +49,7 @@ export const SelectMultipleInput = ({
               const op = options.find((o) => o.value === val)!;
               return (
                 <span
-                  className="flex items-center bg-gray-200 px-2 py-0.5 rounded-lg text-sm"
+                  className="flex items-center bg-gray-200 px-2 py-0.5 rounded-lg text-sm font-roboto "
                   key={val}
                 >
                   {op.label}
@@ -78,7 +78,7 @@ export const SelectMultipleInput = ({
                 <div
                   key={opt.value}
                   onClick={() => toggleValue(opt.value)}
-                  className={`px-3 py-2 cursor-pointer flex justify-between items-center text-sm hover:bg-gray-100
+                  className={`px-3 py-2 cursor-pointer flex justify-between items-center text-sm font-roboto  hover:bg-gray-100
                     ${selected ? "bg-gray-100 font-medium" : ""}
                   `}
                 >
@@ -94,7 +94,7 @@ export const SelectMultipleInput = ({
       </div>
 
       {error && (
-        <p className="mt-1 text-sm text-red-500 font-regular">{error}</p>
+        <p className="mt-1 text-sm font-roboto  text-red-500 font-regular">{error}</p>
       )}
     </div>
   );

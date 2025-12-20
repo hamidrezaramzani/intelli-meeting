@@ -4,6 +4,7 @@ import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 
@@ -13,10 +14,12 @@ import {
 } from "@/services";
 import { Dashboard, Table } from "@/ui";
 
-import { EMPLOYEES_LIST_COLUMNS } from "./_constants";
+import { getEmployeesColumns } from "./_constants";
 
 const EmployeesPage = () => {
   const router = useRouter();
+
+  const { t } = useTranslation();
 
   const [deleteEmployee] = useDeleteEmployeeMutation();
 
@@ -45,10 +48,12 @@ const EmployeesPage = () => {
     position: { id: string; title: string };
   }) => {
     const isConfirmed = await confirmation({
-      title: "Delete employee",
-      message: "Do you want to delete this employee?",
-      confirmText: "Yes",
-      cancelText: "No",
+      title: t("common:deleteThing", { thing: t("employee:employee") }),
+      message: t("common:deleteThingConfirmation", {
+        thing: t("employee:employee"),
+      }),
+      confirmText: t("common:yes"),
+      cancelText: t("common:no"),
     });
 
     if (!isConfirmed) return;
@@ -58,37 +63,38 @@ const EmployeesPage = () => {
         params: { id: row.id },
       }).unwrap(),
       {
-        pending: "Updating audio text...",
+        pending: t("common:deletingThing", { thing: t("employee:employee") }),
         success: {
           render: () => {
             router.push("/employees");
-            return "Deleting employee was successfully!";
+            return t("common:thingDeleted", { thing: t("employee:employee") });
           },
         },
-        error: "Failed to delete employee. Please try again.",
+        error: t("common:operationFailed"),
       },
     );
   };
 
   return (
-    <Dashboard title="Employees">
+    <Dashboard title={t("employee:title")}>
       <Table
         data={employees}
-        title="List of employees"
+        thing={t("employee:employee")}
+        title={t("employee:title")}
         actions={[
           {
             children: <MdEdit />,
             onActionClick: ({ id }) => handleEdit(id),
-            title: "Edit employee",
+            title: t("common:editThing", { thing: t("employee:employee") }),
           },
           {
             children: <MdDelete />,
             onActionClick: handleDelete,
-            title: "Delete employee",
+            title: t("common:deleteThing", { thing: t("employee:employee") }),
           },
         ]}
-        columns={EMPLOYEES_LIST_COLUMNS}
-        description="This table shows all employees inside your organization"
+        columns={getEmployeesColumns(t)}
+        description={t("employee:description")}
         formPath="/employees/new"
         pagination={{
           currentPage: page,

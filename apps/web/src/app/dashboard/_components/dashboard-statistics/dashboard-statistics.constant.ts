@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 import {
   MdOutlineCameraEnhance,
   MdOutlineTextsms,
@@ -7,20 +9,21 @@ import {
 import type { DashboardStatisticsResponse } from "@/services";
 
 export const getDashboardStatistics = (
+  t: TFunction,
   statistics?: DashboardStatisticsResponse,
 ) => [
   {
-    title: "All meetings",
+    title: t("dashboard:statistical.allMeetings"),
     icon: MdOutlineCameraEnhance,
     value: statistics?.allMeetingsCount || "00",
   },
   {
-    title: "Processed audios",
+    title: t("dashboard:statistical.processedAudios"),
     icon: MdOutlineTextsms,
     value: statistics?.processedAudiosCount || "00",
   },
   {
-    title: "Future meetings",
+    title: t("dashboard:statistical.futureMeetings"),
     icon: MdPendingActions,
     value: statistics?.futureMeetingsCount || "00",
   },

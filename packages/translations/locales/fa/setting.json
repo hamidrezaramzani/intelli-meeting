@@ -1,0 +1,10 @@
+{
+  "title": "تنظیمات",
+  "positions": {
+    "title": "سمت ها",
+    "position": "سمت",
+    "description": "این جدول لیست سمت های ایجاد شده را نمایش میدهد",
+    "deletePosition": "حذف سمت",
+    "doYouWantToDeletePosition": "آیا میخواهی این سمت را حذف بکنی؟"
+  }
+}

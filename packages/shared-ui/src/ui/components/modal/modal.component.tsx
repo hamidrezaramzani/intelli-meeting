@@ -32,7 +32,7 @@ export const Modal = ({
       >
         {title && (
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+            <h2 className="text-lg font-roboto  font-semibold text-gray-800">{title}</h2>
             {onClose && (
               <button
                 className="text-xl cursor-pointer"

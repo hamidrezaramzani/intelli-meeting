@@ -1,0 +1,48 @@
+{
+  "yes": "بله",
+  "no": "خیر",
+  "column": {
+    "title": "عنوان"
+  },
+  "title": "دستیار هوشمند",
+  "areYouSureToDeleteThing": "آیا میخواهی این  {{thing, lowercase}} را حذف کنی؟",
+  "table": {
+    "notDataFound": "داده ای یافت نشد",
+    "unableToFetchData": "دریافت داده با مشکل مواجه شد. لطفا مجدد امتحان کنید."
+  },
+  "actions": "اقدام ها",
+
+  "addThing": "افزودن {{thing}}",
+  "addingThing": "در حال افزودن {{thing}}...",
+  "thingAdded": "{{thing}} با موفقیت اضافه شد",
+
+  "viewThing": "مشاهده {{thing}}",
+  "loadingThing": "در حال بارگذاری {{thing}}...",
+  "thingLoaded": "{{thing}} با موفقیت بارگذاری شد",
+
+  "editThing": "ویرایش {{thing}}",
+  "updatingThing": "در حال ویرایش {{thing}}...",
+  "thingUpdated": "{{thing}} با موفقیت ویرایش شد",
+
+  "deleteThing": "حذف {{thing}}",
+  "deletingThing": "در حال حذف {{thing}}...",
+  "thingDeleted": "{{thing}} با موفقیت حذف شد",
+
+  "thingsList": "لیست {{thing}}",
+  "loadingThings": "در حال بارگذاری {{thing}}...",
+  "thingsLoaded": "{{thing}} با موفقیت بارگذاری شد",
+  "noThingsFound": "{{thing}} یافت نشد",
+
+  "areYouSure": "آیا مطمئن هستید؟",
+  "deleteThingConfirmation": "آیا از حذف این {{thing}} مطمئن هستید؟",
+  "thisActionCannotBeUndone": "این عملیات قابل بازگشت نیست",
+
+  "thingNotFound": "{{thing}} یافت نشد",
+  "thingAlreadyExists": "{{thing}} از قبل وجود دارد",
+  "invalidThing": "{{thing}} نامعتبر است",
+  "permissionDenied": "شما اجازه انجام این عملیات را ندارید",
+
+  "operationSuccessful": "عملیات با موفقیت انجام شد",
+  "operationFailed": "انجام عملیات ناموفق بود",
+  "tryAgain": "لطفاً دوباره تلاش کنید"
+}

@@ -39,7 +39,7 @@ export const EmployeeForm = ({
   return (
     <div className="w-full">
       <div className="w-3/5 p-6">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">
+        <h2 className="text-2xl font-roboto font-bold text-slate-800 mb-2">
           {isEdit ? "Edit employee" : "Create employee"}
         </h2>
 

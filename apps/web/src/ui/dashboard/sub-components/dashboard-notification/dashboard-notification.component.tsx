@@ -10,8 +10,11 @@ import {
   useMarkAllNotificationsAsReadMutation,
   useReadDashboardNotificationsQuery,
 } from "@/services";
+import { useTranslation } from "react-i18next";
 
 export const DashboardNotification = () => {
+  const { t } = useTranslation();
+
   const router = useRouter();
 
   const { data: notifications = [] } = useReadDashboardNotificationsQuery({});
@@ -44,12 +47,12 @@ export const DashboardNotification = () => {
       {open && (
         <div className="p-4 rounded-md absolute border border-slate-300 right-0 mt-2 w-96 bg-white text-slate-800 flex flex-col max-h-144 overflow-y-auto z-50">
           <div className="w-full mb-3 flex justify-between items-center">
-            <h3>Notifications</h3>
+            <h3>{t("dashboard:notifications.title")}</h3>
             <div className="flex gap-2 items-center">
               {notifications && notifications.length > 0 && (
                 <IconButton
                   size="sm"
-                  title="Marks all read"
+                  title={t("dashboard:notifications.marksAllRead")}
                   onClick={handleMarkAllNotificationsAsReadClick}
                 >
                   <BiCheckDouble className="text-xl" />
@@ -58,7 +61,7 @@ export const DashboardNotification = () => {
 
               <IconButton
                 size="sm"
-                title="All notification"
+                title={t("dashboard:notifications.allNotifications")}
                 onClick={handleOpenNotificationsListClick}
               >
                 <RiExpandDiagonalLine className="text-xl" />
@@ -67,8 +70,8 @@ export const DashboardNotification = () => {
           </div>
           {notifications.length === 0 && (
             <EmptyState
-              title="All caught up!"
-              description="You have no new notifications at the moment."
+              title={t("dashboard:notifications.allCaughtUp")}
+              description={t("dashboard:notifications.youHaveNoNotifications")}
             />
           )}
           {notifications.map((n) => (
@@ -78,10 +81,16 @@ export const DashboardNotification = () => {
             >
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex justify-between items-center w-full">
-                  <span className="font-semibold text-sm">{n.title}</span>
-                  <span className="text-slate-400 text-xs">{n.timeAgo}</span>
+                  <span className="font-semibold text-sm font-roboto ">
+                    {n.title}
+                  </span>
+                  <span className="text-slate-400 text-xs font-roboto ">
+                    {n.timeAgo}
+                  </span>
                 </div>
-                <span className="text-xs text-slate-500">{n.message}</span>
+                <span className="text-xs font-roboto  text-slate-500">
+                  {n.message}
+                </span>
               </div>
             </div>
           ))}

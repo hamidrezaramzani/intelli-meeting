@@ -1,0 +1,46 @@
+{
+  "title": "Dashboard Home",
+  "meeting": "Meeting",
+  "employee": "Employee",
+  "statistical": {
+    "allMeetings": "All meetings",
+    "processedAudios": "Processed audios",
+    "futureMeetings": "Future meetings"
+  },
+  "dailySchedule": {
+    "title": "Daily Schedule",
+    "description": "Here are all the sessions scheduled for the selected day",
+    "columns": {
+      "title": "Title",
+      "date": "Date",
+      "startTime": "Start time",
+      "endTime": "End time"
+    }
+  },
+  "topEmployees": {
+    "title": "Top employees",
+    "description": "Team members who actively join meetings"
+  },
+  "timeline": {
+    "title": "Timeline",
+    "description": "Here are all the activities timeline for previous today",
+    "notActivitiesFound": "No activities found",
+    "notActivitiesFoundYet": "There are no activities recorded yet"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "meetings": "Meetings",
+    "employees": "Employees",
+    "settings": "Settings"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "allCaughtUp": "All caught up!",
+    "youHaveNoNotifications": "You have no new notifications at the moment.",
+    "allNotifications": "All notifications",
+    "marksAllRead": "Marks all read",
+    "readPending": "Marking all notifications as read…",
+    "readError": "Failed to mark notifications as read. Please try again.",
+    "readSuccess": "All notifications marked as read"
+  }
+}

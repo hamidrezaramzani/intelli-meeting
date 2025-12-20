@@ -79,7 +79,7 @@ export const AudioPlayer = ({ onPlay, title }: AudioPlayerProps) => {
   return (
     <div className="w-full bg-slate-800 rounded-lg p-4 flex flex-col gap-2">
       {title && blobUrl && (
-        <div className="text-slate-50 text-sm font-medium text-center">
+        <div className="text-slate-50 text-sm font-roboto  font-medium text-center">
           {title}
         </div>
       )}
@@ -97,15 +97,15 @@ export const AudioPlayer = ({ onPlay, title }: AudioPlayerProps) => {
                      backdrop-blur-sm pointer-events-none"
           >
             {isLoading ? (
-              <div className="flex items-center gap-2 bg-slate-700/40 h-20 animate-pulse text-sm text-white justify-center w-11/12 rounded-md">
+              <div className="flex items-center gap-2 bg-slate-700/40 h-20 animate-pulse text-sm font-roboto  text-white justify-center w-11/12 rounded-md">
                 Please wait to load
               </div>
             ) : (
               <div className="w-11/12 h-30 bg-slate-700/40 flex gap-1 flex-col items-center justify-center rounded-md">
-                <div className="text-slate-50 text-sm font-medium text-center">
+                <div className="text-slate-50 text-sm font-roboto  font-medium text-center">
                   {title}
                 </div>
-                <span className="ml-3 text-xs text-slate-400">
+                <span className="ml-3 text-xs font-roboto  text-slate-400">
                   Click to play
                 </span>
               </div>

@@ -2,6 +2,7 @@
 import "../globals.css";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import {
   Dashboard,
@@ -17,13 +18,15 @@ import {
 const DashboardPage = () => {
   const router = useRouter();
 
+  const { t } = useTranslation();
+
   useAuthRedirect({
     onRedirect: () => router.push("/sign-in"),
     type: "unlogged",
   });
 
   return (
-    <Dashboard title="Dashboard Home">
+    <Dashboard title={t("dashboard:title")}>
       <div className="w-full flex mt-3 gap-8">
         <div className="w-9/12 flex flex-col">
           <DashboardStatistics />

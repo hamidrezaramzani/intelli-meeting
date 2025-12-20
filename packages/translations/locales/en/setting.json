@@ -1,0 +1,10 @@
+{
+  "title": "Settings",
+  "positions": {
+    "title": "Positions",
+    "position": "Position",
+    "description": "This table show you all of positions that you saved before",
+    "deletePosition": "Delete position",
+    "doYouWantToDeletePosition": "Do you want to delete position?"
+  }
+}

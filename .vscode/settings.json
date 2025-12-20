@@ -1,0 +1,15 @@
+{
+    "i18n-ally.localesPaths": [
+        "packages/translations/locales",
+        "apps/audio_process_service/venv/lib/python3.10/site-packages/triton/language",
+        "apps/audio_process_service/venv/lib64/python3.10/site-packages/triton/language",
+        "apps/backend/venv/lib64/python3.13/site-packages/langchain/messages",
+        "apps/backend/venv/lib64/python3.13/site-packages/langchain_core/messages",
+        "apps/backend/venv/lib64/python3.13/site-packages/triton/language",
+        "apps/backend/venv/lib/python3.13/site-packages/langchain/messages",
+        "apps/backend/venv/lib/python3.13/site-packages/langchain_core/messages",
+        "apps/backend/venv/lib/python3.13/site-packages/triton/language",
+        "apps/backend/venv/lib64/python3.13/site-packages/triton/experimental/gluon/language",
+        "apps/backend/venv/lib/python3.13/site-packages/triton/experimental/gluon/language"
+    ]
+}

@@ -4,22 +4,25 @@ import { MdOutlineStars } from "react-icons/md";
 
 import { getBounceEffect } from "@/lib/helpers";
 import { useReadDashboardTimelineQuery } from "@/services";
+import { useTranslation } from "react-i18next";
 
 export const DashboardTimelineActivity = () => {
+  const { t } = useTranslation();
+
   const { data: timeline, isSuccess } = useReadDashboardTimelineQuery({});
 
   return (
     <div className="relative flex flex-col border border-slate-800 rounded-md w-full bg-white p-5">
       <div className="flex flex-col gap-2 mb-4">
         <div className="w-full flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-slate-800">Timeline</h1>
+          <h1 className="text-2xl font-roboto font-bold text-slate-800">
+            {t("dashboard:timeline.title")}
+          </h1>
           {timeline?.length === 10 && (
             <Button fullWidth={false}>Show all</Button>
           )}
         </div>
-        <p className="text-slate-600">
-          Here are all the activities timeline for previous today
-        </p>
+        <p className="text-slate-600">{t("dashboard:timeline.description")}</p>
       </div>
       {isSuccess && timeline?.length ? (
         timeline?.map((item, index) => (
@@ -36,11 +39,11 @@ export const DashboardTimelineActivity = () => {
                 <div className="flex flex-col">
                   <h3 className="text-slate-800 font-medium">
                     {item.title}{" "}
-                    <span className="text-xs text-slate-500 ml-3">
+                    <span className="text-xs font-roboto  text-slate-500 ml-3">
                       {item.timeAgo}
                     </span>
                   </h3>
-                  <p className="text-slate-600 text-sm">{item.message}</p>
+                  <p className="text-slate-600 text-sm font-roboto ">{item.message}</p>
                 </div>
               </div>
             </div>
@@ -48,8 +51,8 @@ export const DashboardTimelineActivity = () => {
         ))
       ) : (
         <EmptyState
-          title="No activities found"
-          description="There are no activities recorded yet"
+          title={t("dashboard:timeline.notActivitiesFound")}
+          description={t("dashboard:timeline.notActivitiesFoundYet")}
         />
       )}
     </div>

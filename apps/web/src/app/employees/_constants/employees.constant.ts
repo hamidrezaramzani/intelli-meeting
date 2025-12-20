@@ -1,17 +1,21 @@
+import type { TFunction } from "i18next";
+
 import type { TableColumn } from "@/ui";
 
-export const EMPLOYEES_LIST_COLUMNS: TableColumn<{
+export const getEmployeesColumns = (
+  t: TFunction,
+): TableColumn<{
   id: string;
   fullName: string;
   position: { id: string; title: string };
-}>[] = [
+}>[] => [
   {
     key: "fullName",
-    label: "Fullname",
+    label: t("employee:column.fullName"),
   },
   {
     key: "position",
-    label: "Position",
+    label: t("employee:column.position"),
     render: (row) => row.position.title,
   },
 ];

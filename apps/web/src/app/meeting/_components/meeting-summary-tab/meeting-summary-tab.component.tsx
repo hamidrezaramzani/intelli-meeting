@@ -48,7 +48,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
         <>
           <section className="bg-white p-4 rounded-lg">
             <div className="w-full flex mb-5 items-center justify-between">
-              <h3 className="text-lg font-bold mb-2 text-slate-800">Summary</h3>
+              <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">Summary</h3>
               {!isLoading ? (
                 <Button
                   fullWidth={false}
@@ -64,9 +64,9 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
               )}
             </div>
 
-            <p className="text-sm text-slate-600">{summary?.summary}</p>
+            <p className="text-sm font-roboto  text-slate-600">{summary?.summary}</p>
 
-            <ul className="list-disc pl-6 mt-3 text-sm">
+            <ul className="list-disc pl-6 mt-3 text-sm font-roboto ">
               {summary?.key_points?.map((point, i) => (
                 <li className="text-slate-600" key={i}>
                   {point}
@@ -77,16 +77,16 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
           </section>
 
           <section className="p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2 text-slate-800">Decisions</h3>
+            <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">Decisions</h3>
 
-            <ul className="text-sm flex flex-col">
+            <ul className="text-sm font-roboto  flex flex-col">
               {decisions?.map((decision, i) => (
                 <li
                   className="px-3 py-2 rounded-md flex justify-between items-center"
                   key={i}
                 >
                   <span className="text-slate-600">{decision.description}</span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs font-roboto  text-slate-500">
                     decided by: {decision.decided_by || "Unknown"}
                   </span>
                 </li>
@@ -96,16 +96,16 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
           </section>
 
           <section className="p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2 text-slate-800">Actions</h3>
+            <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">Actions</h3>
 
-            <ul className="text-sm flex flex-col">
+            <ul className="text-sm font-roboto  flex flex-col">
               {actions?.map((action, i) => (
                 <li
                   className="text-slate-700 px-3 py-2 rounded-md flex flex-col gap-1"
                   key={i}
                 >
                   <span>{action.description}</span>
-                  <div className="text-xs text-slate-400 flex justify-between">
+                  <div className="text-xs font-roboto  text-slate-400 flex justify-between">
                     <span>owner: {action.owner || "Unknown"}</span>
                     <span>deadline: {action.deadline || "None"}</span>
                   </div>

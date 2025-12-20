@@ -1,0 +1,46 @@
+{
+  "title": "داشبورد",
+  "meeting": "جلسه",
+  "employee": "کارمند",
+  "statistical": {
+    "allMeetings": "همه جلسات",
+    "processedAudios": "صداهای پردازش شده",
+    "futureMeetings": "جلسات آینده"
+  },
+  "dailySchedule": {
+    "title": "برنامه روزانه",
+    "description": "اینجا میتونید جلسات روزانه خودتون رو ببینید",
+    "columns": {
+      "title": "عنوان",
+      "date": "تاریخ",
+      "startTime": "زمان شروع",
+      "endTime": "زمان پایان"
+    }
+  },
+  "topEmployees": {
+    "title": "کارمندان برتر",
+    "description": "اعضای برتر تیم که در جلسات فعال هستند"
+  },
+  "timeline": {
+    "title": "خط زمانی",
+    "description": "در اینجا میتوانید فعالیت های روزانه خود را مشاهده کنید",
+    "notActivitiesFound": "فعالیتی پیدا نشد",
+    "notActivitiesFoundYet": "سابقه فعالیتی هنوز وجود ندارد"
+  },
+  "sidebar": {
+    "dashboard": "داشبورد",
+    "meetings": "جلسات",
+    "employees": "کارمندان",
+    "settings": "تنظیمات"
+  },
+  "notifications": {
+    "title": "اطلاع رسانی",
+    "allCaughtUp": "اعلانی نیست",
+    "youHaveNoNotifications": "در این لحظه اعلان جدیدی نداری",
+    "allNotifications": "تمامی اعلان ها",
+    "marksAllRead": "خواندن همه",
+    "readPending": "در حال خواندن تمامی اعلان ها",
+    "readError": "خواندن اعلان ها موفقیت آمیز نبود. مجدد امتحان کنید",
+    "readSuccess": "تمامی اعلان ها خوانده شد"
+  }
+}

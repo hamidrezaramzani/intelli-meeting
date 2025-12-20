@@ -1,10 +1,13 @@
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 import { getBounceEffect } from "@/lib/helpers";
 import { useReadDashboardTopEmployeesQuery } from "@/services";
 
 export const DashboardTopEmployees = () => {
+  const { t } = useTranslation();
+
   const { data: employees } = useReadDashboardTopEmployeesQuery({});
   return (
     <motion.div
@@ -13,10 +16,12 @@ export const DashboardTopEmployees = () => {
     >
       <div className="flex flex-col gap-2 mb-5">
         <div className="w-full flex justify-between">
-          <h1 className="text-2xl font-bold text-slate-800">Top employees</h1>
+          <h1 className="text-2xl font-roboto font-bold text-slate-800">
+            {t("dashboard:topEmployees.title")}
+          </h1>
         </div>
         <p className="text-slate-600">
-          Team members who actively join meetings
+          {t("dashboard:topEmployees.description")}
         </p>
       </div>
       <div className="w-full flex flex-col justify-center">
@@ -36,16 +41,16 @@ export const DashboardTopEmployees = () => {
                 />
               </div>
               <div className="flex justify-center flex-col">
-                <h3 className="text-md text-slate-700">
+                <h3 className="text-md font-roboto  text-slate-700">
                   {employee.employeeName}
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs font-roboto  text-slate-500">
                   {employee.position.title}
                 </p>
               </div>
             </div>
             <div>
-              <p className="text-xs text-slate-600">{employee.totalTime} MIN</p>
+              <p className="text-xs font-roboto  text-slate-600">{employee.totalTime} MIN</p>
             </div>
           </div>
         ))}

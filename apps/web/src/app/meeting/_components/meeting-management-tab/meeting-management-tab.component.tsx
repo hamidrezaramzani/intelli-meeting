@@ -87,7 +87,7 @@ export const MeetingManagementTab = ({
             {audio?.status !== "success" && (
               <div
                 className={`
-      w-full rounded-md items-center gap-3 p-3 flex flex-col text-sm
+      w-full rounded-md items-center gap-3 p-3 flex flex-col text-sm font-roboto 
       ${
         audio.status === "pending"
           ? "bg-blue-50 text-slate-600"
