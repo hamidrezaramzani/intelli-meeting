@@ -36,7 +36,6 @@ def read_employee_candidates(
     employee_id: str,
     db: Session = Depends(get_db),
 ):
-    print(employee_id)
     return service.read_one_employee(db=db, employee_id=employee_id)
 
 

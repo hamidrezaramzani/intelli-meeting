@@ -69,7 +69,6 @@ def read_one_employee(db: Session, employee_id: str):
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
 
-    print(employee_data)
     return {
         "success": True,
         "employee": employee_data,

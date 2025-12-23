@@ -42,7 +42,7 @@ export const useWebSocket = () => {
       ws.onopen = () => {
         setIsConnected(true);
         reconnectAttemptsRef.current = 0;
-        console.log("WebSocket connected successfully");
+        console.info("WebSocket connected successfully");
       };
 
       ws.onmessage = (event) => {
@@ -53,14 +53,14 @@ export const useWebSocket = () => {
 
       ws.onclose = () => {
         setIsConnected(false);
-        console.log("WebSocket disconnected. Attempting reconnect...");
+        console.info("WebSocket disconnected. Attempting reconnect...");
 
         if (reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS) {
           reconnectAttemptsRef.current += 1;
           reconnectTimerRef.current = setTimeout(() => {
             const params = paramsRef.current;
             if (params) {
-              console.log(
+              console.info(
                 `Attempting reconnect #${reconnectAttemptsRef.current}`,
               );
               createConnection(
