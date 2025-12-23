@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Table, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Table, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from src.database import Base
 
@@ -20,7 +20,7 @@ class Meeting(Base):
     )
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
-    date = Column(String, nullable=False)
+    date = Column(DateTime(timezone=False), nullable=False)
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
     meeting_link = Column(String, nullable=False)

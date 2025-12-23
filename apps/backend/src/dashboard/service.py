@@ -16,9 +16,9 @@ def read_dashboard_statistics(db: Session, request: Request):
     processed_audios_count = db.query(Audio).filter(Audio.status == "SUCCESS").count()
     
     future_meetings_count = db.query(Meeting).filter(
-            Meeting.date > datetime.utcnow(),
-            Meeting.user_id == user_id
-        ).count()
+        Meeting.date > datetime.utcnow(),
+        Meeting.user_id == user_id
+    ).count()
 
 
     return { 
@@ -62,22 +62,23 @@ def read_dashboard_top_players(db: Session, request: Request):
     top_employees = (
         db.query(
             SpeakerProfile.employee_id,
-            (func.sum(SpeakerProfile.end - SpeakerProfile.start)).label("total_time")
+            func.sum(SpeakerProfile.end - SpeakerProfile.start).label("total_time")
         )
         .join(Employee, Employee.id == SpeakerProfile.employee_id)
-        .filter(SpeakerProfile.user_id == user_id) 
+        .filter(SpeakerProfile.user_id == user_id)
         .group_by(SpeakerProfile.employee_id)
-        .order_by((func.sum(SpeakerProfile.start) + func.sum(SpeakerProfile.end)).desc())
+        .order_by(func.sum(SpeakerProfile.end - SpeakerProfile.start).desc())
         .limit(3)
         .all()
     )
+
     response = []
     for employee_id, total_time in top_employees:
         employee = db.query(Employee).filter(Employee.id == employee_id).first()
         response.append({
             "id": employee_id,
             "employeeName": employee.fullName if employee else None,
-            "totalTime": total_time,
+            "totalTime": round(total_time / 60, 2),
             "position": employee.position
         })
 
