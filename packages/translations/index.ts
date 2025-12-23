@@ -4,6 +4,7 @@ import enDashboard from "./locales/en/dashboard.json";
 import enSetting from "./locales/en/setting.json";
 import enEmployee from "./locales/en/employee.json";
 import enMeeting from "./locales/en/meeting.json";
+import enAudio from "./locales/en/audio.json";
 
 import faCommon from "./locales/fa/common.json";
 import faHome from "./locales/fa/home.json";
@@ -11,6 +12,7 @@ import faDashboard from "./locales/fa/dashboard.json";
 import faSetting from "./locales/fa/setting.json";
 import faEmployee from "./locales/fa/employee.json";
 import faMeeting from "./locales/fa/meeting.json";
+import faAudio from "./locales/fa/audio.json";
 
 export const resources = {
   en: {
@@ -20,6 +22,7 @@ export const resources = {
     setting: enSetting,
     employee: enEmployee,
     meeting: enMeeting,
+    audio: enAudio,
   },
   fa: {
     common: faCommon,
@@ -28,6 +31,7 @@ export const resources = {
     setting: faSetting,
     employee: faEmployee,
     meeting: faMeeting,
+    audio: faAudio,
   },
 } as const;
 

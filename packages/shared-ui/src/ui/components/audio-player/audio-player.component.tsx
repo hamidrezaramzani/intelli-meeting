@@ -1,12 +1,14 @@
+/* eslint-disable max-lines-per-function */
 import { useEffect, useRef, useState } from "react";
-import { FaPause, FaPlay } from "react-icons/fa";
+import { FaPause, FaPlay, FaTrash } from "react-icons/fa";
 import WaveSurfer from "wavesurfer.js";
 
 import type { AudioPlayerProps } from "./audio-player.type";
 
+import { confirmation } from "../confirmation-modal";
 import { IconButton } from "../icon-button";
 
-export const AudioPlayer = ({ onPlay, title }: AudioPlayerProps) => {
+export const AudioPlayer = ({ onPlay, title, onDelete }: AudioPlayerProps) => {
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
 
@@ -76,6 +78,25 @@ export const AudioPlayer = ({ onPlay, title }: AudioPlayerProps) => {
     setIsPlaying(!isPlaying);
   };
 
+  const handleDelete = async () => {
+    const confirmed = await confirmation({
+      title: "Delete audio",
+      message:
+        "Are you sure you want to delete this audio? This action cannot be undone.",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+    });
+
+    if (!confirmed) return;
+
+    try {
+      setLoading(true);
+      await onDelete?.();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full bg-slate-800 rounded-lg p-4 flex flex-col gap-2">
       {title && blobUrl && (
@@ -114,17 +135,30 @@ export const AudioPlayer = ({ onPlay, title }: AudioPlayerProps) => {
         )}
       </div>
 
-      <div className="flex items-center justify-between text-slate-200 mt-2">
+      <div className="flex items-center justify-between text-slate-200 mt-2 gap-2">
         <span className="w-[48px]">{formatTime(currentTime)}</span>
 
-        <IconButton
-          type="button"
-          variant="primary"
-          isLoading={isLoading}
-          onClick={togglePlay}
-        >
-          {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
-        </IconButton>
+        <div className="flex items-center gap-2">
+          <IconButton
+            type="button"
+            variant="primary"
+            isLoading={isLoading}
+            onClick={togglePlay}
+          >
+            {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+          </IconButton>
+
+          {onDelete && (
+            <IconButton
+              type="button"
+              variant="default"
+              isLoading={isLoading}
+              onClick={handleDelete}
+            >
+              <FaTrash size={16} />
+            </IconButton>
+          )}
+        </div>
 
         <span className="w-[48px]">{formatTime(duration)}</span>
       </div>

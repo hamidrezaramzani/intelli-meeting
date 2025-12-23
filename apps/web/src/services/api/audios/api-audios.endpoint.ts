@@ -70,6 +70,13 @@ export const audioApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Meeting"],
     }),
+    deleteAudio: builder.mutation({
+      query: ({ params }) => ({
+        url: `/audio/${params.audioId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Meeting"],
+    }),
   }),
 });
 
@@ -83,4 +90,5 @@ export const {
   useAssignAudioSpeakersMutation,
   useUpdateAudioTextMutation,
   useDeleteAudioTextMutation,
+  useDeleteAudioMutation,
 } = audioApi;

@@ -14,12 +14,13 @@ import io
 import json
 import numpy as np
 import os
-import requests
+from sqlalchemy import delete
 import uuid
 import time
 import wave
 from src.chroma.chroma import chroma_collection
 from src.notification import service as notification_service
+from src.notification import models as notification_models
 from src.redis.redis import publisher
 from src.database import SessionLocal
 import httpx
@@ -358,3 +359,40 @@ async def process_audio_to_text(db: Session, audio_id: str, user_id: str, key: s
             audio_id=audio_id,
         )
         await set_audio_status(status=models.AudioStatus.FAILED, audio_id=audio_id, key=key, doc={ "type": "audio_failed", "audioId": audio_id})
+
+def delete_audio(db: Session, audio_id: int):
+    audio = db.get(models.Audio, audio_id)
+    if not audio:
+        raise HTTPException(status_code=404, detail="Audio not found")
+
+    file_path = os.path.join(UPLOAD_DIR, audio.file_path)
+
+    try:
+        chroma_collection.delete(where={"audio_id": str(audio_id)})
+
+        db.execute(
+            delete(speaker_profile_model.SpeakerProfile)
+            .where(speaker_profile_model.SpeakerProfile.audio_id == audio_id)
+        )
+
+        db.execute(
+            delete(notification_models.Notification)
+            .where(notification_models.Notification.audio_id == audio_id)
+        )
+
+        db.execute(
+            delete(models.Audio)
+            .where(models.Audio.id == audio_id)
+        )
+
+        db.commit()
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to delete audio"
+        ) from e

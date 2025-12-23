@@ -18,8 +18,6 @@ async def process_audio_ws(
 ):
     await websocket.accept()
     
-    print("CALLED AGAIN", audio_id)
-
     if reconnect == "false" and not audio_id:
         raise "Audio id is required for start audio processing"
     

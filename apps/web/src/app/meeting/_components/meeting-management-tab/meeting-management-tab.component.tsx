@@ -6,8 +6,11 @@ import {
   EmptyState,
 } from "@intelli-meeting/shared-ui";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import {
+  useDeleteAudioMutation,
   usePlayAudioMutation,
   useReadManyEmployeeCandidatesQuery,
 } from "@/services";
@@ -20,7 +23,10 @@ export const MeetingManagementTab = ({
   audios,
   onStartAudioProcessing,
 }: MeetingManagementTabProps) => {
+  const { t } = useTranslation();
+
   const [playAudio] = usePlayAudioMutation();
+  const [deleteAudio] = useDeleteAudioMutation();
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
 
   const [showTextPopover, setShowTextPopover] = useState<number | null>();
@@ -75,6 +81,23 @@ export const MeetingManagementTab = ({
     }
   };
 
+  const handleAudioDelete = async (audioId: number) => {
+    await toast.promise(
+      deleteAudio({
+        params: { audioId },
+      }).unwrap(),
+      {
+        pending: t("common:deletingThing", { thing: t("audio:audio") }),
+        success: {
+          render: () => {
+            return t("common:thingDeleted", { thing: t("audio:audio") });
+          },
+        },
+        error: t("common:operationFailed"),
+      },
+    );
+  };
+
   return (
     <div className="text-gray-800 transition-all cursor-pointer leading-9">
       {audios.length ? (
@@ -82,6 +105,7 @@ export const MeetingManagementTab = ({
           <div className="flex flex-col gap-4" key={audio.id}>
             <AudioPlayer
               title={audio.name}
+              onDelete={() => handleAudioDelete(audio.id)}
               onPlay={() => getAudioBlob(audio.id)}
             />
             {audio?.status !== "success" && (

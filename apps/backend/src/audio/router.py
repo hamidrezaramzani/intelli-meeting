@@ -77,6 +77,10 @@ def play_audio(audio_id: str, db: Session = Depends(get_db)):
         audio_id=audio_id,
     )
 
+@router.delete("/{audio_id}")
+def delete_audio(audio_id, db: Session = Depends(get_db)):
+    return service.delete_audio(db, audio_id)
+
 
 @router.post("/assign-audio-speaker/{audio_id}")
 def assigns_audio_speakers(
@@ -109,3 +113,4 @@ def read_one_speaker(
     db: Session = Depends(get_db),
 ):
     return speaker_profile_service.read_speakers(db=db, audio_id=audio_id)
+
