@@ -75,6 +75,7 @@ async def save_audio(
             audio_segment = audio_segment.set_frame_rate(16000).set_channels(1)
             audio_segment.export(wav_path, format="wav")
             final_path = wav_path
+            os.remove(file_path)
         else:
             final_path = file_path
             audio_segment = AudioSegment.from_file(file_path)
