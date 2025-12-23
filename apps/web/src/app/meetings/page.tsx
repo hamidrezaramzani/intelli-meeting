@@ -1,11 +1,13 @@
 "use client";
 
+import { confirmation } from "@intelli-meeting/shared-ui";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
-import { useReadManyMeetingsQuery } from "@/services";
+import { useDeleteMeetingMutation, useReadManyMeetingsQuery } from "@/services";
 import { Dashboard, Table } from "@/ui";
 
 import type { Meeting } from "./_types";
@@ -20,8 +22,39 @@ const MeetingsPage = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const { data, isLoading } = useReadManyMeetingsQuery({});
-  const handleEdit = (meeting: Meeting) => console.log("Edit", meeting);
-  const handleDelete = (meeting: Meeting) => console.log("Delete", meeting);
+
+  const [deleteMeeting] = useDeleteMeetingMutation();
+
+  const handleEdit = (meeting: Meeting) =>
+    router.push(`/meetings/edit/${meeting.id}`);
+  const handleDelete = async (meeting: Meeting) => {
+    const isConfirmed = await confirmation({
+      title: t("common:deleteThing", { thing: t("meeting:meeting") }),
+      message: t("common:deleteThingConfirmation", {
+        thing: t("meeting:meeting"),
+      }),
+      confirmText: t("common:yes"),
+      cancelText: t("common:no"),
+    });
+
+    if (!isConfirmed) return;
+
+    await toast.promise(
+      deleteMeeting({
+        params: { meetingId: meeting.id },
+      }).unwrap(),
+      {
+        pending: t("common:deletingThing", { thing: t("meeting:meeting") }),
+        success: {
+          render: () => {
+            router.push("/meetings");
+            return t("common:thingDeleted", { thing: t("meeting:meeting") });
+          },
+        },
+        error: t("common:operationFailed"),
+      },
+    );
+  };
 
   const meetings = data?.meetings || [];
   const total = data?.total || 0;

@@ -10,7 +10,7 @@
     "notDataFound": "No data found",
     "unableToFetchData": "Unable to load table data. Please try again later."
   },
-  "actions": "Actions",
+  "actions": "ACTIONS",
 
   "addThing": "Add {{thing, lowercase}}",
   "addingThing": "Adding {{thing, lowercase}}...",

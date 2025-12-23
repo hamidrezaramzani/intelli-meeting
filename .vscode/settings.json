@@ -11,5 +11,6 @@
         "apps/backend/venv/lib/python3.13/site-packages/triton/language",
         "apps/backend/venv/lib64/python3.13/site-packages/triton/experimental/gluon/language",
         "apps/backend/venv/lib/python3.13/site-packages/triton/experimental/gluon/language"
-    ]
+    ],
+    "i18n-ally.keystyle": "flat"
 }

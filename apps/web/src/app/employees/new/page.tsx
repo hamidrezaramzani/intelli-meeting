@@ -32,15 +32,17 @@ const NewEmployeeForm = () => {
     });
   };
 
-  <Dashboard backUrl="/employees" title="New employee">
-    <EmployeeForm
-      defaultValue={{ fullName: "", position: "" }}
-      isEdit={false}
-      isLoading={isLoading}
-      onSubmit={onSubmit}
-    />
-    ;
-  </Dashboard>;
+  return (
+    <Dashboard backUrl="/employees" title="New employee">
+      <EmployeeForm
+        defaultValue={{ fullName: "", position: "" }}
+        isEdit={false}
+        isLoading={isLoading}
+        onSubmit={onSubmit}
+      />
+      ;
+    </Dashboard>
+  );
 };
 
 export default NewEmployeeForm;

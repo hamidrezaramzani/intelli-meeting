@@ -6,5 +6,9 @@
     "date": "تاریخ",
     "startTime": "ساعت شروع",
     "endTime": "ساعت اتمام"
+  },
+  "form": {
+    "addMeetingDescription": "جلسه جدید را با جزئیات ایجاد کنید",
+    "editMeetingDescription": "اطلاعات جلسه جاری رو تغییر دهید"
   }
 }

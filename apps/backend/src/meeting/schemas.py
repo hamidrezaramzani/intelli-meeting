@@ -7,7 +7,15 @@ from datetime import datetime
 class CreateMeetingResponse(BaseModel):
     success: bool
 
-class CreateMeetingBody(BaseModel):
+
+class UpdateMeetingResponse(BaseModel):
+    success: bool
+
+class DeleteMeetingResponse(BaseModel):
+    success: bool
+
+
+class MeetingBody(BaseModel):
     title: str
     description: str
     date: str

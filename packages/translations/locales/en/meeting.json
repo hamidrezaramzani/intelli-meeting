@@ -6,5 +6,9 @@
     "date": "Date",
     "startTime": "Start time",
     "endTime": "End time"
+  },
+  "form": {
+    "addMeetingDescription": "Create a new meeting and enter its details",
+    "editMeetingDescription": "Modify the details of an existing meeting"
   }
 }

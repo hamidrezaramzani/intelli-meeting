@@ -2,7 +2,6 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session, joinedload
 from fastapi.encoders import jsonable_encoder
 from . import models
-from src.position import models as position_models 
 
 def create_employee(db: Session, fullName: str, position: str):
     try:

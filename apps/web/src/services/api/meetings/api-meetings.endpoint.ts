@@ -52,6 +52,21 @@ export const meetingsApi = baseApi.injectEndpoints({
       providesTags: ["MeetingSummary"],
       transformResponse: (data: any) => data?.data,
     }),
+    updateMeeting: builder.mutation({
+      query: ({ data, params }) => ({
+        url: `/meeting/${params.meetingId}`,
+        method: "PUT",
+        data,
+      }),
+      invalidatesTags: ["Meetings", "Meeting"],
+    }),
+    deleteMeeting: builder.mutation({
+      query: ({ params }) => ({
+        url: `/meeting/${params.meetingId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Meetings"],
+    }),
   }),
 });
 
@@ -61,4 +76,6 @@ export const {
   useReadMeetingCandidatesQuery,
   useReadOneMeetingQuery,
   useReadMeetingSummariesQuery,
+  useUpdateMeetingMutation,
+  useDeleteMeetingMutation,
 } = meetingsApi;

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from jose import jwt
 from passlib.context import CryptContext
+from jose.exceptions import JWTError, ExpiredSignatureError
 from src import config
 
 
@@ -26,11 +27,12 @@ def create_access_token(data: dict, expires_delta: int | None = None) -> str:
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
 def decode_access_token(token: str) -> dict | None:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except jwt.ExpiredSignatureError:
-        return None 
-    except jwt.InvalidTokenError:
+    except ExpiredSignatureError:
+        return None
+    except JWTError:
         return None

@@ -1,14 +1,16 @@
+/* eslint-disable next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable complexity */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import type { FormEventHandler } from "react";
 
 import { confirmation, IconButton } from "@intelli-meeting/shared-ui";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { LuUserRoundCheck, LuUserRoundMinus } from "react-icons/lu";
-import { MdPlayCircle } from "react-icons/md";
+import { MdCheck, MdEdit, MdPlayCircle } from "react-icons/md";
 import { toast } from "react-toastify";
 
 import { getBounceEffect } from "@/lib/helpers";
@@ -34,13 +36,15 @@ export const MeetingTranscribeSentence = ({
   const [updateAudioText, { isLoading: isUpdatingAudioText }] =
     useUpdateAudioTextMutation();
   const [currentText, setCurrentText] = useState(text.text);
+  const [isEditable, setIsEditable] = useState(false);
   const [_, setPlayingAudioId] = useState<number | null>(null);
 
-  const [showEmployeesDropdown, setShowEmployeesDropdown] =
+  const [isAssignableToEmployee, setIsAssignableToEmployee] =
     useState<boolean>(false);
 
   const handleShowEmployeesClick = () => {
-    setShowEmployeesDropdown((prevStatus) => !prevStatus);
+    setIsEditable(false);
+    setIsAssignableToEmployee((prevStatus) => !prevStatus);
   };
 
   const handlePlayClick = async (speakerProfileId: number) => {
@@ -69,36 +73,30 @@ export const MeetingTranscribeSentence = ({
         pending: "Assigning speakers...",
         success: {
           render: () => {
-            setShowEmployeesDropdown(false);
+            setIsAssignableToEmployee(false);
             onTranscribeSelect(null);
             return "Speakers assigned successfully!";
           },
         },
         error: "Failed to assign speakers. Please try again.",
-      },
+      }
     );
   };
 
-  const handleTextBlur: FormEventHandler<HTMLParagraphElement> = async (e) => {
-    const newValue = e.currentTarget.innerText;
-    if (newValue.length === 0) {
-      toast.error("Text is required");
-      setCurrentText(text.text);
-      return;
-    }
-    if (newValue === text.text) return;
-    setCurrentText(newValue);
+  const handleEdit = async () => {
+    setCurrentText(currentText);
     await toast.promise(
       updateAudioText({
-        payload: { newText: newValue },
+        payload: { newText: currentText },
         speakerProfileId: text.id,
       }).unwrap(),
       {
         pending: "Updating audio text...",
         success: {
           render: () => {
-            setShowEmployeesDropdown(false);
+            setIsAssignableToEmployee(false);
             onTranscribeSelect(null);
+            setIsEditable(false);
             return "Updating audio text successfully!";
           },
         },
@@ -125,14 +123,27 @@ export const MeetingTranscribeSentence = ({
         pending: "Deleting audio text...",
         success: {
           render: () => {
-            setShowEmployeesDropdown(false);
+            setIsAssignableToEmployee(false);
             onTranscribeSelect(null);
             return "deleting audio text successfully!";
           },
         },
         error: "Failed to delete audio text. Please try again.",
-      },
+      }
     );
+  };
+
+  const handleOnEditClick = () => {
+    if (!isEditable) {
+      setIsAssignableToEmployee(false);
+      setIsEditable(true);
+      return;
+    }
+    handleEdit();
+  };
+
+  const handleValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCurrentText(e.target.value);
   };
 
   const isLoading = isUpdatingAudioText || isDeletingAudioText;
@@ -141,7 +152,7 @@ export const MeetingTranscribeSentence = ({
     <div className="relative inline py-3">
       {openedTextPopoverId && openedTextPopoverId === Number(text.id) && (
         <motion.div
-          className="w-96 right-0 absolute bg-slate-800 py-2 rounded-md z-30 flex flex-col justify-between px-4"
+          className="w-xl right-0 absolute bg-slate-800 py-2 rounded-md z-30 flex flex-col justify-between px-4"
           style={{
             top: "-60px",
           }}
@@ -151,7 +162,7 @@ export const MeetingTranscribeSentence = ({
             <div className="flex">
               <img
                 className="w-12 rounded-full"
-                src="https://ui-avatars.com/api/?name=HamidrezaRamzani"
+                src={`https://ui-avatars.com/api/?name=${text.employee ? text.employee.fullName : text.initial_speaker_label}`}
               />
               <div className="flex flex-col px-3 justify-center">
                 <h3 className="text-slate-300 text-md font-roboto  inline leading-6">
@@ -164,10 +175,17 @@ export const MeetingTranscribeSentence = ({
             </div>
             <div className="flex items-center gap-2">
               <IconButton onClick={handleShowEmployeesClick}>
-                {!showEmployeesDropdown ? (
+                {!isAssignableToEmployee ? (
                   <LuUserRoundCheck className="text-2xl font-roboto" />
                 ) : (
                   <LuUserRoundMinus className="text-2xl font-roboto" />
+                )}
+              </IconButton>
+              <IconButton onClick={handleOnEditClick}>
+                {isEditable ? (
+                  <MdCheck />
+                ) : (
+                  <MdEdit className="text-2xl font-roboto" />
                 )}
               </IconButton>
               <IconButton onClick={handleTextDelete}>
@@ -179,10 +197,22 @@ export const MeetingTranscribeSentence = ({
             </div>
           </div>
 
-          {showEmployeesDropdown ? (
+          {isEditable && !isAssignableToEmployee && (
+            <div className="w-full py-4">
+              <textarea
+                className="bg-slate-600 text-white outline-none px-2 rounded-md w-full"
+                value={currentText}
+                onChange={handleValueChange}
+              />
+            </div>
+          )}
+
+          {isAssignableToEmployee && !isEditable ? (
             <div className="flex flex-col gap-4 py-4">
               <div className="flex flex-col">
-                <h3 className="text-white text-md font-roboto ">Select employee</h3>
+                <h3 className="text-white text-md font-roboto ">
+                  Select employee
+                </h3>
                 <span className="text-sm font-roboto  text-slate-400">
                   Please select an employee for this voice
                 </span>
@@ -219,12 +249,9 @@ export const MeetingTranscribeSentence = ({
       )}
       <p
         className={`inline whitespace-normal p-2 hover:bg-slate-300 caret-red-600 outline-none focus:outline-none ${isLoading ? "bg-loading" : ""}`}
-        contentEditable={!isLoading}
-        onBlur={handleTextBlur}
         onClick={() => onTranscribeSelect(text.id)}
-        suppressContentEditableWarning
       >
-        {currentText}
+        {text.text}
       </p>
     </div>
   );
