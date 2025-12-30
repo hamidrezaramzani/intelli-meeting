@@ -5,6 +5,14 @@
     "position": "Position",
     "description": "This table show you all of positions that you saved before",
     "deletePosition": "Delete position",
-    "doYouWantToDeletePosition": "Do you want to delete position?"
+    "doYouWantToDeletePosition": "Do you want to delete position?",
+    "form": {
+      "createTitle": "Add new position",
+      "editTitle": "Edit position",
+      "createDescription": "Fill out the form below to create new position",
+      "editDescription": "Fill out the form below to edit position",
+      "createSubmit": "Create position",
+      "editSubmit": "Edit position"
+    }
   }
 }

@@ -4,6 +4,7 @@ import { Button, TextInput } from "@intelli-meeting/shared-ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { useCheckEmailMutation, useSignupMutation } from "@/services/api";
@@ -14,6 +15,7 @@ import { getSignUpFormSchema } from "./_schemas";
 
 const SignUpPage = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [signUp, { isSuccess }] = useSignupMutation();
   const [checkEmail] = useCheckEmailMutation();
@@ -23,7 +25,7 @@ const SignUpPage = () => {
     return result.isUnique;
   };
 
-  const schema = getSignUpFormSchema(checkIsEmailAlreadyUsed);
+  const schema = getSignUpFormSchema(checkIsEmailAlreadyUsed, t);
 
   const resolver = zodResolver(schema, undefined, { mode: "async" });
 
@@ -37,12 +39,12 @@ const SignUpPage = () => {
 
   const onSubmit = async (data: SignUpFormValues) => {
     await toast.promise(signUp(data).unwrap(), {
-      pending: "Please wait",
-      error: "We have an error when creating new user, please try again",
+      pending: t("common:pleaseWait"),
+      error: t("common:errors.createUser"),
       success: {
         render: () => {
           router.push("/sign-in");
-          return "User created successfully";
+          return t("common:messages.userCreated");
         },
       },
     });
@@ -53,50 +55,49 @@ const SignUpPage = () => {
       <div className="w-96">
         <div className="flex justify-center items-center flex-col mt-6">
           <Link href="/">
-            <img alt="logo" className="w-32" src="/logo.png" />
+            <img alt={t("common:logoAlt")} className="w-32" src="/logo.png" />
           </Link>
         </div>
 
         <div className="flex justify-center flex-col mt-3">
           <h3 className="text-black text-2xl font-roboto mb-2 font-bold text-center">
-            Sign up
+            {t("common:auth.signUp")}
           </h3>
           <p className="text-gray-600 text-md font-roboto  font-regular text-center">
-            Sign up to unlock exclusive tools, insights, and personalized
-            features made for you.
+            {t("common:auth.signUpDescription")}
           </p>
         </div>
 
         <div className="mt-4 px-3">
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextInput
-              label="Name"
+              label={t("common:form.name")}
               type="text"
-              placeholder="Enter name"
+              placeholder={t("common:placeholders.name")}
               {...register("name")}
               error={touchedFields?.name ? errors.name?.message : ""}
             />
 
             <TextInput
-              label="Email"
+              label={t("common:form.email")}
               type="text"
-              placeholder="Enter email(example@mail.com)"
+              placeholder={t("common:placeholders.email")}
               {...register("email")}
               error={touchedFields.email ? errors.email?.message : ""}
             />
 
             <TextInput
-              label="Password"
+              label={t("common:form.password")}
               type="password"
-              placeholder="Enter password"
+              placeholder={t("common:placeholders.password")}
               {...register("password")}
               error={touchedFields?.password ? errors.password?.message : ""}
             />
 
             <TextInput
-              label="Confirm password"
+              label={t("common:form.confirmPassword")}
               type="password"
-              placeholder="Enter confirm password"
+              placeholder={t("common:placeholders.confirmPassword")}
               {...register("confirmPassword")}
               error={
                 touchedFields?.confirmPassword
@@ -106,14 +107,14 @@ const SignUpPage = () => {
             />
 
             <Button disabled={isSubmitting || isSuccess} type="submit">
-              Sign up
+              {t("common:auth.signUp")}
             </Button>
 
             <div className="py-3 flex justify-center items-center">
               <p className="text-gray-600 text-regular text-center">
-                Do you have an account?
+                {t("common:auth.haveAccount")}
                 <Link className="text-gray-800 ml-2" href="/sign-in">
-                  Sign in
+                  {t("common:auth.signIn")}
                 </Link>
               </p>
             </div>

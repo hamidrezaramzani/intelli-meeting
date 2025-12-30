@@ -11,7 +11,18 @@ import type { HeaderProps } from "./header.type";
 
 import { Button, UserMenu } from "..";
 
-export const Header = ({ menus, navigate, menuItems, actions }: HeaderProps) => {
+export const Header = ({
+  menus,
+  navigate,
+  menuItems,
+  actions,
+  brandLabel,
+  brandHref,
+  loginLabel,
+  registerLabel,
+  openMenuLabel,
+  userMenuProps,
+}: HeaderProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -24,7 +35,9 @@ export const Header = ({ menus, navigate, menuItems, actions }: HeaderProps) => 
 
   const renderUserDropdown = () => (
     <div className="relative w-12 h-12" ref={menuRef}>
-      {isLoggedIn && menuItems && <UserMenu menuItems={menuItems} />}
+      {isLoggedIn && menuItems && (
+        <UserMenu menuItems={menuItems} {...userMenuProps} />
+      )}
     </div>
   );
 
@@ -44,9 +57,9 @@ export const Header = ({ menus, navigate, menuItems, actions }: HeaderProps) => 
           <div className="flex justify-center items-center">
             <a
               className="text-lg font-roboto  font-regular text-black"
-              href="/"
+              href={brandHref}
             >
-              Intelli Meetings
+              {brandLabel}
             </a>
           </div>
 
@@ -54,8 +67,12 @@ export const Header = ({ menus, navigate, menuItems, actions }: HeaderProps) => 
             {actions}
             {!isLoggedIn && (
               <div className="hidden md:flex gap-3">
-                <Button onClick={() => navigate("/sign-in")}>Login</Button>
-                <Button onClick={() => navigate("/sign-up")}>Register</Button>
+                <Button onClick={() => navigate("/sign-in")}>
+                  {loginLabel}
+                </Button>
+                <Button onClick={() => navigate("/sign-up")}>
+                  {registerLabel}
+                </Button>
               </div>
             )}
             {renderUserDropdown()}
@@ -67,16 +84,16 @@ export const Header = ({ menus, navigate, menuItems, actions }: HeaderProps) => 
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
           >
-            <span className="sr-only">Open main menu</span>
+            <span className="sr-only">{openMenuLabel}</span>
             <HiOutlineMenuAlt2 className="text-3xl  font-roboto" />
           </button>
 
           <a
             className="flex items-center space-x-3 rtl:space-x-reverse"
-            href="/"
+            href={brandHref}
           >
             <span className="self-center text-lg font-roboto  font-regular whitespace-nowrap text-black">
-              Intelli Meetings
+              {brandLabel}
             </span>
           </a>
 

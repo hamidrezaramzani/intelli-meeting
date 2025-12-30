@@ -9,6 +9,7 @@ export const SelectMultipleInput = ({
   label,
   error,
   width,
+  placeholder,
   value,
   options,
   onChange,
@@ -43,7 +44,7 @@ export const SelectMultipleInput = ({
           `}
         >
           {value.length === 0 ? (
-            <span className="text-gray-400">Select...</span>
+            <span className="text-gray-400">{placeholder}</span>
           ) : (
             value.map((val) => {
               const op = options.find((o) => o.value === val)!;

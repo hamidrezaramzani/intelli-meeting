@@ -9,11 +9,16 @@ import { toast, ToastContainer } from "react-toastify";
 import type { LoginFormValues, LoginProps } from "./login.type";
 
 import { Button, TextInput } from "..";
-import logo from "../../../assets/logo.png";
 import { getLoginFormSchema } from "./login.schema";
 
-export const Login = ({ navigate }: LoginProps) => {
-  const schema = getLoginFormSchema();
+export const Login = ({
+  navigate,
+  copy,
+  links,
+  toastMessages,
+  validationMessages,
+}: LoginProps) => {
+  const schema = getLoginFormSchema(validationMessages);
   const resolver = zodResolver(schema);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -30,8 +35,8 @@ export const Login = ({ navigate }: LoginProps) => {
 
   const handleSubmitForm = async (data: LoginFormValues) => {
     void toast.promise(signIn(data).unwrap(), {
-      pending: "Signing in...",
-      error: "Invalid credentials, please try again",
+      pending: toastMessages.pending,
+      error: toastMessages.error,
       success: {
         render: ({ data: loggedInUser }) => {
           dispatch(
@@ -40,7 +45,7 @@ export const Login = ({ navigate }: LoginProps) => {
               token: loggedInUser.token,
             })
           );
-          return "Signed in successfully!";
+          return toastMessages.success;
         },
       },
     });
@@ -53,52 +58,51 @@ export const Login = ({ navigate }: LoginProps) => {
         <div className="flex justify-center items-center flex-col mt-6">
           <button
             type="button"
-            onClick={() => navigate("http://localhost:3000")}
+            onClick={() => navigate(links.homeUrl)}
           >
-            {/* <img alt="logo" className="w-32" src={logo} /> */}
           </button>
         </div>
 
         <div className="flex justify-center flex-col mt-3">
           <h3 className="text-black text-2xl font-roboto mb-2 font-bold text-center">
-            Sign in
+            {copy.title}
           </h3>
           <p className="text-gray-600 text-md font-roboto  font-regular text-center">
-            Sign in to access your account and all features.
+            {copy.description}
           </p>
         </div>
 
         <div className="mt-4 px-3">
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <TextInput
-              label="Email"
+              label={copy.emailLabel}
               type="text"
-              placeholder="Enter email(example@mail.com)"
+              placeholder={copy.emailPlaceholder}
               {...register("email")}
               error={touchedFields.email ? errors.email?.message : ""}
             />
 
             <TextInput
-              label="Password"
+              label={copy.passwordLabel}
               type="password"
-              placeholder="Enter password"
+              placeholder={copy.passwordPlaceholder}
               {...register("password")}
               error={touchedFields?.password ? errors.password?.message : ""}
             />
 
             <Button disabled={isLoading} type="submit">
-              Sign in
+              {copy.submitLabel}
             </Button>
 
             <div className="py-3 flex justify-center items-center">
               <p className="text-gray-600 text-regular text-center">
-                Don’t have an account?
+                {copy.noAccountPrompt}
                 <button
                   className="text-gray-800 ml-2 cursor-pointer"
                   type="button"
-                  onClick={() => navigate("http://localhost:3000/sign-up")}
+                  onClick={() => navigate(links.signUpUrl)}
                 >
-                  Sign up
+                  {copy.signUpLabel}
                 </button>
               </p>
             </div>

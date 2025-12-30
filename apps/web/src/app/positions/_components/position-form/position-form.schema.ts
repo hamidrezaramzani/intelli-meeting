@@ -1,5 +1,7 @@
+import type { TFunction } from "i18next";
 import { z } from "zod";
 
-export const positionSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-});
+export const getPositionSchema = (t: TFunction) =>
+  z.object({
+    title: z.string().min(1, t("common:validation.titleRequired")),
+  });

@@ -204,10 +204,13 @@ export const Table = <T,>({
             fullWidth={false}
             onClick={handlePrev}
           >
-            Previous
+            {t("common:pagination.previous")}
           </Button>
           <span className="flex items-center px-2 text-sm font-roboto  text-gray-700">
-            Page {pagination.currentPage} of {pagination.totalPages}
+            {t("common:pagination.pageOf", {
+              current: pagination.currentPage,
+              total: pagination.totalPages,
+            })}
           </span>
           <Button
             className="w-24"
@@ -215,7 +218,7 @@ export const Table = <T,>({
             fullWidth={false}
             onClick={handleNext}
           >
-            Next
+            {t("common:pagination.next")}
           </Button>
         </div>
       )}

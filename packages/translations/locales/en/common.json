@@ -5,7 +5,23 @@
     "title": "Title"
   },
   "title": "Intelli Meeting",
+  "logoAlt": "Logo",
+  "tagline": {
+    "aiPowered": "AI-powered"
+  },
   "areYouSureToDeleteThing": "Are you sure to delete {{thing, lowercase}}",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "reset": "Reset",
+  "retry": "Retry",
+  "unknown": "Unknown",
+  "none": "None",
+  "pleaseWait": "Please wait",
+  "openMainMenu": "Open main menu",
+  "avatarAlt": "User avatar",
+  "guest": "Guest",
+  "greeting": "Hello, {{name}}!",
   "table": {
     "notDataFound": "No data found",
     "unableToFetchData": "Unable to load table data. Please try again later."
@@ -36,6 +52,72 @@
   "areYouSure": "Are you sure?",
   "deleteThingConfirmation": "Are you sure you want to delete this {{thing, lowercase}}?",
   "thisActionCannotBeUndone": "This action cannot be undone",
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signInDescription": "Sign in to access your account and all features.",
+    "signUpDescription": "Sign up to unlock exclusive tools, insights, and personalized features made for you.",
+    "haveAccount": "Do you have an account?",
+    "noAccountPrompt": "Don't have an account?",
+    "signInPending": "Signing in...",
+    "signInError": "Invalid credentials, please try again",
+    "signInSuccess": "Signed in successfully!"
+  },
+  "form": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "fullName": "Full name",
+    "position": "Position",
+    "title": "Title",
+    "description": "Description",
+    "date": "Date",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "meetingLink": "Meeting link",
+    "employees": "Employees"
+  },
+  "placeholders": {
+    "name": "Enter name",
+    "email": "Enter email(example@mail.com)",
+    "password": "Enter password",
+    "confirmPassword": "Enter confirm password",
+    "fullName": "Enter employee name",
+    "positionTitle": "Enter position title",
+    "meetingTitle": "Enter meeting title",
+    "meetingDescription": "Enter meeting description",
+    "meetingLink": "Enter meeting URL",
+    "select": "Select..."
+  },
+  "validation": {
+    "nameMinLength": "Name must be at least 2 characters long.",
+    "invalidEmail": "Invalid email address.",
+    "passwordMinLength": "Password must be at least 6 characters long.",
+    "emailInUse": "Email is already used",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "titleRequired": "Title is required",
+    "fullNameRequired": "Full name is required",
+    "fullNameMinLength": "Full name is too short",
+    "positionRequired": "Position is required"
+  },
+  "errors": {
+    "createUser": "We have an error when creating new user, please try again",
+    "createPosition": "We have an error when creating new position, please try again"
+  },
+  "messages": {
+    "userCreated": "User created successfully",
+    "positionCreated": "Position created successfully"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{current}} of {{total}}"
+  },
+  "language": {
+    "faShort": "FA",
+    "enShort": "EN"
+  },
 
   "thingNotFound": "{{thing}} not found",
   "thingAlreadyExists": "{{thing}} already exists",

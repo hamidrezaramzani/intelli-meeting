@@ -1,6 +1,7 @@
 "use client";
 import { useAuthRedirect } from "@intelli-meeting/store";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { useCreateEmployeeMutation } from "@/services";
@@ -12,6 +13,7 @@ import { EmployeeForm } from "../_components";
 
 const NewEmployeeForm = () => {
   const [createEmployee, { isLoading }] = useCreateEmployeeMutation();
+  const { t } = useTranslation();
 
   const router = useRouter();
   useAuthRedirect({
@@ -21,19 +23,22 @@ const NewEmployeeForm = () => {
 
   const onSubmit = async (data: EmployeeFormValues) => {
     await toast.promise(createEmployee(data).unwrap(), {
-      pending: "Creating employee...",
+      pending: t("employee:messages.creating"),
       success: {
         render: () => {
           router.push("/employees");
-          return "Employee created successfully!";
+          return t("employee:messages.created");
         },
       },
-      error: "Error while creating employee. Please try again.",
+      error: t("employee:messages.createFailed"),
     });
   };
 
   return (
-    <Dashboard backUrl="/employees" title="New employee">
+    <Dashboard
+      backUrl="/employees"
+      title={t("employee:form.createTitle")}
+    >
       <EmployeeForm
         defaultValue={{ fullName: "", position: "" }}
         isEdit={false}

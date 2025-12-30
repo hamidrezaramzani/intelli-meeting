@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import type { DashboardProps } from "./dashboard.type";
 
@@ -7,6 +8,7 @@ import DashboardHeader from "./sub-components/dashboard-header/dashboard-header.
 
 export const Dashboard = ({ children, title, backUrl }: DashboardProps) => {
   const router = useRouter();
+  const { t } = useTranslation();
   const goToHome = () => {
     router.push("/");
   };
@@ -17,14 +19,18 @@ export const Dashboard = ({ children, title, backUrl }: DashboardProps) => {
           <button className="mt-4" type="button" onClick={goToHome}>
             <div className="w-full p-3 flex items-center cursor-pointer">
               <div className="w-3/12 flex justify-start">
-                <img alt="LOGO" className="w-18" src="/logo.png" />
+                <img
+                  alt={t("common:logoAlt")}
+                  className="w-18"
+                  src="/logo.png"
+                />
               </div>
               <div className="w-9/12 flex flex-col items-start gap-1">
                 <h1 className="text-xl text-slate-800 font-bold">
-                  Intelli Meeting
+                  {t("common:title")}
                 </h1>
                 <p className="text-xs font-roboto  font-body text-slate-600">
-                  AI-powered
+                  {t("common:tagline.aiPowered")}
                 </p>
               </div>
             </div>

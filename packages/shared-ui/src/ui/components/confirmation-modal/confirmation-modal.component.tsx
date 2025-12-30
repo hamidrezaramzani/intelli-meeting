@@ -6,10 +6,10 @@ import { Modal } from "../modal";
 
 export const ConfirmationModal = ({
   open,
-  title = "Confirm",
-  message = "Are you sure?",
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  title,
+  message,
+  confirmText,
+  cancelText,
   onConfirm,
   onCancel,
 }: ConfirmationModalProps) => {

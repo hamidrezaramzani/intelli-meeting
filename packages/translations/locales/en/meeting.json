@@ -2,6 +2,10 @@
   "title": "Meetings",
   "meeting": "Meeting",
   "description": "This table show you all of meetings that you saved before",
+  "tabs": {
+    "management": "Management",
+    "summary": "Summary"
+  },
   "column": {
     "date": "Date",
     "startTime": "Start time",
@@ -10,5 +14,40 @@
   "form": {
     "addMeetingDescription": "Create a new meeting and enter its details",
     "editMeetingDescription": "Modify the details of an existing meeting"
+  },
+  "validation": {
+    "titleRequired": "Title is required",
+    "dateRequired": "Date is required",
+    "startTimeRequired": "Start time is required",
+    "invalidUrl": "Invalid URL"
+  },
+  "summary": {
+    "title": "Summary",
+    "decisions": "Decisions",
+    "actions": "Actions",
+    "generate": "Generate",
+    "generateAgain": "Generate Again",
+    "emptyTitle": "No summary available",
+    "emptyDescription": "There are no notes or action items recorded for this session yet",
+    "decidedBy": "decided by: {{name}}",
+    "owner": "owner: {{owner}}",
+    "deadline": "deadline: {{deadline}}",
+    "generateFailed": "We have an error generating meeting summary",
+    "generateSuccess": "Meeting summary generated successfully"
+  },
+  "transcribe": {
+    "assigningSpeakers": "Assigning speakers...",
+    "assignSuccess": "Speakers assigned successfully!",
+    "assignFailed": "Failed to assign speakers. Please try again.",
+    "updatingText": "Updating audio text...",
+    "updateSuccess": "Updating audio text successfully!",
+    "updateFailed": "Failed to update audio text. Please try again.",
+    "deleteTitle": "Delete audio text",
+    "deleteMessage": "Do you want to delete audio? this action is not undoable",
+    "deletingText": "Deleting audio text...",
+    "deleteSuccess": "Deleting audio text successfully!",
+    "deleteFailed": "Failed to delete audio text. Please try again.",
+    "selectEmployeeTitle": "Select employee",
+    "selectEmployeeDescription": "Please select an employee for this voice"
   }
 }

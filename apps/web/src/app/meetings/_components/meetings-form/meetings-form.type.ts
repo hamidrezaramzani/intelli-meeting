@@ -1,8 +1,8 @@
 import type { z } from "zod";
 
-import type { meetingSchema } from "./meetings-form.schema";
+import type { getMeetingSchema } from "./meetings-form.schema";
 
-export type MeetingFormValues = z.infer<typeof meetingSchema>;
+export type MeetingFormValues = z.infer<ReturnType<typeof getMeetingSchema>>;
 
 export interface MeetingFormProps {
   title: string;

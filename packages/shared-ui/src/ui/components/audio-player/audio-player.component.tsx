@@ -14,6 +14,10 @@ export const AudioPlayer = ({
   onDelete,
   onReset,
   isPlayable = true,
+  deleteConfirmation,
+  resetConfirmation,
+  loadingMessage,
+  clickToPlayLabel,
 }: AudioPlayerProps) => {
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
@@ -95,13 +99,8 @@ export const AudioPlayer = ({
   };
 
   const handleDelete = async () => {
-    const confirmed = await confirmation({
-      title: "Delete audio",
-      message:
-        "Are you sure you want to delete this audio? This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
-    });
+    if (!deleteConfirmation) return;
+    const confirmed = await confirmation(deleteConfirmation);
 
     if (!confirmed) return;
 
@@ -114,13 +113,8 @@ export const AudioPlayer = ({
   };
 
   const handleReset = async () => {
-    const confirmed = await confirmation({
-      title: "Reset audio",
-      message:
-        "Are you sure you want to reset this audio? This will remove generated data.",
-      confirmText: "Reset",
-      cancelText: "Cancel",
-    });
+    if (!resetConfirmation) return;
+    const confirmed = await confirmation(resetConfirmation);
 
     if (!confirmed) return;
 
@@ -154,7 +148,7 @@ export const AudioPlayer = ({
           >
             {isLoading ? (
               <div className="flex items-center gap-2 bg-slate-700/40 h-20 animate-pulse text-sm font-roboto  text-white justify-center w-11/12 rounded-md">
-                Please wait to load
+                {loadingMessage}
               </div>
             ) : (
               <div className="w-11/12 h-30 bg-slate-700/40 flex gap-1 flex-col items-center justify-center rounded-md">
@@ -162,7 +156,7 @@ export const AudioPlayer = ({
                   {title}
                 </div>
                 <span className="ml-3 text-xs font-roboto  text-slate-400">
-                  Click to play
+                  {clickToPlayLabel}
                 </span>
               </div>
             )}

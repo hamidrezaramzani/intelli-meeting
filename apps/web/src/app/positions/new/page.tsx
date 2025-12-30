@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { useCreatePositionMutation } from "@/services";
@@ -11,23 +12,27 @@ import { PositionForm } from "../_components";
 
 const NewPositionForm = () => {
   const [createPosition, { isLoading }] = useCreatePositionMutation();
+  const { t } = useTranslation();
   const router = useRouter();
 
   const onSubmit = async (data: PositionFormValues) => {
     await toast.promise(createPosition(data).unwrap(), {
-      pending: "Please wait",
-      error: "We have an error when creating new position, please try again",
+      pending: t("common:pleaseWait"),
+      error: t("common:errors.createPosition"),
       success: {
         render: () => {
           router.push("/settings?tab=positions");
-          return "Position created successfully";
+          return t("common:messages.positionCreated");
         },
       },
     });
   };
 
   return (
-    <Dashboard backUrl="/settings?tab=positions" title="New Position">
+    <Dashboard
+      backUrl="/settings?tab=positions"
+      title={t("setting:positions.form.createTitle")}
+    >
       <PositionForm
         defaultValue={{ title: "" }}
         isEdit={false}

@@ -304,7 +304,25 @@ export const RecordPage = () => {
         onConfirm={handleConfirmSelectingAudioName}
         open={isSelectAudioNameModalOpen}
       />
-      <MainLayout menuItems={menuItems} navigate={navigate}>
+      <MainLayout
+        brandHref="http://localhost:3000"
+        brandLabel="Intelli Meetings"
+        loginLabel="Login"
+        menuItems={menuItems}
+        menus={[
+          { id: 1, title: "Home", link: "http://localhost:3000" },
+          { id: 2, title: "About me", link: "https://thehamidreza.ir" },
+          { id: 3, title: "Contribute", link: "https://github.com/hamidrezaramzani" },
+        ]}
+        navigate={navigate}
+        openMenuLabel="Open main menu"
+        registerLabel="Register"
+        userMenuProps={{
+          avatarAlt: "User avatar",
+          guestLabel: "Guest",
+          renderGreeting: (name) => `Hello, ${name}!`,
+        }}
+      >
         <div className="w-full flex flex-col justify-center items-center">
           <div
             className={`w-48 h-48 rounded-full cursor-pointer flex justify-center items-center transition-all duration-300 ${

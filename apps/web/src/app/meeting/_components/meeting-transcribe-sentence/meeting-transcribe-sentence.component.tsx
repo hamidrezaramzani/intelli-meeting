@@ -8,6 +8,7 @@
 import { confirmation, IconButton } from "@intelli-meeting/shared-ui";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FiTrash2 } from "react-icons/fi";
 import { LuUserRoundCheck, LuUserRoundMinus } from "react-icons/lu";
 import { MdCheck, MdEdit, MdPlayCircle } from "react-icons/md";
@@ -29,6 +30,7 @@ export const MeetingTranscribeSentence = ({
   employees,
   onTranscribeSelect,
 }: MeetingTranscribeSentenceProps) => {
+  const { t } = useTranslation();
   const [playAudio] = usePlaySpeakerProfileMutation();
   const [assignAudioSpeakers] = useAssignAudioSpeakersMutation();
   const [deleteAudioText, { isLoading: isDeletingAudioText }] =
@@ -70,15 +72,15 @@ export const MeetingTranscribeSentence = ({
         audioId: text.audio_id,
       }).unwrap(),
       {
-        pending: "Assigning speakers...",
+        pending: t("meeting:transcribe.assigningSpeakers"),
         success: {
           render: () => {
             setIsAssignableToEmployee(false);
             onTranscribeSelect(null);
-            return "Speakers assigned successfully!";
+            return t("meeting:transcribe.assignSuccess");
           },
         },
-        error: "Failed to assign speakers. Please try again.",
+        error: t("meeting:transcribe.assignFailed"),
       },
     );
   };
@@ -91,26 +93,26 @@ export const MeetingTranscribeSentence = ({
         speakerProfileId: text.id,
       }).unwrap(),
       {
-        pending: "Updating audio text...",
+        pending: t("meeting:transcribe.updatingText"),
         success: {
           render: () => {
             setIsAssignableToEmployee(false);
             onTranscribeSelect(null);
             setIsEditable(false);
-            return "Updating audio text successfully!";
+            return t("meeting:transcribe.updateSuccess");
           },
         },
-        error: "Failed to update audio text. Please try again.",
+        error: t("meeting:transcribe.updateFailed"),
       },
     );
   };
 
   const handleTextDelete = async () => {
     const confirmationDelete = await confirmation({
-      confirmText: "Delete",
-      cancelText: "Cancel",
-      title: "Delete audio text",
-      message: "Do you want to delete audio? this action is not undoable",
+      confirmText: t("common:delete"),
+      cancelText: t("common:cancel"),
+      title: t("meeting:transcribe.deleteTitle"),
+      message: t("meeting:transcribe.deleteMessage"),
     });
 
     if (!confirmationDelete) return;
@@ -120,15 +122,15 @@ export const MeetingTranscribeSentence = ({
         speakerProfileId: text.id,
       }).unwrap(),
       {
-        pending: "Deleting audio text...",
+        pending: t("meeting:transcribe.deletingText"),
         success: {
           render: () => {
             setIsAssignableToEmployee(false);
             onTranscribeSelect(null);
-            return "deleting audio text successfully!";
+            return t("meeting:transcribe.deleteSuccess");
           },
         },
-        error: "Failed to delete audio text. Please try again.",
+        error: t("meeting:transcribe.deleteFailed"),
       }
     );
   };
@@ -169,7 +171,7 @@ export const MeetingTranscribeSentence = ({
                   {text.employee?.fullName || text.initial_speaker_label}
                 </h3>
                 <span className="text-slate-400 text-xs font-roboto  inline">
-                  {text.employee?.position.title || "Unknown"}
+                  {text.employee?.position.title || t("common:unknown")}
                 </span>
               </div>
             </div>
@@ -208,13 +210,13 @@ export const MeetingTranscribeSentence = ({
           )}
 
           {isAssignableToEmployee && !isEditable ? (
-            <div className="flex flex-col gap-4 py-4">
+              <div className="flex flex-col gap-4 py-4">
               <div className="flex flex-col">
                 <h3 className="text-white text-md font-roboto ">
-                  Select employee
+                  {t("meeting:transcribe.selectEmployeeTitle")}
                 </h3>
                 <span className="text-sm font-roboto  text-slate-400">
-                  Please select an employee for this voice
+                  {t("meeting:transcribe.selectEmployeeDescription")}
                 </span>
               </div>
               <div className="flex flex-col gap-4 h-48 overflow-y-auto">
@@ -237,7 +239,7 @@ export const MeetingTranscribeSentence = ({
                         <span className="text-slate-400 text-xs font-roboto  inline">
                           {employee?.position
                             ? employee?.position.title
-                            : "Unknown"}
+                            : t("common:unknown")}
                         </span>
                       </div>
                     </div>

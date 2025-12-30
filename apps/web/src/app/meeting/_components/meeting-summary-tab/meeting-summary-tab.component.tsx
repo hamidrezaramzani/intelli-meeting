@@ -1,11 +1,13 @@
 import { Button, EmptyState } from "@intelli-meeting/shared-ui";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { useMeetingSummaryManager } from "@/lib";
 
 import type { MeetingSummaryTabProps } from "./meeting-summary-tab.type";
 
 export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
+  const { t } = useTranslation();
   const {
     generateAgain,
     isEmptyFromDB,
@@ -39,9 +41,9 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
     <div className="flex flex-col gap-6">
       {isEmptyFromDB && !isLoading ? (
         <EmptyState
-          title="No summary available"
-          actionLabel="Generate"
-          description="There are no notes or action items recorded for this session yet"
+          title={t("meeting:summary.emptyTitle")}
+          actionLabel={t("meeting:summary.generate")}
+          description={t("meeting:summary.emptyDescription")}
           onAction={generateAgain}
         />
       ) : (
@@ -49,7 +51,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
           <section className="bg-white p-4 rounded-lg">
             <div className="w-full flex mb-5 items-center justify-between">
               <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">
-                Summary
+                {t("meeting:summary.title")}
               </h3>
               {!isLoading ? (
                 <Button
@@ -57,7 +59,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
                   isLoading={isLoading}
                   onClick={generateAgain}
                 >
-                  Generate Again
+                  {t("meeting:summary.generateAgain")}
                 </Button>
               ) : null}
             </div>
@@ -78,7 +80,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
 
           <section className="p-4 rounded-lg">
             <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">
-              Decisions
+              {t("meeting:summary.decisions")}
             </h3>
 
             <ul className="text-sm font-roboto  flex flex-col">
@@ -89,7 +91,9 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
                 >
                   <span className="text-slate-600">{decision.description}</span>
                   <span className="text-xs font-roboto  text-slate-500">
-                    decided by: {decision.decided_by || "Unknown"}
+                    {t("meeting:summary.decidedBy", {
+                      name: decision.decided_by || t("common:unknown"),
+                    })}
                   </span>
                 </li>
               ))}
@@ -99,7 +103,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
 
           <section className="p-4 rounded-lg">
             <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">
-              Actions
+              {t("meeting:summary.actions")}
             </h3>
 
             <ul className="text-sm font-roboto  flex flex-col">
@@ -110,8 +114,16 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
                 >
                   <span>{action.description}</span>
                   <div className="text-xs font-roboto  text-slate-400 flex justify-between">
-                    <span>owner: {action.owner || "Unknown"}</span>
-                    <span>deadline: {action.deadline || "None"}</span>
+                    <span>
+                      {t("meeting:summary.owner", {
+                        owner: action.owner || t("common:unknown"),
+                      })}
+                    </span>
+                    <span>
+                      {t("meeting:summary.deadline", {
+                        deadline: action.deadline || t("common:none"),
+                      })}
+                    </span>
                   </div>
                 </li>
               ))}

@@ -4,6 +4,7 @@ import { useAuthRedirect } from "@intelli-meeting/store";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { motion } from "motion/react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { TiPinOutline } from "react-icons/ti";
 
 import { getBounceEffect } from "@/lib/helpers";
@@ -15,6 +16,7 @@ import { useAudioProcessing } from "../_hooks";
 
 const Meeting = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const { id } = useParams();
 
@@ -31,7 +33,7 @@ const Meeting = () => {
   });
 
   return (
-    <Dashboard backUrl="/meetings" title="Meeting">
+    <Dashboard backUrl="/meetings" title={t("meeting:meeting")}>
       {meeting ? (
         <>
           <motion.div
@@ -73,7 +75,7 @@ const Meeting = () => {
             <Tabs
               tabs={[
                 {
-                  label: "Management",
+                  label: t("meeting:tabs.management"),
                   content: (
                     <MeetingManagementTab
                       audios={meeting?.audios}
@@ -82,7 +84,7 @@ const Meeting = () => {
                   ),
                 },
                 {
-                  label: "Summary",
+                  label: t("meeting:tabs.summary"),
                   content: <MeetingSummaryTab meetingId={id as string} />,
                 },
               ]}

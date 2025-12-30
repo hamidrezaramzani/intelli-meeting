@@ -6,6 +6,7 @@ export const SelectInput = ({
   label,
   error,
   width,
+  placeholder,
   options,
   ...props
 }: SelectInputProps) => {
@@ -27,7 +28,7 @@ export const SelectInput = ({
           {...props}
         >
           <option selected value="">
-            Select an option
+            {placeholder}
           </option>
           {options.map((option) => (
             <option key={`${option.value}-key`} value={option.value}>

@@ -12,15 +12,43 @@ export default function Home() {
   const { t } = useTranslation<"">();
 
   const menuItems = getUserMenuItems(router);
+  const menus = [
+    {
+      id: 1,
+      title: t("home:navigation.home"),
+      link: "/",
+    },
+    {
+      id: 2,
+      title: t("home:navigation.about"),
+      link: "https://thehamidreza.ir",
+    },
+    {
+      id: 3,
+      title: t("home:navigation.contribute"),
+      link: "https://github.com/hamidrezaramzani",
+    },
+  ];
 
   return (
     <div className="w-full flex justify-center h-screen">
       <div className="h-[calc(100vh-120px)]  w-full flex items-center flex-col mt-3">
         <MainLayout
+          brandHref="/"
+          brandLabel={t("common:title")}
           headerActions={<LanguageToggle />}
+          loginLabel={t("common:auth.signIn")}
           menuItems={menuItems}
+          menus={menus}
           navigate={(path) => {
             router.push(path);
+          }}
+          openMenuLabel={t("common:openMainMenu")}
+          registerLabel={t("common:auth.signUp")}
+          userMenuProps={{
+            avatarAlt: t("common:avatarAlt"),
+            guestLabel: t("common:guest"),
+            renderGreeting: (name) => t("common:greeting", { name }),
           }}
         >
           <div className="bg-white flex justify-center mt-3 flex-col items-center  h-[calc(100vh-120px)]  w-full">

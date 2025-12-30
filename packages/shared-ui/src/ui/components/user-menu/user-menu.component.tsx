@@ -6,11 +6,17 @@ import { useState } from "react";
 
 import type { UserMenuProps } from "./user-menu.type";
 
-export const UserMenu = ({ menuItems }: UserMenuProps) => {
+export const UserMenu = ({
+  menuItems,
+  guestLabel,
+  avatarAlt,
+  renderGreeting,
+}: UserMenuProps) => {
   const [open, setOpen] = useState(false);
   const { data } = useReadUserProfileQuery({});
-  const employeeName = data?.user?.name || "guest";
+  const employeeName = data?.user?.name || guestLabel || "";
   const avatarUrl = `https://avatar.iran.liara.run/username?username=${employeeName.replace(" ", "")}`;
+  const greeting = renderGreeting ? renderGreeting(employeeName) : employeeName;
 
   return (
     <div className="relative">
@@ -21,7 +27,7 @@ export const UserMenu = ({ menuItems }: UserMenuProps) => {
         <img
           height={55}
           width={55}
-          alt="user"
+          alt={avatarAlt}
           className="w-12 rounded-md"
           src={avatarUrl}
         />
@@ -31,7 +37,7 @@ export const UserMenu = ({ menuItems }: UserMenuProps) => {
         <div className="absolute right-0 mt-2 w-48 bg-slate-50 border border-slate-200 rounded-lg overflow-hidden z-10">
           <div className="px-4 py-3 border-b border-slate-200 bg-slate-100">
             <p className="text-sm font-roboto  text-gray-800 font-medium">
-              Hello, {employeeName}!
+              {greeting}
             </p>
           </div>
           <ul className="text-sm font-roboto  text-gray-700">

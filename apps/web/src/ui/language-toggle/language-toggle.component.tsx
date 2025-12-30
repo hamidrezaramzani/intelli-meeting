@@ -6,14 +6,13 @@ import { useTranslation } from "react-i18next";
 import { LANGUAGE_STORAGE_KEY } from "@/lib/constants";
 import { setDocumentLanguage } from "@/lib/helpers";
 
-const LANGUAGES = [
-  { code: "fa", label: "FA" },
-  { code: "en", label: "EN" },
-];
-
 export const LanguageToggle = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const activeLanguage = i18n.language?.split("-")[0] ?? "en";
+  const languages = [
+    { code: "fa", label: t("common:language.faShort") },
+    { code: "en", label: t("common:language.enShort") },
+  ];
 
   useEffect(() => {
     setDocumentLanguage(activeLanguage);
@@ -31,7 +30,7 @@ export const LanguageToggle = () => {
 
   return (
     <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-1">
-      {LANGUAGES.map((language) => {
+      {languages.map((language) => {
         const isActive = activeLanguage === language.code;
         return (
           <button

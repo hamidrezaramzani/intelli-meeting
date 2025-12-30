@@ -1,3 +1,28 @@
 {
-  "audio": "Audio"
+  "audio": "Audio",
+  "status": {
+    "processingTitle": "Processing",
+    "processingMessage": "This audio is already being processed. Please wait until it completes.",
+    "failedTitle": "Processing Failed",
+    "failedMessage": "Previous processing attempt failed. Do you want to retry?",
+    "pendingMessage": "This recording is waiting to be processed.",
+    "startProcessing": "Start Processing",
+    "processingBanner": "The recording is currently being processed...",
+    "processingButton": "Processing...",
+    "failedBanner": "Processing failed. Please try again."
+  },
+  "empty": {
+    "title": "No audio available",
+    "description": "There are no audios recorded for this meeting yet"
+  },
+  "player": {
+    "loadingMessage": "Please wait to load",
+    "clickToPlay": "Click to play"
+  },
+  "confirm": {
+    "deleteTitle": "Delete audio",
+    "deleteMessage": "Are you sure you want to delete this audio? This action cannot be undone.",
+    "resetTitle": "Reset audio",
+    "resetMessage": "Are you sure you want to reset this audio? This will remove generated data."
+  }
 }

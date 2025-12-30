@@ -2,6 +2,10 @@
   "title": "جلسات",
   "meeting": "جلسه",
   "description": "این جدول جلساتی که تا به الان ثبت کردید را نمایش میدهد",
+  "tabs": {
+    "management": "مدیریت",
+    "summary": "خلاصه"
+  },
   "column": {
     "date": "تاریخ",
     "startTime": "ساعت شروع",
@@ -10,5 +14,40 @@
   "form": {
     "addMeetingDescription": "جلسه جدید را با جزئیات ایجاد کنید",
     "editMeetingDescription": "اطلاعات جلسه جاری رو تغییر دهید"
+  },
+  "validation": {
+    "titleRequired": "عنوان الزامی است",
+    "dateRequired": "تاریخ الزامی است",
+    "startTimeRequired": "زمان شروع الزامی است",
+    "invalidUrl": "آدرس نامعتبر است"
+  },
+  "summary": {
+    "title": "خلاصه",
+    "decisions": "تصمیم‌ها",
+    "actions": "اقدام‌ها",
+    "generate": "ایجاد",
+    "generateAgain": "تولید مجدد",
+    "emptyTitle": "خلاصه‌ای موجود نیست",
+    "emptyDescription": "هنوز یادداشت یا اقداماتی برای این جلسه ثبت نشده است",
+    "decidedBy": "تصمیم‌گیرنده: {{name}}",
+    "owner": "مسئول: {{owner}}",
+    "deadline": "موعد: {{deadline}}",
+    "generateFailed": "در تولید خلاصه جلسه خطایی رخ داد",
+    "generateSuccess": "خلاصه جلسه با موفقیت ایجاد شد"
+  },
+  "transcribe": {
+    "assigningSpeakers": "در حال انتساب گوینده‌ها...",
+    "assignSuccess": "گوینده‌ها با موفقیت تخصیص داده شدند!",
+    "assignFailed": "تخصیص گوینده‌ها ناموفق بود. لطفا دوباره تلاش کنید.",
+    "updatingText": "در حال به‌روزرسانی متن صوت...",
+    "updateSuccess": "متن صوت با موفقیت به‌روزرسانی شد!",
+    "updateFailed": "به‌روزرسانی متن صوت ناموفق بود. لطفا دوباره تلاش کنید.",
+    "deleteTitle": "حذف متن صوت",
+    "deleteMessage": "آیا می‌خواهید صوت را حذف کنید؟ این عملیات قابل بازگشت نیست",
+    "deletingText": "در حال حذف متن صوت...",
+    "deleteSuccess": "متن صوت با موفقیت حذف شد!",
+    "deleteFailed": "حذف متن صوت ناموفق بود. لطفا دوباره تلاش کنید.",
+    "selectEmployeeTitle": "انتخاب کارمند",
+    "selectEmployeeDescription": "لطفاً یک کارمند را برای این صدا انتخاب کنید"
   }
 }

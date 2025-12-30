@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, SelectInput, TextInput } from "@intelli-meeting/shared-ui";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { useReadManyPositionCandidatesQuery } from "@/services";
 
@@ -9,7 +10,7 @@ import type {
   EmployeeFormValues,
 } from "./employee-form.type";
 
-import { employeeFormSchema } from "./employee-form.schema";
+import { getEmployeeFormSchema } from "./employee-form.schema";
 
 export const EmployeeForm = ({
   onSubmit,
@@ -17,6 +18,7 @@ export const EmployeeForm = ({
   isEdit,
   defaultValue,
 }: EmployeeFormProps) => {
+  const { t } = useTranslation();
   const { data: positionsData } = useReadManyPositionCandidatesQuery({});
 
   const positions = positionsData?.positions ?? [];
@@ -32,7 +34,7 @@ export const EmployeeForm = ({
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<EmployeeFormValues>({
-    resolver: zodResolver(employeeFormSchema),
+    resolver: zodResolver(getEmployeeFormSchema(t)),
     values: defaultValue,
   });
 
@@ -40,31 +42,36 @@ export const EmployeeForm = ({
     <div className="w-full">
       <div className="w-3/5 p-6">
         <h2 className="text-2xl font-roboto font-bold text-slate-800 mb-2">
-          {isEdit ? "Edit employee" : "Create employee"}
+          {isEdit
+            ? t("employee:form.editTitle")
+            : t("employee:form.createTitle")}
         </h2>
 
         <p className="text-slate-600 mb-6">
-          Fill out the form below to register a new employee.
+          {t("employee:form.description")}
         </p>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             width="half"
-            label="Full name"
+            label={t("common:form.fullName")}
             type="text"
-            placeholder="Enter employee name"
+            placeholder={t("common:placeholders.fullName")}
             {...register("fullName")}
             error={touchedFields.fullName ? errors.fullName?.message : ""}
           />
 
           <SelectInput
-            label="Position"
+            label={t("common:form.position")}
+            placeholder={t("common:placeholders.select")}
             {...register("position")}
             options={positionOptions}
           />
 
           <Button className="mt-2 w-96" disabled={isLoading} type="submit">
-            {isEdit ? "Update employee" : "Save employee"}
+            {isEdit
+              ? t("employee:form.editSubmit")
+              : t("employee:form.createSubmit")}
           </Button>
         </form>
       </div>

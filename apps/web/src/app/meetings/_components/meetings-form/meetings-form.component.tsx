@@ -13,7 +13,7 @@ import { useReadManyEmployeeCandidatesQuery } from "@/services";
 
 import type { MeetingFormProps, MeetingFormValues } from "./meetings-form.type";
 
-import { meetingSchema } from "./meetings-form.schema";
+import { getMeetingSchema } from "./meetings-form.schema";
 
 export const MeetingsForm = ({
   title,
@@ -41,7 +41,7 @@ export const MeetingsForm = ({
     control,
     formState: { errors, touchedFields },
   } = useForm<MeetingFormValues>({
-    resolver: zodResolver(meetingSchema),
+    resolver: zodResolver(getMeetingSchema(t)),
   });
 
   useEffect(() => {
@@ -61,25 +61,25 @@ export const MeetingsForm = ({
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             width="half"
-            label="Title"
+            label={t("common:form.title")}
             type="text"
-            placeholder="Enter meeting title"
+            placeholder={t("common:placeholders.meetingTitle")}
             {...register("title")}
             error={touchedFields.title ? errors.title?.message : ""}
           />
 
           <TextInput
             width="half"
-            label="Description"
+            label={t("common:form.description")}
             type="text"
-            placeholder="Enter meeting description"
+            placeholder={t("common:placeholders.meetingDescription")}
             {...register("description")}
             error={touchedFields.description ? errors.description?.message : ""}
           />
 
           <TextInput
             width="half"
-            label="Date"
+            label={t("common:form.date")}
             type="date"
             {...register("date")}
             error={touchedFields.date ? errors.date?.message : ""}
@@ -88,7 +88,7 @@ export const MeetingsForm = ({
           <div className="flex gap-3 w-1/2 ">
             <div className="w-1/2">
               <TextInput
-                label="Start time"
+                label={t("common:form.startTime")}
                 type="time"
                 {...register("startTime")}
                 width="full"
@@ -98,7 +98,7 @@ export const MeetingsForm = ({
 
             <div className="w-1/2">
               <TextInput
-                label="End time"
+                label={t("common:form.endTime")}
                 type="time"
                 {...register("endTime")}
                 width="full"
@@ -108,9 +108,9 @@ export const MeetingsForm = ({
           </div>
 
           <TextInput
-            label="Meeting link"
+            label={t("common:form.meetingLink")}
             type="text"
-            placeholder="Enter meeting URL"
+            placeholder={t("common:placeholders.meetingLink")}
             {...register("meetingLink")}
             width="half"
             error={touchedFields.meetingLink ? errors.meetingLink?.message : ""}
@@ -121,7 +121,8 @@ export const MeetingsForm = ({
             control={control}
             render={({ field, fieldState }) => (
               <SelectMultipleInput
-                label="Employees"
+                label={t("common:form.employees")}
+                placeholder={t("common:placeholders.select")}
                 value={field.value || []}
                 error={fieldState.error?.message}
                 onBlur={field.onBlur}

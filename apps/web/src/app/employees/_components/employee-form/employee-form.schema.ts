@@ -1,6 +1,12 @@
+import type { TFunction } from "i18next";
+
 import { z } from "zod";
 
-export const employeeFormSchema = z.object({
-  fullName: z.string("Full name is required").min(2, "Full name is too short"),
-  position: z.string().min(1, "Position is required"),
-});
+export const getEmployeeFormSchema = (t: TFunction) =>
+  z.object({
+    fullName: z
+      .string()
+      .min(1, t("common:validation.fullNameRequired"))
+      .min(2, t("common:validation.fullNameMinLength")),
+    position: z.string().min(1, t("common:validation.positionRequired")),
+  });

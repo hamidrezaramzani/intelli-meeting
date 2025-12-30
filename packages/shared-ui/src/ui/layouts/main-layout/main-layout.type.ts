@@ -8,4 +8,19 @@ export interface MainLayoutProps {
   navigate: (path: string) => void;
   menuItems?: MenuItem[];
   headerActions?: React.ReactNode;
+  menus: {
+    id: number;
+    title: string;
+    link: string;
+  }[];
+  brandLabel: string;
+  brandHref: string;
+  loginLabel: string;
+  registerLabel: string;
+  openMenuLabel: string;
+  userMenuProps?: {
+    guestLabel?: string;
+    avatarAlt?: string;
+    renderGreeting?: (name: string) => string;
+  };
 }

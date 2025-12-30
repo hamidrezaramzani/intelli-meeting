@@ -3,6 +3,7 @@
 /* eslint-disable @eslint-react/hooks-extra/no-direct-set-state-in-use-effect */
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { normalizeWebsocketResponse, useWebSocket } from "@/lib";
@@ -39,6 +40,7 @@ interface SummaryState {
 }
 
 export const useMeetingSummaryManager = (meetingId?: string) => {
+  const { t } = useTranslation();
   const { connect } = useWebSocket();
 
   const { data: meetingSummaries, isFetching } = useReadMeetingSummariesQuery(
@@ -98,7 +100,7 @@ export const useMeetingSummaryManager = (meetingId?: string) => {
       isLoading: isFailed,
       isEmptyFromDB: true,
     });
-    if (isFailed) toast.error("We have an error generating meeting summary");
+    if (isFailed) toast.error(t("meeting:summary.generateFailed"));
   }, []);
 
   const startWebSocketProcessing = useCallback((reconnect: boolean = false) => {
@@ -125,7 +127,7 @@ export const useMeetingSummaryManager = (meetingId?: string) => {
             if (message.type === "done") {
               newState.isLoading = false;
               newState.isEmptyFromDB = false;
-              toast.success("Meeting summary generated successfully");
+              toast.success(t("meeting:summary.generateSuccess"));
             }
             return newState;
           });

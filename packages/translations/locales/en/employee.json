@@ -5,5 +5,17 @@
     "column": {
         "fullName": "Fullname",
         "position": "Position"
+    },
+    "form": {
+        "createTitle": "Create employee",
+        "editTitle": "Edit employee",
+        "description": "Fill out the form below to register a new employee.",
+        "createSubmit": "Save employee",
+        "editSubmit": "Update employee"
+    },
+    "messages": {
+        "creating": "Creating employee...",
+        "created": "Employee created successfully!",
+        "createFailed": "Error while creating employee. Please try again."
     }
 }

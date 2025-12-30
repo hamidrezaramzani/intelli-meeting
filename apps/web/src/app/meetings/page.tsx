@@ -65,11 +65,11 @@ const MeetingsPage = () => {
   });
 
   return (
-    <Dashboard title="Meetings">
+    <Dashboard title={t("meeting:title")}>
       <Table
         data={meetings}
         thing={t("meeting:meeting")}
-        title={t("meeting:meeting")}
+        title={t("meeting:title")}
         columns={getMeetingColumns(t)}
         description={t("meeting:description")}
         formPath="/meetings/new"

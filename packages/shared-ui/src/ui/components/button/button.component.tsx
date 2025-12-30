@@ -8,6 +8,7 @@ export const Button = ({
   fullWidth = true,
   variant = "default",
   isLoading = false,
+  loadingLabel,
 
   ...props
 }: ButtonProps) => {
@@ -41,7 +42,7 @@ export const Button = ({
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only">{loadingLabel}</span>
     </div>
   );
 

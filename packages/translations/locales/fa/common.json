@@ -5,7 +5,23 @@
     "title": "عنوان"
   },
   "title": "دستیار هوشمند",
+  "logoAlt": "لوگو",
+  "tagline": {
+    "aiPowered": "قدرت‌گرفته از هوش مصنوعی"
+  },
   "areYouSureToDeleteThing": "آیا میخواهی این  {{thing, lowercase}} را حذف کنی؟",
+  "delete": "حذف",
+  "cancel": "لغو",
+  "confirm": "تایید",
+  "reset": "بازنشانی",
+  "retry": "تلاش مجدد",
+  "unknown": "نامشخص",
+  "none": "هیچ‌کدام",
+  "pleaseWait": "لطفاً صبر کنید",
+  "openMainMenu": "باز کردن منوی اصلی",
+  "avatarAlt": "آواتار کاربر",
+  "guest": "مهمان",
+  "greeting": "سلام، {{name}}!",
   "table": {
     "notDataFound": "داده ای یافت نشد",
     "unableToFetchData": "دریافت داده با مشکل مواجه شد. لطفا مجدد امتحان کنید."
@@ -30,6 +46,72 @@
   "areYouSure": "آیا مطمئن هستید؟",
   "deleteThingConfirmation": "آیا از حذف این {{thing}} مطمئن هستید؟",
   "thisActionCannotBeUndone": "این عملیات قابل بازگشت نیست",
+  "auth": {
+    "signIn": "ورود",
+    "signUp": "ثبت‌نام",
+    "signInDescription": "برای دسترسی به حساب کاربری و همه امکانات وارد شوید.",
+    "signUpDescription": "برای دسترسی به ابزارها، بینش‌ها و ویژگی‌های شخصی‌سازی‌شده ثبت‌نام کنید.",
+    "haveAccount": "حساب کاربری دارید؟",
+    "noAccountPrompt": "حساب کاربری ندارید؟",
+    "signInPending": "در حال ورود...",
+    "signInError": "اطلاعات ورود نامعتبر است. لطفاً دوباره تلاش کنید",
+    "signInSuccess": "با موفقیت وارد شدید!"
+  },
+  "form": {
+    "name": "نام",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "confirmPassword": "تکرار رمز عبور",
+    "fullName": "نام کامل",
+    "position": "سمت",
+    "title": "عنوان",
+    "description": "توضیحات",
+    "date": "تاریخ",
+    "startTime": "زمان شروع",
+    "endTime": "زمان پایان",
+    "meetingLink": "لینک جلسه",
+    "employees": "کارمندان"
+  },
+  "placeholders": {
+    "name": "نام را وارد کنید",
+    "email": "ایمیل را وارد کنید (example@mail.com)",
+    "password": "رمز عبور را وارد کنید",
+    "confirmPassword": "تکرار رمز عبور را وارد کنید",
+    "fullName": "نام کارمند را وارد کنید",
+    "positionTitle": "عنوان سمت را وارد کنید",
+    "meetingTitle": "عنوان جلسه را وارد کنید",
+    "meetingDescription": "توضیحات جلسه را وارد کنید",
+    "meetingLink": "لینک جلسه را وارد کنید",
+    "select": "انتخاب کنید..."
+  },
+  "validation": {
+    "nameMinLength": "نام باید حداقل ۲ کاراکتر باشد.",
+    "invalidEmail": "آدرس ایمیل نامعتبر است.",
+    "passwordMinLength": "رمز عبور باید حداقل ۶ کاراکتر باشد.",
+    "emailInUse": "ایمیل قبلا استفاده شده است",
+    "passwordsDoNotMatch": "رمزهای عبور مطابقت ندارند.",
+    "titleRequired": "عنوان الزامی است",
+    "fullNameRequired": "نام کامل الزامی است",
+    "fullNameMinLength": "نام کامل خیلی کوتاه است",
+    "positionRequired": "سمت الزامی است"
+  },
+  "errors": {
+    "createUser": "در ایجاد کاربر جدید خطا رخ داد. لطفا دوباره تلاش کنید",
+    "createPosition": "در ایجاد سمت جدید خطا رخ داد. لطفا دوباره تلاش کنید"
+  },
+  "messages": {
+    "userCreated": "کاربر با موفقیت ایجاد شد",
+    "positionCreated": "سمت با موفقیت ایجاد شد"
+  },
+  "pagination": {
+    "previous": "قبلی",
+    "next": "بعدی",
+    "pageOf": "صفحه {{current}} از {{total}}"
+  },
+  "language": {
+    "faShort": "فا",
+    "enShort": "EN"
+  },
   "thingNotFound": "{{thing}} یافت نشد",
   "thingAlreadyExists": "{{thing}} از قبل وجود دارد",
   "invalidThing": "{{thing}} نامعتبر است",

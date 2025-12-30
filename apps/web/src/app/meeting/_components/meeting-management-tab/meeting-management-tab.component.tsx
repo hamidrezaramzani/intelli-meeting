@@ -57,17 +57,20 @@ export const MeetingManagementTab = ({
     switch (status) {
       case "processing": {
         shouldProcessAudio = await confirmation({
-          title: "Processing",
-          message:
-            "This audio is already being processed. Please wait until it completes.",
+          title: t("audio:status.processingTitle"),
+          message: t("audio:status.processingMessage"),
+          confirmText: t("common:confirm"),
+          cancelText: t("common:cancel"),
         });
         return;
       }
 
       case "failed":
         shouldProcessAudio = await confirmation({
-          title: "Processing Failed",
-          message: "Previous processing attempt failed. Do you want to retry?",
+          title: t("audio:status.failedTitle"),
+          message: t("audio:status.failedMessage"),
+          confirmText: t("common:confirm"),
+          cancelText: t("common:cancel"),
         });
         break;
 
@@ -96,7 +99,7 @@ export const MeetingManagementTab = ({
           },
         },
         error: t("common:operationFailed"),
-      }
+      },
     );
   };
 
@@ -113,7 +116,7 @@ export const MeetingManagementTab = ({
           },
         },
         error: t("common:operationFailed"),
-      }
+      },
     );
   };
 
@@ -125,6 +128,14 @@ export const MeetingManagementTab = ({
             <AudioPlayer
               isPlayable={audio.status === "success"}
               title={audio.name}
+              clickToPlayLabel={t("audio:player.clickToPlay")}
+              deleteConfirmation={{
+                title: t("audio:confirm.deleteTitle"),
+                message: t("audio:confirm.deleteMessage"),
+                confirmText: t("common:delete"),
+                cancelText: t("common:cancel"),
+              }}
+              loadingMessage={t("audio:player.loadingMessage")}
               onDelete={() => handleAudioDelete(audio.id)}
               onPlay={() => getAudioBlob(audio.id)}
               onReset={
@@ -132,6 +143,12 @@ export const MeetingManagementTab = ({
                   ? () => handleAudioReset(audio.id)
                   : undefined
               }
+              resetConfirmation={{
+                title: t("audio:confirm.resetTitle"),
+                message: t("audio:confirm.resetMessage"),
+                confirmText: t("common:reset"),
+                cancelText: t("common:cancel"),
+              }}
             />
             {audio?.status !== "success" && (
               <div
@@ -150,37 +167,37 @@ export const MeetingManagementTab = ({
               >
                 {audio.status === "pending" && (
                   <>
-                    <p>This recording is waiting to be processed.</p>
+                    <p>{t("audio:status.pendingMessage")}</p>
                     <Button
                       fullWidth={false}
                       onClick={() =>
                         handleStartAudioProcessing(audio.id, audio.status)
                       }
                     >
-                      Start Processing
+                      {t("audio:status.startProcessing")}
                     </Button>
                   </>
                 )}
 
                 {audio.status === "processing" && (
                   <>
-                    <p>The recording is currently being processed...</p>
+                    <p>{t("audio:status.processingBanner")}</p>
                     <Button disabled fullWidth={false}>
-                      Processing...
+                      {t("audio:status.processingButton")}
                     </Button>
                   </>
                 )}
 
                 {audio.status === "failed" && (
                   <>
-                    <p>Processing failed. Please try again.</p>
+                    <p>{t("audio:status.failedBanner")}</p>
                     <Button
                       fullWidth={false}
                       onClick={() =>
                         handleStartAudioProcessing(audio.id, audio.status)
                       }
                     >
-                      Retry
+                      {t("common:retry")}
                     </Button>
                   </>
                 )}
@@ -203,8 +220,8 @@ export const MeetingManagementTab = ({
         ))
       ) : (
         <EmptyState
-          title="No audio available"
-          description="There are no audios recorded for this meeting yet"
+          title={t("audio:empty.title")}
+          description={t("audio:empty.description")}
         />
       )}
     </div>

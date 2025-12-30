@@ -5,6 +5,14 @@
     "position": "سمت",
     "description": "این جدول لیست سمت های ایجاد شده را نمایش میدهد",
     "deletePosition": "حذف سمت",
-    "doYouWantToDeletePosition": "آیا میخواهی این سمت را حذف بکنی؟"
+    "doYouWantToDeletePosition": "آیا میخواهی این سمت را حذف بکنی؟",
+    "form": {
+      "createTitle": "افزودن سمت جدید",
+      "editTitle": "ویرایش سمت",
+      "createDescription": "فرم زیر را برای ایجاد سمت جدید تکمیل کنید",
+      "editDescription": "فرم زیر را برای ویرایش سمت تکمیل کنید",
+      "createSubmit": "ایجاد سمت",
+      "editSubmit": "ویرایش سمت"
+    }
   }
 }

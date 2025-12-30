@@ -52,6 +52,7 @@ export const AudioNameModal = ({
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <SelectInput
           label="Meeting"
+          placeholder="Select a meeting"
           options={meetingOptions}
           {...register("meetingId")}
           error={touchedFields.meetingId ? errors.meetingId?.message : ""}

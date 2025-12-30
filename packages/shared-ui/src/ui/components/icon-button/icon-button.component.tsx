@@ -8,6 +8,7 @@ export const IconButton = ({
   size = "md",
   variant = "default",
   isLoading = false,
+  loadingLabel,
   ...props
 }: IconButtonProps) => {
   const sizeStyles = {
@@ -46,7 +47,7 @@ export const IconButton = ({
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only">{loadingLabel}</span>
     </div>
   );
 
