@@ -397,3 +397,33 @@ def delete_audio(db: Session, audio_id: int):
             status_code=500,
             detail="Failed to delete audio"
         ) from e
+
+
+def reset_audio(db: Session, audio_id: int):
+    audio = db.get(models.Audio, audio_id)
+    if not audio:
+        raise HTTPException(status_code=404, detail="Audio not found")
+
+    try:
+        db.execute(
+            delete(speaker_profile_model.SpeakerProfile)
+            .where(speaker_profile_model.SpeakerProfile.audio_id == audio_id)
+        )
+
+        chroma_collection.delete(where={"audio_id": str(audio_id)})
+
+        audio.transcript = None
+        audio.processing_duration = None
+        audio.status = models.AudioStatus.PENDING
+        audio.is_processing = False
+
+        db.commit()
+        db.refresh(audio)
+        return {"success": True}
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to reset audio"
+        ) from e

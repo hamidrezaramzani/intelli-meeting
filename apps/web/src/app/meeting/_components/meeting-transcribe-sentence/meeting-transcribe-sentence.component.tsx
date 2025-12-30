@@ -79,7 +79,7 @@ export const MeetingTranscribeSentence = ({
           },
         },
         error: "Failed to assign speakers. Please try again.",
-      }
+      },
     );
   };
 
@@ -152,7 +152,7 @@ export const MeetingTranscribeSentence = ({
     <div className="relative inline py-3">
       {openedTextPopoverId && openedTextPopoverId === Number(text.id) && (
         <motion.div
-          className="w-xl right-0 absolute bg-slate-800 py-2 rounded-md z-30 flex flex-col justify-between px-4"
+          className="w-xl left-0 right-0 absolute bg-slate-800 py-2 rounded-md z-30 flex flex-col justify-between px-4"
           style={{
             top: "-60px",
           }}

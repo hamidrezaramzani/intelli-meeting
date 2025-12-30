@@ -77,6 +77,13 @@ export const audioApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Meeting"],
     }),
+    resetAudio: builder.mutation({
+      query: ({ params }) => ({
+        url: `/audio/${params.audioId}/reset`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Meeting"],
+    }),
   }),
 });
 
@@ -91,4 +98,5 @@ export const {
   useUpdateAudioTextMutation,
   useDeleteAudioTextMutation,
   useDeleteAudioMutation,
+  useResetAudioMutation,
 } = audioApi;

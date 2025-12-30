@@ -13,6 +13,7 @@ import {
   useDeleteAudioMutation,
   usePlayAudioMutation,
   useReadManyEmployeeCandidatesQuery,
+  useResetAudioMutation,
 } from "@/services";
 
 import type { MeetingManagementTabProps } from "./meeting-management-tab.props";
@@ -27,6 +28,7 @@ export const MeetingManagementTab = ({
 
   const [playAudio] = usePlayAudioMutation();
   const [deleteAudio] = useDeleteAudioMutation();
+  const [resetAudio] = useResetAudioMutation();
   const { data: employees } = useReadManyEmployeeCandidatesQuery({});
 
   const [showTextPopover, setShowTextPopover] = useState<number | null>();
@@ -37,7 +39,7 @@ export const MeetingManagementTab = ({
         ? null
         : selectedId
           ? Number(selectedId)
-          : null,
+          : null
     );
   };
 
@@ -49,7 +51,7 @@ export const MeetingManagementTab = ({
 
   const handleStartAudioProcessing = async (
     audioId: number,
-    status: string,
+    status: string
   ) => {
     let shouldProcessAudio = false;
     switch (status) {
@@ -75,7 +77,7 @@ export const MeetingManagementTab = ({
       default:
         break;
     }
-
+    console.log(shouldProcessAudio, audioId, status);
     if (shouldProcessAudio) {
       onStartAudioProcessing(audioId);
     }
@@ -94,7 +96,24 @@ export const MeetingManagementTab = ({
           },
         },
         error: t("common:operationFailed"),
-      },
+      }
+    );
+  };
+
+  const handleAudioReset = async (audioId: number) => {
+    await toast.promise(
+      resetAudio({
+        params: { audioId },
+      }).unwrap(),
+      {
+        pending: t("common:updatingThing", { thing: t("audio:audio") }),
+        success: {
+          render: () => {
+            return t("common:thingUpdated", { thing: t("audio:audio") });
+          },
+        },
+        error: t("common:operationFailed"),
+      }
     );
   };
 
@@ -104,9 +123,15 @@ export const MeetingManagementTab = ({
         audios.map((audio) => (
           <div className="flex flex-col gap-4" key={audio.id}>
             <AudioPlayer
+              isPlayable={audio.status === "success"}
               title={audio.name}
               onDelete={() => handleAudioDelete(audio.id)}
               onPlay={() => getAudioBlob(audio.id)}
+              onReset={
+                audio.status === "success"
+                  ? () => handleAudioReset(audio.id)
+                  : undefined
+              }
             />
             {audio?.status !== "success" && (
               <div

@@ -5,6 +5,7 @@ import {
   SelectMultipleInput,
   TextInput,
 } from "@intelli-meeting/shared-ui";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +14,6 @@ import { useReadManyEmployeeCandidatesQuery } from "@/services";
 import type { MeetingFormProps, MeetingFormValues } from "./meetings-form.type";
 
 import { meetingSchema } from "./meetings-form.schema";
-import { useEffect } from "react";
 
 export const MeetingsForm = ({
   title,

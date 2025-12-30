@@ -10,7 +10,7 @@ export const useAudioProcessing = (meetingId?: string) => {
   const { connect, isConnected } = useWebSocket();
   const hasConnectedRef = useRef(false);
   const { data } = useReadOneMeetingQuery(
-    meetingId ? { meetingId } : skipToken,
+    meetingId ? { meetingId } : skipToken
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -19,8 +19,8 @@ export const useAudioProcessing = (meetingId?: string) => {
 
   const connectSocket = useCallback(
     (reconnect: boolean, audioId?: number) => {
+      console.log(hasConnectedRef.current);
       if (hasConnectedRef.current) return;
-
       const wsPath = `/audio/process-audio?meeting_id=${meetingId}&reconnect=${reconnect}${audioId ? `&audio_id=${audioId}` : "&audio_id=0"}`;
       hasConnectedRef.current = true;
 
@@ -34,7 +34,7 @@ export const useAudioProcessing = (meetingId?: string) => {
             { meetingId },
             (draft) => {
               const audio = draft.meeting.audios.find(
-                (a) => String(a.id) === payload.audioId,
+                (a) => String(a.id) === payload.audioId
               );
 
               if (!audio) return;
@@ -60,13 +60,13 @@ export const useAudioProcessing = (meetingId?: string) => {
                 default:
                   break;
               }
-            },
-          ),
+            }
+          )
         );
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [meetingId],
+    [meetingId]
   );
 
   useEffect(() => {
@@ -80,9 +80,10 @@ export const useAudioProcessing = (meetingId?: string) => {
 
   const startAudioProcessing = useCallback(
     (audioId: number) => {
+      console.log(audioId);
       connectSocket(false, audioId);
     },
-    [connectSocket],
+    [connectSocket]
   );
 
   return {

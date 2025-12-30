@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { useEffect, useRef, useState } from "react";
-import { FaPause, FaPlay, FaTrash } from "react-icons/fa";
+import { FaPause, FaPlay, FaTrash, FaUndo } from "react-icons/fa";
 import WaveSurfer from "wavesurfer.js";
 
 import type { AudioPlayerProps } from "./audio-player.type";
@@ -8,7 +8,13 @@ import type { AudioPlayerProps } from "./audio-player.type";
 import { confirmation } from "../confirmation-modal";
 import { IconButton } from "../icon-button";
 
-export const AudioPlayer = ({ onPlay, title, onDelete }: AudioPlayerProps) => {
+export const AudioPlayer = ({
+  onPlay,
+  title,
+  onDelete,
+  onReset,
+  isPlayable = true,
+}: AudioPlayerProps) => {
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
 
@@ -63,8 +69,18 @@ export const AudioPlayer = ({ onPlay, title, onDelete }: AudioPlayerProps) => {
     }
   }, [blobUrl]);
 
+  useEffect(() => {
+    if (!isPlayable) {
+      wavesurfer.current?.stop();
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setDuration(0);
+      setBlobUrl(undefined);
+    }
+  }, [isPlayable]);
+
   const togglePlay = async () => {
-    if (!wavesurfer.current) return;
+    if (!wavesurfer.current || !isPlayable || isLoading) return;
 
     if (!isPlaying && !blobUrl) {
       setLoading(true);
@@ -92,6 +108,25 @@ export const AudioPlayer = ({ onPlay, title, onDelete }: AudioPlayerProps) => {
     try {
       setLoading(true);
       await onDelete?.();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReset = async () => {
+    const confirmed = await confirmation({
+      title: "Reset audio",
+      message:
+        "Are you sure you want to reset this audio? This will remove generated data.",
+      confirmText: "Reset",
+      cancelText: "Cancel",
+    });
+
+    if (!confirmed) return;
+
+    try {
+      setLoading(true);
+      await onReset?.();
     } finally {
       setLoading(false);
     }
@@ -139,7 +174,19 @@ export const AudioPlayer = ({ onPlay, title, onDelete }: AudioPlayerProps) => {
         <span className="w-[48px]">{formatTime(currentTime)}</span>
 
         <div className="flex items-center gap-2">
+          {onReset && (
+            <IconButton
+              disabled={!isPlayable}
+              type="button"
+              variant="default"
+              isLoading={isLoading}
+              onClick={handleReset}
+            >
+              <FaUndo size={16} />
+            </IconButton>
+          )}
           <IconButton
+            disabled={!isPlayable}
             type="button"
             variant="primary"
             isLoading={isLoading}

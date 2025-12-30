@@ -35,7 +35,10 @@ const NewMeetingForm = () => {
   };
 
   return (
-    <Dashboard backUrl="/meetings" title={t("meeting:form.addMeeting")}>
+    <Dashboard
+      backUrl="/meetings"
+      title={t("common:addThing", { thing: t("meeting:meeting") })}
+    >
       <MeetingsForm
         title={t("common:addThing", { thing: t("meeting:meeting") })}
         description={t("meeting:form.addMeetingDescription")}
