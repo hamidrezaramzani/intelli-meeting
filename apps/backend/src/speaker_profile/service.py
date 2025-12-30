@@ -88,11 +88,26 @@ def assign_speakers(db: Session, speaker_profile_assignment_payload, audio_id, u
         .all()
     )
 
+    updated_profiles = []
     for sp in speakers:
         if sp.initial_speaker_label in labels_in_payload:
             sp.employee_id = labels_in_payload[sp.initial_speaker_label]
+            updated_profiles.append(sp)
 
     db.commit()
+
+    for sp in updated_profiles:
+        chroma_collection.upsert(
+            ids=[str(sp.id)],
+            documents=[sp.text or ""],
+            metadatas=[
+                {
+                    "speaker_profile_id": str(sp.id),
+                    "audio_id": str(sp.audio_id),
+                    "speaker_id": sp.employee_id,
+                }
+            ],
+        )
 
 def update_audio_text(db: Session, speaker_profile_id, payload):
     new_text = payload["newText"]
@@ -132,4 +147,3 @@ def delete_audio_text(db: Session, speaker_profile_id):
     db.commit()
     chroma_collection.delete(where={"speaker_profile_id": str(speaker_profile_id)})
     return True
-

@@ -93,6 +93,15 @@ async def get_user_prompt(db, query_text, audio_ids, ):
         if m.get("speaker_profile_id")
     }
 
+    employee_ids = {
+        int(m["employee_id"])
+        for m in metadatas
+        if m.get("employee_id")
+    }
+    employee_ids.update(
+        int(m["speaker_id"]) for m in metadatas if m.get("speaker_id")
+    )
+
     speaker_profiles = (
         db.query(SpeakerProfile)
         .filter(SpeakerProfile.id.in_(speaker_profile_ids))
@@ -104,6 +113,16 @@ async def get_user_prompt(db, query_text, audio_ids, ):
     )
 
     speaker_map = {sp.id: sp for sp in speaker_profiles}
+
+    employees = (
+        db.query(Employee)
+        .options(joinedload(Employee.position))
+        .filter(Employee.id.in_(employee_ids))
+        .all()
+        if employee_ids
+        else []
+    )
+    employee_map = {employee.id: employee for employee in employees}
 
     enriched_chunks = []
 
@@ -121,14 +140,25 @@ async def get_user_prompt(db, query_text, audio_ids, ):
                 else "Unknown Position"
             )
             prefix = f"[{employee_name} | {position}]"
+        else:
+            employee_id = meta.get("employee_id") or meta.get("speaker_id")
+            employee = (
+                employee_map.get(int(employee_id)) if employee_id else None
+            )
+            if employee:
+                position = (
+                    employee.position.title
+                    if employee.position
+                    else "Unknown Position"
+                )
+                prefix = f"[{employee.fullName} | {position}]"
 
-        elif meta.get("speaker_label"):
+        if prefix == "[Unknown Speaker]" and meta.get("speaker_label"):
             prefix = f"[{meta['speaker_label']}]"
 
         enriched_chunks.append(f"{prefix}:\n{doc}")
 
     content = "\n\n".join(enriched_chunks)
-    
     return content
 
 
