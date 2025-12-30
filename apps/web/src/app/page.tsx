@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import { getUserMenuItems } from "@/lib/constants/user-menu";
+import { LanguageToggle } from "@/ui";
 
 export default function Home() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function Home() {
     <div className="w-full flex justify-center h-screen">
       <div className="h-[calc(100vh-120px)]  w-full flex items-center flex-col mt-3">
         <MainLayout
+          headerActions={<LanguageToggle />}
           menuItems={menuItems}
           navigate={(path) => {
             router.push(path);

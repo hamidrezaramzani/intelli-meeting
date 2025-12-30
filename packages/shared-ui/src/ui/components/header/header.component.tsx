@@ -11,7 +11,7 @@ import type { HeaderProps } from "./header.type";
 
 import { Button, UserMenu } from "..";
 
-export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
+export const Header = ({ menus, navigate, menuItems, actions }: HeaderProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -51,6 +51,7 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
           </div>
 
           <div className="md:flex items-center gap-3">
+            {actions}
             {!isLoggedIn && (
               <div className="hidden md:flex gap-3">
                 <Button onClick={() => navigate("/sign-in")}>Login</Button>
@@ -79,7 +80,10 @@ export const Header = ({ menus, navigate, menuItems }: HeaderProps) => {
             </span>
           </a>
 
-          {renderUserDropdown()}
+          <div className="flex items-center gap-3">
+            {actions}
+            {renderUserDropdown()}
+          </div>
         </div>
 
         <div

@@ -7,9 +7,15 @@ export const MainLayout = ({
   children,
   navigate,
   menuItems,
+  headerActions,
 }: MainLayoutProps) => (
   <div className="w-full md:w-5/6">
-    <Header menuItems={menuItems} menus={MENU_ITEMS} navigate={navigate} />
+    <Header
+      actions={headerActions}
+      menuItems={menuItems}
+      menus={MENU_ITEMS}
+      navigate={navigate}
+    />
     <div>{children}</div>
   </div>
 );

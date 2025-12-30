@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { MdArrowBackIos, MdSettings } from "react-icons/md";
 
 import { getUserMenuItems } from "@/lib/constants/user-menu";
+import { LanguageToggle } from "@/ui";
 
 import type { DashboardHeaderProps } from "./dashboard-header.type";
 
@@ -28,6 +29,8 @@ const DashboardHeader = ({ title, backUrl }: DashboardHeaderProps) => {
 
       <div className="flex items-center gap-4">
         <DashboardNotification />
+
+        <LanguageToggle />
 
         <IconButton type="button" onClick={() => router.push("/settings")}>
           <MdSettings size={22} />

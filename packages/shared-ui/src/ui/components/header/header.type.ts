@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type { MenuItem } from "../../layouts/main-layout/main-layout.type";
 
 export interface HeaderProps {
@@ -10,4 +12,5 @@ export interface HeaderProps {
   onLogout?: () => void;
   navigate: (url: string) => void;
   menuItems?: MenuItem[];
+  actions?: ReactNode;
 }

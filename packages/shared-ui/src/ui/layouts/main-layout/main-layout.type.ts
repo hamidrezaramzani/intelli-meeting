@@ -7,4 +7,5 @@ export interface MainLayoutProps {
   children: React.ReactNode;
   navigate: (path: string) => void;
   menuItems?: MenuItem[];
+  headerActions?: React.ReactNode;
 }
