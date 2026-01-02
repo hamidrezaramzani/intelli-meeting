@@ -14,7 +14,7 @@ const SignInPage = () => {
   });
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div className="w-full min-h-screen flex justify-center items-center px-4 py-8">
       <Login
         navigate={router.push}
         copy={{

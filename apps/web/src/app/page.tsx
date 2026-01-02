@@ -31,8 +31,8 @@ export default function Home() {
   ];
 
   return (
-    <div className="w-full flex justify-center h-screen">
-      <div className="h-[calc(100vh-120px)]  w-full flex items-center flex-col mt-3">
+    <div className="w-full flex justify-center min-h-screen">
+      <div className="min-h-[calc(100vh-120px)] w-full flex items-center flex-col mt-3 px-4">
         <MainLayout
           brandHref="/"
           brandLabel={t("common:title")}
@@ -51,13 +51,13 @@ export default function Home() {
             renderGreeting: (name) => t("common:greeting", { name }),
           }}
         >
-          <div className="bg-white flex justify-center mt-3 flex-col items-center  h-[calc(100vh-120px)]  w-full">
-            <div className="w-full pt-5 text-black flex gap-8 justify-center text-4xl font-roboto  font-black items-center mt-3">
+          <div className="bg-white flex justify-center mt-3 flex-col items-center min-h-[calc(100vh-120px)] w-full py-8">
+            <div className="w-full pt-5 text-black flex gap-4 sm:gap-8 justify-center text-3xl sm:text-4xl font-roboto font-black items-center mt-3 text-center">
               {t("common:title")}
             </div>
 
-            <div className="w-full py-5 flex gap-16 justify-center text-md font-roboto  font-regular items-center">
-              <p className="font-roboto text-shadow-gray-400 md:p-0 px-3 text-center">
+            <div className="w-full py-5 flex gap-6 sm:gap-16 justify-center text-md font-roboto  font-regular items-center">
+              <p className="font-roboto text-shadow-gray-400 md:p-0 px-3 text-center max-w-2xl">
                 {t("home:description")}
               </p>
             </div>

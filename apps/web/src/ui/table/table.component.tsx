@@ -42,9 +42,9 @@ export const Table = <T,>({
   };
 
   return (
-    <div className="overflow-x-auto w-full">
-      <div className="w-full flex justify-between items-center my-5">
-        <div>
+    <div className="w-full">
+      <div className="w-full flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center my-5">
+        <div className="flex-1">
           <h2 className="text-2xl font-roboto font-bold text-slate-900">
             {title}
           </h2>
@@ -52,7 +52,7 @@ export const Table = <T,>({
             {description}
           </p>
         </div>
-        <div>
+        <div className="flex sm:justify-end">
           {formPath && (
             <Button onClick={() => router.push(formPath)}>
               {t("common:addThing", { thing })}
@@ -61,7 +61,8 @@ export const Table = <T,>({
         </div>
       </div>
 
-      <table className="min-w-full divide-y divide-gray-200">
+      <div className="overflow-x-auto">
+        <table className="min-w-[640px] w-full divide-y divide-gray-200">
         <thead>
           <tr>
             {columns.map((col) => (
@@ -194,10 +195,11 @@ export const Table = <T,>({
             </tr>
           )}
         </tbody>
-      </table>
+        </table>
+      </div>
 
       {pagination && pagination.totalPages > 1 && (
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex flex-col sm:flex-row sm:justify-end sm:items-center gap-2 mt-4">
           <Button
             className="w-24"
             disabled={pagination.currentPage === 1}

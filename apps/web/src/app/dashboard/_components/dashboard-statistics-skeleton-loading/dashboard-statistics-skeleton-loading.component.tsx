@@ -1,8 +1,8 @@
 export const DashboardStatisticsSkeletonLoading = () => (
-  <div className="flex gap-3 justify-between">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
     {Array.from({ length: 3 }).map((_, i) => (
       <div
-        className="flex items-center w-1/3 justify-center h-56 max-w-sm bg-slate-100 rounded-md animate-pulse"
+        className="flex items-center w-full justify-center h-56 max-w-sm bg-slate-100 rounded-md animate-pulse"
         role="status"
         // eslint-disable-next-line perfectionist/sort-jsx-props, @eslint-react/no-array-index-key
         key={i}

@@ -27,13 +27,13 @@ const DashboardPage = () => {
 
   return (
     <Dashboard title={t("dashboard:title")}>
-      <div className="w-full flex mt-3 gap-8">
-        <div className="w-9/12 flex flex-col">
+      <div className="w-full flex flex-col md:flex-row mt-3 gap-6 md:gap-8">
+        <div className="w-full md:w-9/12 flex flex-col">
           <DashboardStatistics />
           <DashboardDailySchedule />
           <DashboardTimelineActivity />
         </div>
-        <div className="w-3/12">
+        <div className="w-full md:w-3/12">
           <DashboardQuickActions />
           <DashboardTopEmployees />
         </div>

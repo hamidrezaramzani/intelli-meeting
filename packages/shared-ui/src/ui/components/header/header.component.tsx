@@ -106,9 +106,9 @@ export const Header = ({
         <div
           className={`${
             isMenuOpen ? "block" : "hidden"
-          } w-full md:hidden md:w-auto absolute top-0 left-0 h-screen bg-white`}
+          } w-full md:hidden md:w-auto fixed inset-0 h-screen bg-white z-40`}
         >
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4  gap-5 md:space-x-8 rtl:space-x-reverse">
+          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 gap-5 md:space-x-8 rtl:space-x-reverse overflow-y-auto">
             <li>
               <button
                 className="cursor-pointer"
@@ -122,7 +122,8 @@ export const Header = ({
               <li key={menu.id}>
                 <a
                   className="block py-2 px-3 text-black rounded"
-                  href={menu.title}
+                  href={menu.link}
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   {menu.title}
                 </a>

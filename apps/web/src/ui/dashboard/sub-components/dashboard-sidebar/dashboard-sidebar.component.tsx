@@ -6,7 +6,11 @@ import { useTranslation } from "react-i18next";
 import { HiOutlineUsers } from "react-icons/hi";
 import { MdDashboard, MdEvent, MdSettings } from "react-icons/md";
 
-export const DashboardSidebar = () => {
+export const DashboardSidebar = ({
+  onNavigate,
+}: {
+  onNavigate?: () => void;
+}) => {
   const { t } = useTranslation();
 
   const pathname = usePathname();
@@ -43,7 +47,8 @@ export const DashboardSidebar = () => {
           <Link
             href={item.link}
             key={item.name}
-            className={`flex font-roboto text-lg font-roboto  items-center gap-3 px-4 py-2.5 mb-8 rounded-xl font-medium transition-all
+            onClick={onNavigate}
+            className={`flex font-roboto text-lg  items-center gap-3 px-4 py-2.5 mb-8 rounded-xl font-medium transition-all
               ${isActive ? "bg-slate-800 text-white" : "text-slate-700 hover:bg-slate-200"}
             `}
           >

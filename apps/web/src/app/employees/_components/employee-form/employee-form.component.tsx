@@ -40,7 +40,7 @@ export const EmployeeForm = ({
 
   return (
     <div className="w-full">
-      <div className="w-3/5 p-6">
+      <div className="w-full lg:w-3/5 p-4 sm:p-6">
         <h2 className="text-2xl font-roboto font-bold text-slate-800 mb-2">
           {isEdit
             ? t("employee:form.editTitle")
@@ -68,7 +68,7 @@ export const EmployeeForm = ({
             options={positionOptions}
           />
 
-          <Button className="mt-2 w-96" disabled={isLoading} type="submit">
+          <Button className="mt-2 w-full sm:w-96" disabled={isLoading} type="submit">
             {isEdit
               ? t("employee:form.editSubmit")
               : t("employee:form.createSubmit")}

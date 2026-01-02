@@ -1,6 +1,7 @@
 import { EmptyState, IconButton } from "@intelli-meeting/shared-ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BiCheckDouble } from "react-icons/bi";
 import { MdNotificationsNone } from "react-icons/md";
 import { RiExpandDiagonalLine } from "react-icons/ri";
@@ -10,7 +11,6 @@ import {
   useMarkAllNotificationsAsReadMutation,
   useReadDashboardNotificationsQuery,
 } from "@/services";
-import { useTranslation } from "react-i18next";
 
 export const DashboardNotification = () => {
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ export const DashboardNotification = () => {
       </IconButton>
 
       {open && (
-        <div className="p-4 rounded-md absolute border border-slate-300 right-0 mt-2 w-96 bg-white text-slate-800 flex flex-col max-h-144 overflow-y-auto z-50">
+        <div className="p-4 rounded-md absolute border border-slate-300 right-0 mt-2 w-[90vw] max-w-sm sm:w-96 bg-white text-slate-800 flex flex-col max-h-144 overflow-y-auto z-50">
           <div className="w-full mb-3 flex justify-between items-center">
             <h3>{t("dashboard:notifications.title")}</h3>
             <div className="flex gap-2 items-center">

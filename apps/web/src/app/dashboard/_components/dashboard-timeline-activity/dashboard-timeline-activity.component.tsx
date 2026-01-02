@@ -14,7 +14,7 @@ export const DashboardTimelineActivity = () => {
   return (
     <div className="relative flex flex-col border border-slate-800 rounded-md w-full bg-white p-5">
       <div className="flex flex-col gap-2 mb-4">
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <h1 className="text-2xl font-roboto font-bold text-slate-800">
             {t("dashboard:timeline.title")}
           </h1>

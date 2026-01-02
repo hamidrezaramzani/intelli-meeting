@@ -5,6 +5,7 @@ import { IconButton } from "@intelli-meeting/shared-ui";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LuCalendar1, LuCalendarCheck2 } from "react-icons/lu";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { Calendar } from "react-multi-date-picker";
@@ -12,7 +13,6 @@ import { Calendar } from "react-multi-date-picker";
 import { getBounceEffect } from "@/lib/helpers";
 import { useReadDashboardMeetingsScheduleQuery } from "@/services";
 import { Table } from "@/ui";
-import { useTranslation } from "react-i18next";
 
 export const DashboardDailySchedule = () => {
   const today = new Date();
@@ -107,18 +107,46 @@ export const DashboardDailySchedule = () => {
         </p>
       </div>
       <div className="flex flex-col items-center w-full">
-        <div className="flex items-center gap-4 w-full justify-between">
-          <button
-            className="px-3 py-1 text-slate-600 text-2xl font-roboto cursor-pointer"
-            type="button"
-            onClick={() => handleScheduleDateSelect("prev")}
-          >
-            <MdChevronLeft />
-          </button>
-          <div className="flex gap-3 items-center">
-            <IconButton title="Go to today" onClick={changeDateToToday}>
-              <LuCalendar1 className="text-xl" />
-            </IconButton>
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex items-center justify-between gap-2">
+            <button
+              className="px-3 py-1 text-slate-600 text-2xl font-roboto cursor-pointer"
+              type="button"
+              onClick={() => handleScheduleDateSelect("prev")}
+            >
+              <MdChevronLeft />
+            </button>
+            <div className="flex gap-3 items-center">
+              <IconButton title="Go to today" onClick={changeDateToToday}>
+                <LuCalendar1 className="text-xl" />
+              </IconButton>
+              <div className="relative">
+                <IconButton
+                  title="Select a date from date picker"
+                  onClick={() => setShowCalendar((prevShow) => !prevShow)}
+                >
+                  <LuCalendarCheck2 className="text-xl" />
+                </IconButton>
+                {showCalendar ? (
+                  <Calendar
+                    className="top-15 right-0 absolute"
+                    value={currentDate}
+                    onChange={(date) =>
+                      handleScheduleDateSelect("select", date?.toDate())
+                    }
+                  />
+                ) : null}
+              </div>
+            </div>
+            <button
+              className="px-3 py-1 text-slate-600 text-2xl font-roboto cursor-pointer"
+              type="button"
+              onClick={() => handleScheduleDateSelect("next")}
+            >
+              <MdChevronRight />
+            </button>
+          </div>
+          <div className="flex justify-center items-center gap-3 overflow-x-auto pb-2">
             {visibleDays.map((day, idx) => (
               <div
                 key={idx}
@@ -134,36 +162,14 @@ export const DashboardDailySchedule = () => {
                       : "bg-gray-200 text-gray-700"
                   }`}
                 >
-                  <div className="text-xs font-roboto ">{DAYS[day.getDay()]}</div>
+                  <div className="text-xs font-roboto ">
+                    {DAYS[day.getDay()]}
+                  </div>
                   {formatDay(day)}
                 </div>
               </div>
             ))}
-            <div className="relative">
-              <IconButton
-                title="Select a date from date picker"
-                onClick={() => setShowCalendar((prevShow) => !prevShow)}
-              >
-                <LuCalendarCheck2 className="text-xl" />
-              </IconButton>
-              {showCalendar ? (
-                <Calendar
-                  className="top-15 right-0 absolute"
-                  value={currentDate}
-                  onChange={(date) =>
-                    handleScheduleDateSelect("select", date?.toDate())
-                  }
-                />
-              ) : null}
-            </div>
           </div>
-          <button
-            className="px-3 py-1 text-slate-600 text-2xl font-roboto cursor-pointer"
-            type="button"
-            onClick={() => handleScheduleDateSelect("next")}
-          >
-            <MdChevronRight />
-          </button>
         </div>
       </div>
       <div className="w-full mt-8">

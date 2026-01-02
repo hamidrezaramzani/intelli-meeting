@@ -10,7 +10,8 @@ export const SelectInput = ({
   options,
   ...props
 }: SelectInputProps) => {
-  const widthClass = !width ? "w-full" : width === "full" ? "w-full" : "w-1/2";
+  const widthClass =
+    !width || width === "full" ? "w-full" : "w-full sm:w-1/2";
 
   return (
     <div className="rounded-md">

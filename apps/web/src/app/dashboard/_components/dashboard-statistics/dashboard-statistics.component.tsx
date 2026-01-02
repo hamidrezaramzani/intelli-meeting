@@ -19,10 +19,10 @@ export const DashboardStatistics = () => {
   if (isLoading) return <DashboardStatisticsSkeletonLoading />;
 
   return (
-    <div className="w-full flex gap-4">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {items.map((item, index) => (
         <motion.div
-          className="flex items-center bg-slate-800 border group w-2/6 p-5 py-6 gap-6 rounded-md"
+          className="flex items-center bg-slate-800 border group w-full p-5 py-6 gap-6 rounded-md"
           key={item.title}
           {...getBounceEffect(index)}
         >

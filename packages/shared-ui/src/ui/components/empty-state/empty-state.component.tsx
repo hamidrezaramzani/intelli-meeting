@@ -12,11 +12,13 @@ export const EmptyState = ({
 }: EmptyStateProps) => {
   return (
     <div
-      className={`w-full h-96 flex flex-col justify-center items-center rounded-md ${className}`}
+      className={`w-full h-40 flex flex-col justify-center items-center rounded-md ${className}`}
     >
       <div className="flex flex-col items-center gap-1 mb-3">
         <h1 className="text-lg font-roboto  text-slate-700">{title}</h1>
-        <p className="text-sm font-roboto  text-slate-500">{description}</p>
+        <p className="text-sm font-roboto text-center text-slate-500">
+          {description}
+        </p>
       </div>
       {actionLabel && onAction && (
         <Button fullWidth={false} isLoading={isLoading} onClick={onAction}>

@@ -40,7 +40,7 @@ export const PositionForm = ({
 
   return (
     <div className="w-full">
-      <div className="w-3/5 bg-slate-50 p-6">
+      <div className="w-full lg:w-3/5 bg-slate-50 p-4 sm:p-6">
         <h2 className="text-2xl font-roboto font-bold text-slate-800 mb-2">
           {title}
         </h2>
@@ -57,7 +57,7 @@ export const PositionForm = ({
           />
 
           <Button
-            className="mt-2 w-96"
+            className="mt-2 w-full sm:w-96"
             disabled={isLoading}
             fullWidth={false}
             type="submit"

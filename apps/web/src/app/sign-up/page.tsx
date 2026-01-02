@@ -51,8 +51,8 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <div className="w-96">
+    <div className="w-full min-h-screen flex justify-center items-center px-4 py-8">
+      <div className="w-full max-w-md">
         <div className="flex justify-center items-center flex-col mt-6">
           <Link href="/">
             <img alt={t("common:logoAlt")} className="w-32" src="/logo.png" />

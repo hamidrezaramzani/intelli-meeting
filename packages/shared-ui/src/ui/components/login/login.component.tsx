@@ -52,7 +52,7 @@ export const Login = ({
   };
 
   return (
-    <div className="w-96 bg-white">
+    <div className="w-full max-w-md bg-white">
       <ToastContainer position="bottom-right" />
       <div className="w-full">
         <div className="flex justify-center items-center flex-col mt-6">

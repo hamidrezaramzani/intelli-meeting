@@ -52,7 +52,7 @@ export const MeetingsForm = ({
 
   return (
     <div className="w-full">
-      <div className="w-3/5 p-6">
+      <div className="w-full lg:w-3/5 p-4 sm:p-6">
         <h2 className="text-2xl font-roboto font-bold text-slate-800 mb-2">
           {title}
         </h2>
@@ -85,8 +85,8 @@ export const MeetingsForm = ({
             error={touchedFields.date ? errors.date?.message : ""}
           />
 
-          <div className="flex gap-3 w-1/2 ">
-            <div className="w-1/2">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2">
               <TextInput
                 label={t("common:form.startTime")}
                 type="time"
@@ -96,7 +96,7 @@ export const MeetingsForm = ({
               />
             </div>
 
-            <div className="w-1/2">
+            <div className="w-full sm:w-1/2">
               <TextInput
                 label={t("common:form.endTime")}
                 type="time"
@@ -132,7 +132,7 @@ export const MeetingsForm = ({
             )}
           />
 
-          <Button className="mt-2 w-96" disabled={isLoading} type="submit">
+          <Button className="mt-2 w-full sm:w-96" disabled={isLoading} type="submit">
             {isEdit
               ? t("common:editThing", { thing: t("meeting:meeting") })
               : t("common:addThing", { thing: t("meeting:meeting") })}

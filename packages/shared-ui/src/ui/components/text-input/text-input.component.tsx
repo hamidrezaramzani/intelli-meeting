@@ -6,7 +6,8 @@ export const TextInput = ({
   width,
   ...props
 }: TextInputProps) => {
-  const widthClass = !width ? "w-full" : width === "full" ? "w-full" : "w-1/2";
+  const widthClass =
+    !width || width === "full" ? "w-full" : "w-full sm:w-1/2";
   return (
     <div className="mb-5 rounded-md">
       <label className="block mb-2 text-sm font-roboto  font-medium text-gray-500 font-regular">

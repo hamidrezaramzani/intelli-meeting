@@ -15,7 +15,8 @@ export const SelectMultipleInput = ({
   onChange,
   onBlur,
 }: SelectMultipleInputProps) => {
-  const widthClass = !width ? "w-full" : width === "full" ? "w-full" : "w-1/2";
+  const widthClass =
+    !width || width === "full" ? "w-full" : "w-full sm:w-1/2";
   const [open, setOpen] = useState(false);
 
   const toggleValue = (v: string) => {

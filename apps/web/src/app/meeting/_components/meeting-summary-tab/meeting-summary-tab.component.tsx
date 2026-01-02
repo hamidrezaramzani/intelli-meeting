@@ -49,7 +49,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
       ) : (
         <>
           <section className="bg-white p-4 rounded-lg">
-            <div className="w-full flex mb-5 items-center justify-between">
+            <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
               <h3 className="text-lg font-roboto  font-bold mb-2 text-slate-800">
                 {t("meeting:summary.title")}
               </h3>
@@ -86,7 +86,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
             <ul className="text-sm font-roboto  flex flex-col">
               {decisions?.map((decision) => (
                 <li
-                  className="px-3 py-2 rounded-md flex justify-between items-center"
+                  className="px-3 py-2 rounded-md flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2"
                   key={decision.description}
                 >
                   <span className="text-slate-600">{decision.description}</span>
@@ -113,7 +113,7 @@ export const MeetingSummaryTab = ({ meetingId }: MeetingSummaryTabProps) => {
                   key={i}
                 >
                   <span>{action.description}</span>
-                  <div className="text-xs font-roboto  text-slate-400 flex justify-between">
+                  <div className="text-xs font-roboto  text-slate-400 flex flex-col sm:flex-row sm:justify-between gap-2">
                     <span>
                       {t("meeting:summary.owner", {
                         owner: action.owner || t("common:unknown"),
