@@ -12,7 +12,7 @@ export default function HomePage() {
 
   const { t } = useTranslation<"">();
 
-  const menuItems = getUserMenuItems(router);
+  const menuItems = getUserMenuItems(router, t);
   const menus = [
     {
       id: 1,

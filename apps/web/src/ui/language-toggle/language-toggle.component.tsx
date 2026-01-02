@@ -29,7 +29,7 @@ export const LanguageToggle = () => {
   };
 
   return (
-    <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-1">
+    <div className="flex items-center gap-1 rounded-md p-1">
       {languages.map((language) => {
         const isActive = activeLanguage === language.code;
         return (
@@ -39,8 +39,8 @@ export const LanguageToggle = () => {
             key={language.code}
             type="button"
             onClick={() => handleChangeLanguage(language.code)}
-            className={`px-2 py-1 text-xs font-roboto  rounded-md border transition-colors ${
-              isActive
+            className={`px-2 py-1 text-xs font-roboto  rounded-md border transition-colors cursor-pointer ${
+              !isActive
                 ? "bg-slate-900 text-white border-slate-900"
                 : "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
             }`}

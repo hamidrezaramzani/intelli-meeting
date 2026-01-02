@@ -20,7 +20,7 @@ const DashboardHeader = ({
 }: DashboardHeaderProps) => {
   const router = useRouter();
   const { t } = useTranslation();
-  const menuItems = getUserMenuItems(router);
+  const menuItems = getUserMenuItems(router, t);
   return (
     <header className="px-3 w-full bg-slate-800 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 py-3 mb-4 rounded-2xl">
       <h2 className="text-lg sm:text-xl flex pl-3 items-center gap-3 font-semibold text-white">

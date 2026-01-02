@@ -3,12 +3,14 @@
 import { Button, MainLayout } from "@intelli-meeting/shared-ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { getUserMenuItems } from "@/lib/constants/user-menu";
 
 export default function NotFound() {
   const router = useRouter();
-  const menuItems = getUserMenuItems(router);
+  const { t } = useTranslation();
+  const menuItems = getUserMenuItems(router, t);
 
   const menus = [
     { id: 1, title: "Home", link: "/" },
