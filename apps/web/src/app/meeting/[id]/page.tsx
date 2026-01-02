@@ -1,99 +1,13 @@
-"use client";
-import { Chip, Tabs } from "@intelli-meeting/shared-ui";
-import { useAuthRedirect } from "@intelli-meeting/store";
-import { skipToken } from "@reduxjs/toolkit/query";
-import { motion } from "motion/react";
-import { useParams, useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
-import { TiPinOutline } from "react-icons/ti";
+import type { Metadata } from "next";
 
-import { getBounceEffect } from "@/lib/helpers";
-import { useReadOneMeetingQuery } from "@/services";
-import { Dashboard } from "@/ui";
+import { createPageTitle } from "@/lib/metadata";
 
-import { MeetingManagementTab, MeetingSummaryTab } from "../_components";
-import { useAudioProcessing } from "../_hooks";
+import Meeting from "./page.client";
 
-const Meeting = () => {
-  const router = useRouter();
-  const { t } = useTranslation();
-
-  const { id } = useParams();
-
-  const { data: meetingData } = useReadOneMeetingQuery(
-    id ? { meetingId: id as string } : skipToken,
-  );
-
-  const { startAudioProcessing } = useAudioProcessing(id as string);
-
-  const meeting = meetingData?.meeting;
-  useAuthRedirect({
-    type: "unlogged",
-    onRedirect: () => router.push("/sign-in"),
-  });
-
-  return (
-    <Dashboard backUrl="/meetings" title={t("meeting:meeting")}>
-      {meeting ? (
-        <>
-          <motion.div
-            className="px-3 flex flex-col gap-6 sm:gap-12 mt-6 sm:mt-8"
-            {...getBounceEffect(1)}
-          >
-            <div className="flex flex-col gap-3 justify-center">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div>
-                  <h1 className="text-slate-800 text-2xl sm:text-4xl font-roboto  font-bold flex items-center gap-3 flex-wrap">
-                    {meeting.title}
-                    <a
-                      className="text-md font-roboto "
-                      href={meeting.meeting_link}
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <TiPinOutline className="text-md font-roboto " />
-                    </a>
-                  </h1>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-md font-roboto  text-slate-500">
-                  {meeting.date} - {meeting.start_time} - {meeting.end_time}
-                </h4>
-              </div>
-              <p className="text-slate-600 font-body">{meeting.description}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-2 sm:gap-4 my-2">
-              {meeting?.employees?.map((employee: any) => (
-                <Chip key={employee.id}>{employee.fullName}</Chip>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div {...getBounceEffect(2)} className="mt-5">
-            <Tabs
-              tabs={[
-                {
-                  label: t("meeting:tabs.management"),
-                  content: (
-                    <MeetingManagementTab
-                      audios={meeting?.audios}
-                      onStartAudioProcessing={startAudioProcessing}
-                    />
-                  ),
-                },
-                {
-                  label: t("meeting:tabs.summary"),
-                  content: <MeetingSummaryTab meetingId={id as string} />,
-                },
-              ]}
-            />
-          </motion.div>
-        </>
-      ) : null}
-    </Dashboard>
-  );
+export const metadata: Metadata = {
+  title: createPageTitle("Meeting Details"),
 };
 
-export default Meeting;
+export default function MeetingDetailsPage() {
+  return <Meeting />;
+}

@@ -1,33 +1,13 @@
-"use client";
+import type { Metadata } from "next";
 
-import type { Tab } from "@intelli-meeting/shared-ui";
+import { createPageTitle } from "@/lib/metadata";
 
-import { Tabs } from "@intelli-meeting/shared-ui";
-import { useAuthRedirect } from "@intelli-meeting/store";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
+import SettingsPage from "./page.client";
 
-import { Dashboard } from "@/ui";
-
-import { PositionsList } from "./_components";
-
-const SettingsPage = () => {
-  const { t } = useTranslation();
-  const router = useRouter();
-  useAuthRedirect({
-    onRedirect: () => router.push("/sign-in"),
-    type: "unlogged",
-  });
-
-  const tabs: Tab[] = [
-    { label: t("setting:positions.title"), content: <PositionsList /> },
-  ];
-
-  return (
-    <Dashboard title={t("setting:title")}>
-      <Tabs defaultIndex={0} tabs={tabs} />
-    </Dashboard>
-  );
+export const metadata: Metadata = {
+  title: createPageTitle("Settings"),
 };
 
-export default SettingsPage;
+export default function SettingsRoute() {
+  return <SettingsPage />;
+}

@@ -1,45 +1,13 @@
-"use client";
-import "../globals.css";
-import { useAuthRedirect } from "@intelli-meeting/store";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
+import type { Metadata } from "next";
 
-import {
-  Dashboard,
-  DashboardDailySchedule,
-  DashboardStatistics,
-  DashboardTimelineActivity,
-} from "@/ui";
-import {
-  DashboardQuickActions,
-  DashboardTopEmployees,
-} from "@/ui/dashboard/sub-components";
+import { createPageTitle } from "@/lib/metadata";
 
-const DashboardPage = () => {
-  const router = useRouter();
+import DashboardPage from "./page.client";
 
-  const { t } = useTranslation();
-
-  useAuthRedirect({
-    onRedirect: () => router.push("/sign-in"),
-    type: "unlogged",
-  });
-
-  return (
-    <Dashboard title={t("dashboard:title")}>
-      <div className="w-full flex flex-col md:flex-row mt-3 gap-6 md:gap-8">
-        <div className="w-full md:w-9/12 flex flex-col">
-          <DashboardStatistics />
-          <DashboardDailySchedule />
-          <DashboardTimelineActivity />
-        </div>
-        <div className="w-full md:w-3/12">
-          <DashboardQuickActions />
-          <DashboardTopEmployees />
-        </div>
-      </div>
-    </Dashboard>
-  );
+export const metadata: Metadata = {
+  title: createPageTitle("Dashboard"),
 };
 
-export default DashboardPage;
+export default function DashboardRoute() {
+  return <DashboardPage />;
+}
