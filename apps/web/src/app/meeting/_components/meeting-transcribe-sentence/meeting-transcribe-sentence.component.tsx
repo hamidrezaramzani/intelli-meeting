@@ -81,7 +81,7 @@ export const MeetingTranscribeSentence = ({
           },
         },
         error: t("meeting:transcribe.assignFailed"),
-      },
+      }
     );
   };
 
@@ -103,7 +103,7 @@ export const MeetingTranscribeSentence = ({
           },
         },
         error: t("meeting:transcribe.updateFailed"),
-      },
+      }
     );
   };
 
@@ -149,9 +149,13 @@ export const MeetingTranscribeSentence = ({
   };
 
   const isLoading = isUpdatingAudioText || isDeletingAudioText;
+  const avatarLabel =
+    text.employee?.fullName?.slice(0, 2).toUpperCase() ||
+    text.initial_speaker_label?.slice(0, 2).toUpperCase() ||
+    "SP";
 
   return (
-    <div className="relative inline py-3">
+    <div className="relative py-3 w-full">
       {openedTextPopoverId && openedTextPopoverId === Number(text.id) && (
         <motion.div
           className="w-xl left-0 right-0 absolute bg-slate-800 py-2 rounded-md z-30 flex flex-col justify-between px-4"
@@ -210,7 +214,7 @@ export const MeetingTranscribeSentence = ({
           )}
 
           {isAssignableToEmployee && !isEditable ? (
-              <div className="flex flex-col gap-4 py-4">
+            <div className="flex flex-col gap-4 py-4">
               <div className="flex flex-col">
                 <h3 className="text-white text-md font-roboto ">
                   {t("meeting:transcribe.selectEmployeeTitle")}
@@ -249,12 +253,21 @@ export const MeetingTranscribeSentence = ({
           ) : null}
         </motion.div>
       )}
-      <p
-        className={`inline whitespace-normal p-2 hover:bg-slate-300 caret-red-600 outline-none focus:outline-none ${isLoading ? "bg-loading" : ""}`}
+      <div
+        className="flex items-start gap-3 w-full"
         onClick={() => onTranscribeSelect(text.id)}
       >
-        {text.text}
-      </p>
+        <div className="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs uppercase">
+          {avatarLabel}
+        </div>
+        <div
+          className={`flex-1 whitespace-pre-wrap rounded-xl px-4 py-3 text-sm font-roboto  ${
+            isLoading ? "bg-slate-200" : "bg-slate-100"
+          } hover:bg-slate-200 transition-colors`}
+        >
+          {text.text}
+        </div>
+      </div>
     </div>
   );
 };

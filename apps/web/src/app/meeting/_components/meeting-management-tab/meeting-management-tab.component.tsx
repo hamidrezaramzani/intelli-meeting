@@ -204,7 +204,16 @@ export const MeetingManagementTab = ({
               </div>
             )}
             {audio.status === "success" && (
-              <div className="mb-4">
+              <div
+                className={`mb-4 max-h-[60vh] pr-2 ${
+                  showTextPopover &&
+                  audio.speaker_profiles.some(
+                    (sp) => sp.id === Number(showTextPopover)
+                  )
+                    ? "overflow-visible"
+                    : "overflow-y-auto"
+                }`}
+              >
                 {audio.speaker_profiles.map((text) => (
                   <MeetingTranscribeSentence
                     key={text.id}
