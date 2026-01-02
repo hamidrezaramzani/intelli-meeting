@@ -17,15 +17,15 @@ export const MainLayout = ({
 }: MainLayoutProps) => (
   <div className="w-full md:w-5/6">
     <Header
-      actions={headerActions}
       brandHref={brandHref}
       brandLabel={brandLabel}
-      loginLabel={loginLabel}
       menuItems={menuItems}
       menus={menus}
       navigate={navigate}
-      openMenuLabel={openMenuLabel}
       registerLabel={registerLabel}
+      actions={headerActions}
+      loginLabel={loginLabel}
+      openMenuLabel={openMenuLabel}
       userMenuProps={userMenuProps}
     />
     <div>{children}</div>

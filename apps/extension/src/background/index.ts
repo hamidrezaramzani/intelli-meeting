@@ -11,8 +11,9 @@ async function createOffscreen() {
 }
 
 chrome.runtime.onMessage.addListener(async (message) => {
-  await createOffscreen();
   if (message.type === "start-recording") {
+    await createOffscreen();
+
     const [tab] = await chrome.tabs.query({
       active: true,
       currentWindow: true,
@@ -20,11 +21,18 @@ chrome.runtime.onMessage.addListener(async (message) => {
     const streamId = await chrome.tabCapture.getMediaStreamId({
       targetTabId: tab.id,
     });
+    const monitorTabAudio =
+      typeof message.monitorTabAudio === "boolean"
+        ? message.monitorTabAudio
+        : true;
 
     chrome.runtime.sendMessage({
       target: "offscreen",
       type: "start-recording",
-      data: streamId,
+      data: {
+        streamId,
+        monitorTabAudio,
+      },
     });
   }
 });

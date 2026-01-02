@@ -89,6 +89,10 @@ export const RecordPage = () => {
           setSeconds(msg.time);
         }
       }
+
+      if (msg.type === "recording-warning" && msg.warning) {
+        toast.warn(msg.warning, { autoClose: 3500 });
+      }
     });
   }, []);
 
@@ -111,7 +115,9 @@ export const RecordPage = () => {
   }, [recordedUrl]);
 
   const handleStart = () => {
-    chrome.runtime.sendMessage({ type: "start-recording" });
+    chrome.runtime.sendMessage({
+      type: "start-recording",
+    });
     setIsRecording(true);
     setIsPaused(false);
     setIsStopped(false);
@@ -228,11 +234,14 @@ export const RecordPage = () => {
   };
 
   const renderRecordingActions = () => {
+    const baseButtonClasses =
+      "px-6 py-2 rounded-full text-white font-semibold shadow transition-colors duration-200";
+
     if (!isRecording && !isStopped) {
       return (
         <div className="flex justify-center items-center gap-4 mt-3">
           <button
-            className="px-6 py-2 rounded-full text-white font-semibold shadow bg-brand-400"
+            className={`${baseButtonClasses} bg-indigo-600 hover:bg-indigo-700`}
             type="button"
             onClick={handleStart}
           >
@@ -248,15 +257,17 @@ export const RecordPage = () => {
           <button
             type="button"
             onClick={handlePauseResume}
-            className={`px-6 py-2 rounded-full text-white font-semibold shadow ${
-              isPaused ? "bg-yellow-500" : "bg-red-600"
+            className={`${baseButtonClasses} ${
+              isPaused
+                ? "bg-amber-500 hover:bg-amber-600"
+                : "bg-red-600 hover:bg-red-700"
             }`}
           >
             {isPaused ? "Resume" : "Pause"}
           </button>
 
           <button
-            className="px-6 py-2 rounded-full text-white font-semibold shadow bg-gray-600"
+            className={`${baseButtonClasses} bg-slate-700 hover:bg-slate-800`}
             type="button"
             onClick={handleStop}
           >
@@ -270,7 +281,7 @@ export const RecordPage = () => {
       return (
         <div className="flex justify-center items-center gap-4 mt-3">
           <button
-            className="px-6 py-2 rounded-full bg-brand-500 text-white font-semibold shadow"
+            className={`${baseButtonClasses} bg-indigo-600 hover:bg-indigo-700`}
             type="button"
             onClick={handlePlayPause}
           >
@@ -278,7 +289,7 @@ export const RecordPage = () => {
           </button>
 
           <button
-            className="px-6 py-2 rounded-full bg-green-600 text-white font-semibold shadow"
+            className={`${baseButtonClasses} bg-green-600 hover:bg-green-700`}
             type="button"
             onClick={handleSaveClick}
           >
@@ -286,7 +297,7 @@ export const RecordPage = () => {
           </button>
 
           <button
-            className="px-6 py-2 rounded-full bg-red-500 text-white font-semibold shadow"
+            className={`${baseButtonClasses} bg-red-500 hover:bg-red-600`}
             type="button"
             onClick={handleCancel}
           >
@@ -307,30 +318,36 @@ export const RecordPage = () => {
       <MainLayout
         brandHref="http://localhost:3000"
         brandLabel="Intelli Meetings"
-        loginLabel="Login"
         menuItems={menuItems}
-        menus={[
-          { id: 1, title: "Home", link: "http://localhost:3000" },
-          { id: 2, title: "About me", link: "https://thehamidreza.ir" },
-          { id: 3, title: "Contribute", link: "https://github.com/hamidrezaramzani" },
-        ]}
         navigate={navigate}
-        openMenuLabel="Open main menu"
         registerLabel="Register"
+        loginLabel="Login"
+        openMenuLabel="Open main menu"
         userMenuProps={{
           avatarAlt: "User avatar",
           guestLabel: "Guest",
           renderGreeting: (name) => `Hello, ${name}!`,
         }}
+        menus={[
+          { id: 1, title: "Home", link: "http://localhost:3000" },
+          { id: 2, title: "About me", link: "https://thehamidreza.ir" },
+          {
+            id: 3,
+            title: "Contribute",
+            link: "https://github.com/hamidrezaramzani",
+          },
+        ]}
       >
         <div className="w-full flex flex-col justify-center items-center">
           <div
-            className={`w-48 h-48 rounded-full cursor-pointer flex justify-center items-center transition-all duration-300 ${
-              isRecording ? "bg-red-500" : "bg-brand-600"
+            className={`w-48 h-48 rounded-full cursor-pointer flex justify-center items-center transition-all duration-300 shadow-lg ${
+              isRecording
+                ? "bg-red-600 hover:bg-red-700"
+                : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
             <button
-              className="flex items-center justify-center"
+              className="flex items-center justify-center text-white"
               type="button"
               onClick={isRecording ? handleStop : handleStart}
             >
@@ -341,7 +358,9 @@ export const RecordPage = () => {
           <div className="w-full mt-6" ref={containerRef} />
 
           <div className="w-full flex flex-col justify-center items-center mt-3">
-            <h3 className="text-4xl font-roboto  text-brand-400 font-black">{time}</h3>
+            <h3 className="text-4xl font-roboto  text-brand-400 font-black">
+              {time}
+            </h3>
             {isPaused && (
               <p className="text-yellow-500 font-semibold mt-1">Paused</p>
             )}

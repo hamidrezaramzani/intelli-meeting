@@ -37,19 +37,19 @@ export default function HomePage() {
         <MainLayout
           brandHref="/"
           brandLabel={t("common:title")}
-          headerActions={<LanguageToggle />}
-          loginLabel={t("common:auth.signIn")}
           menuItems={menuItems}
           menus={menus}
-          navigate={(path) => {
-            router.push(path);
-          }}
-          openMenuLabel={t("common:openMainMenu")}
           registerLabel={t("common:auth.signUp")}
+          headerActions={<LanguageToggle />}
+          loginLabel={t("common:auth.signIn")}
+          openMenuLabel={t("common:openMainMenu")}
           userMenuProps={{
             avatarAlt: t("common:avatarAlt"),
             guestLabel: t("common:guest"),
             renderGreeting: (name) => t("common:greeting", { name }),
+          }}
+          navigate={(path) => {
+            router.push(path);
           }}
         >
           <div className="bg-white flex justify-center mt-3 flex-col items-center min-h-[calc(100vh-120px)] w-full py-8">

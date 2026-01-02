@@ -6,6 +6,7 @@ let isPaused = false;
 let isStopped = false;
 let time = 0;
 let interval: ReturnType<typeof setInterval> | null = null;
+let monitorAudioElement: HTMLAudioElement | null = null;
 
 const getRecordingUrl = () => {
   const blob = new Blob(data, { type: "audio/webm" });
@@ -50,8 +51,25 @@ chrome.runtime.onMessage.addListener(async (message) => {
   }
 });
 
-async function startRecording(streamId: string) {
+type StartRecordingPayload =
+  | string
+  | {
+      streamId: string;
+      monitorTabAudio?: boolean;
+    };
+
+async function startRecording(payload: StartRecordingPayload) {
   stopAllStreams();
+
+  if (!payload) {
+    console.warn("Missing payload for startRecording");
+    return;
+  }
+
+  const { streamId, monitorTabAudio = true } =
+    typeof payload === "string"
+      ? { streamId: payload, monitorTabAudio: true }
+      : payload;
 
   try {
     const tabStream = await navigator.mediaDevices.getUserMedia({
@@ -65,6 +83,8 @@ async function startRecording(streamId: string) {
     });
 
     activeStreams.push(tabStream);
+
+    setupAudioMonitoring(tabStream, monitorTabAudio);
 
     const audioContext = new AudioContext();
     const tabSource = audioContext.createMediaStreamSource(tabStream);
@@ -141,6 +161,7 @@ function stopRecording() {
 }
 
 function stopAllStreams() {
+  stopMonitoringPlayback();
   activeStreams.forEach((s) => s.getTracks().forEach((t) => t.stop()));
   activeStreams = [];
 }
@@ -152,4 +173,35 @@ function resetRecording() {
   isPaused = false;
   isStopped = false;
   time = 0;
+}
+
+function setupAudioMonitoring(
+  tabStream: MediaStream,
+  monitorTabAudio: boolean,
+) {
+  stopMonitoringPlayback();
+  if (!monitorTabAudio) return;
+
+  const monitorStream = new MediaStream(tabStream.getAudioTracks());
+  monitorAudioElement = new Audio();
+  monitorAudioElement.autoplay = true;
+  monitorAudioElement.muted = false;
+  monitorAudioElement.srcObject = monitorStream;
+
+  monitorAudioElement.play().catch((error) => {
+    console.warn("Unable to start tab audio monitoring", error);
+    chrome.runtime.sendMessage({
+      type: "recording-warning",
+      warning:
+        "Could not play captured tab audio locally. Recording continues.",
+    });
+  });
+}
+
+function stopMonitoringPlayback() {
+  if (monitorAudioElement) {
+    monitorAudioElement.pause();
+    monitorAudioElement.srcObject = null;
+    monitorAudioElement = null;
+  }
 }
