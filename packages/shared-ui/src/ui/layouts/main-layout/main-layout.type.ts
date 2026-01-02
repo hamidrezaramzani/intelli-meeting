@@ -18,9 +18,11 @@ export interface MainLayoutProps {
   loginLabel: string;
   registerLabel: string;
   openMenuLabel: string;
+  headerVariant?: "default" | "landing";
   userMenuProps?: {
     guestLabel?: string;
     avatarAlt?: string;
     renderGreeting?: (name: string) => string;
+    variant?: "default" | "landing";
   };
 }

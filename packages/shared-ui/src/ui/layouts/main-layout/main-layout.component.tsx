@@ -13,6 +13,7 @@ export const MainLayout = ({
   loginLabel,
   registerLabel,
   openMenuLabel,
+  headerVariant = "default",
   userMenuProps,
 }: MainLayoutProps) => (
   <div className="w-full md:w-5/6">
@@ -26,6 +27,7 @@ export const MainLayout = ({
       actions={headerActions}
       loginLabel={loginLabel}
       openMenuLabel={openMenuLabel}
+      variant={headerVariant}
       userMenuProps={userMenuProps}
     />
     <div>{children}</div>

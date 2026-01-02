@@ -118,6 +118,13 @@
     "faShort": "FA",
     "enShort": "EN"
   },
+  "userMenu": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "meetings": "Meetings",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
 
   "thingNotFound": "{{thing}} not found",
   "thingAlreadyExists": "{{thing}} already exists",

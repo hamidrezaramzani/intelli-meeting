@@ -1,9 +1,74 @@
 {
-    "description": "Intelli-Meeting – AI-powered online meeting assistant that records, analyzes, and summarizes meetings, identifying who said what.",
-    "gettingStarted": "Getting Started",
-    "navigation": {
-        "home": "Home",
-        "about": "About me",
-        "contribute": "Contribute"
+  "description": "Intelli-Meeting – AI-powered online meeting assistant that records, analyzes, and summarizes meetings, identifying who said what.",
+  "gettingStarted": "Getting Started",
+  "navigation": {
+    "home": "Home",
+    "about": "About me",
+    "contribute": "Contribute"
+  },
+  "hero": {
+    "badge": "Realtime insight stream",
+    "eyebrow": "AI-first meeting workspace",
+    "headline": "Meetings that write themselves.",
+    "subheadline": "Capture every voice, diarize speakers, and deliver instant action items across languages—while you stay focused on the conversation.",
+    "primaryCta": "Start for free",
+    "secondaryCta": "Watch a 90s tour",
+    "pill": "Live transcription • Speaker-aware • Multilingual"
+  },
+  "metrics": {
+    "hoursSaved": "Hours saved per team each week",
+    "languages": "Languages auto-detected",
+    "accuracy": "Speaker ID precision"
+  },
+  "features": {
+    "diarization": {
+      "badge": "Speaker intelligence",
+      "title": "Hear who said what in real time",
+      "description": "Accurate diarization tags each voice and preserves context so action items stay tied to the right owner."
+    },
+    "summary": {
+      "badge": "Structured outputs",
+      "title": "Get summaries that feel hand-written",
+      "description": "Concise highlights, decisions, and follow-ups drop into your workflow the moment the call ends."
+    },
+    "security": {
+      "badge": "Enterprise ready",
+      "title": "Built for trust and privacy",
+      "description": "On-device pipelines, regional processing options, and granular access controls keep every meeting protected."
     }
+  },
+  "workflow": {
+    "eyebrow": "Flow",
+    "title": "From live call to ready-to-share notes",
+    "subtitle": "An opinionated pipeline that keeps accuracy high without slowing the team down.",
+    "capture": {
+      "title": "Capture",
+      "description": "High-fidelity audio ingestion with noise-aware smoothing and multilingual detection."
+    },
+    "identify": {
+      "title": "Identify",
+      "description": "Speaker diarization clusters voices and keeps them consistent as the conversation evolves."
+    },
+    "summarize": {
+      "title": "Summarize",
+      "description": "Actionable notes, decisions, and timelines, ready to ship to your CRM or task manager."
+    }
+  },
+  "preview": {
+    "title": "Live feed",
+    "subtitle": "Speaker-aware transcript",
+    "label": "Preview",
+    "messages": [
+      "SPEAKER_1: Let's lock the launch date for next Tuesday and keep scope frozen.",
+      "SPEAKER_2: I’ll own the release notes and align with marketing on the messaging.",
+      "SPEAKER_3: QA finishes regression by Friday; blockers will be flagged daily."
+    ]
+  },
+  "cta": {
+    "eyebrow": "Get started",
+    "title": "Ready for meetings that remember everything?",
+    "subtitle": "Spin up a workspace in minutes. Bring your stack, keep your language, and let Intelli Meeting capture the rest.",
+    "primaryCta": "Start free today",
+    "secondaryCta": "Book a live demo"
+  }
 }

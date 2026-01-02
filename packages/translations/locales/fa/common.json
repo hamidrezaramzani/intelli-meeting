@@ -112,6 +112,13 @@
     "faShort": "فا",
     "enShort": "EN"
   },
+  "userMenu": {
+    "dashboard": "داشبورد",
+    "profile": "پروفایل",
+    "meetings": "جلسات",
+    "settings": "تنظیمات",
+    "logout": "خروج"
+  },
   "thingNotFound": "{{thing}} یافت نشد",
   "thingAlreadyExists": "{{thing}} از قبل وجود دارد",
   "invalidThing": "{{thing}} نامعتبر است",

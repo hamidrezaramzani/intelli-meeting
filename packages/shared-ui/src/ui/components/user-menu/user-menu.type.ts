@@ -5,4 +5,5 @@ export interface UserMenuProps {
   guestLabel?: string;
   avatarAlt?: string;
   renderGreeting?: (name: string) => string;
+  variant?: "default" | "landing";
 }

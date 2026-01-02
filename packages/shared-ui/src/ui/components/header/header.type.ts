@@ -14,6 +14,7 @@ export interface HeaderProps {
   loginLabel: string;
   registerLabel: string;
   openMenuLabel: string;
+  variant?: "default" | "landing";
   isLoggedIn?: boolean;
   onLogout?: () => void;
   navigate: (url: string) => void;
