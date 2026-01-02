@@ -6,17 +6,23 @@ import { motion } from "motion/react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { TiPinOutline } from "react-icons/ti";
+import { useState } from "react";
 
 import { getBounceEffect } from "@/lib/helpers";
 import { useReadOneMeetingQuery } from "@/services";
 import { Dashboard } from "@/ui";
 
-import { MeetingManagementTab, MeetingSummaryTab } from "../_components";
+import {
+  MeetingChatTab,
+  MeetingManagementTab,
+  MeetingSummaryTab,
+} from "../_components";
 import { useAudioProcessing } from "../_hooks";
 
 const Meeting = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState("management");
 
   const { id } = useParams();
 
@@ -75,6 +81,7 @@ const Meeting = () => {
             <Tabs
               tabs={[
                 {
+                  name: "management",
                   label: t("meeting:tabs.management"),
                   content: (
                     <MeetingManagementTab
@@ -84,10 +91,24 @@ const Meeting = () => {
                   ),
                 },
                 {
+                  name: "summary",
                   label: t("meeting:tabs.summary"),
                   content: <MeetingSummaryTab meetingId={id as string} />,
                 },
+                {
+                  name: "chat",
+                  label: t("meeting:tabs.chat"),
+                  content: (
+                    <MeetingChatTab
+                      isActive={activeTab === "chat"}
+                      meetingId={id as string}
+                    />
+                  ),
+                },
               ]}
+              onChange={(newTab) => {
+                if (newTab) setActiveTab(newTab);
+              }}
             />
           </motion.div>
         </>

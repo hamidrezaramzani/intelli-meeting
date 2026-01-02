@@ -1,6 +1,9 @@
 import { baseApi } from "@intelli-meeting/store";
 
-import type { ReadOneMeetingResponse } from "./api-meetings.type";
+import type {
+  MeetingChatHistoryResponse,
+  ReadOneMeetingResponse,
+} from "./api-meetings.type";
 
 export const meetingsApi = baseApi.injectEndpoints({
   overrideExisting: true,
@@ -67,6 +70,16 @@ export const meetingsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Meetings"],
     }),
+    readMeetingChatHistory: builder.query<
+      MeetingChatHistoryResponse,
+      { meetingId: string }
+    >({
+      query: ({ meetingId }) => ({
+        url: `/meeting/${meetingId}/chat/history`,
+        method: "GET",
+      }),
+      providesTags: ["MeetingChat"],
+    }),
   }),
 });
 
@@ -78,4 +91,5 @@ export const {
   useReadMeetingSummariesQuery,
   useUpdateMeetingMutation,
   useDeleteMeetingMutation,
+  useReadMeetingChatHistoryQuery,
 } = meetingsApi;

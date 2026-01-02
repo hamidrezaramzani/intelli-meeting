@@ -4,7 +4,8 @@
   "description": "This table show you all of meetings that you saved before",
   "tabs": {
     "management": "Management",
-    "summary": "Summary"
+    "summary": "Summary",
+    "chat": "Chat"
   },
   "column": {
     "date": "Date",
@@ -49,5 +50,20 @@
     "deleteFailed": "Failed to delete audio text. Please try again.",
     "selectEmployeeTitle": "Select employee",
     "selectEmployeeDescription": "Please select an employee for this voice"
+  },
+  "chat": {
+    "title": "Chat",
+    "placeholder": "Ask a question about this meeting...",
+    "send": "Send",
+    "loading": "Assistant is processing your question...",
+    "disabledHint": "Please wait for the current response to finish.",
+    "empty": "Start the conversation by asking about the meeting details.",
+    "permissionError": "You do not have permission to view this chat.",
+    "connectionError": "Unable to connect to chat. Please try again.",
+    "noMeetingInfo": "There is no information for this meeting yet. Please upload/update it.",
+    "processingError": "We could not process your request. Please try again.",
+    "helper": "Keep questions concise for quicker answers.",
+    "copy": "Copy",
+    "copied": "Copied!"
   }
 }

@@ -18,6 +18,18 @@ export const useWebSocket = () => {
   const MAX_RECONNECT_ATTEMPTS = 5;
   const RECONNECT_DELAY = 3000;
 
+  const disconnect = useCallback(() => {
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+      reconnectTimerRef.current = null;
+    }
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    setIsConnected(false);
+  }, []);
+
   const createConnection = useCallback(
     (
       path: string,
@@ -99,14 +111,20 @@ export const useWebSocket = () => {
     [createConnection],
   );
 
-  useEffect(() => {
-    return () => {
-      if (reconnectTimerRef.current) {
-        clearTimeout(reconnectTimerRef.current);
-      }
-      wsRef.current?.close();
-    };
+  const send = useCallback((payload: string | object) => {
+    const ws = wsRef.current;
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(typeof payload === "string" ? payload : JSON.stringify(payload));
+    } else {
+      console.warn("WebSocket is not connected.");
+    }
   }, []);
 
-  return { isConnected, connect };
+  useEffect(() => {
+    return () => {
+      disconnect();
+    };
+  }, [disconnect]);
+
+  return { isConnected, connect, send, disconnect };
 };

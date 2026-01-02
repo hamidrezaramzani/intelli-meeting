@@ -29,7 +29,14 @@ export const Tabs = ({ tabs, onChange, defaultIndex = 0 }: TabsProps) => {
       </div>
 
       <div className="mt-4">
-        {tabs[activeIndex] && <div>{tabs[activeIndex].content}</div>}
+        {tabs.map((tab, index) => (
+          <div
+            key={index}
+            className={index === activeIndex ? "block" : "hidden"}
+          >
+            {tab.content}
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -45,3 +45,18 @@ export interface ReadOneMeetingResponse {
   meeting: Meeting;
   success: boolean;
 }
+
+export interface MeetingChatMessage {
+  id: number;
+  role: "user" | "assistant" | "system";
+  content: string;
+  created_at: string;
+  message_code?: string | null;
+}
+
+export interface MeetingChatHistoryResponse {
+  success: boolean;
+  messages: MeetingChatMessage[];
+  isProcessing: boolean;
+  error?: string;
+}

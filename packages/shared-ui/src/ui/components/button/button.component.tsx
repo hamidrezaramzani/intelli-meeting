@@ -9,11 +9,11 @@ export const Button = ({
   variant = "default",
   isLoading = false,
   loadingLabel,
-
+  disabled,
   ...props
 }: ButtonProps) => {
   const baseStyles =
-    "font-roboto px-4 py-2 font-regular text-sm font-roboto  cursor-pointer rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-50";
+    "font-roboto px-4 py-2 font-regular text-sm font-roboto flex justify-center text-center cursor-pointer rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-50";
 
   const variantStyles = {
     default:
@@ -48,7 +48,7 @@ export const Button = ({
 
   return (
     <button
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       type="button"
       className={clsx(
         baseStyles,

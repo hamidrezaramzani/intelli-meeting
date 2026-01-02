@@ -1,2 +1,6 @@
 export * from "./api-meetings.endpoint";
-export type { Meeting } from "./api-meetings.type";
+export type {
+  Meeting,
+  MeetingChatHistoryResponse,
+  MeetingChatMessage,
+} from "./api-meetings.type";

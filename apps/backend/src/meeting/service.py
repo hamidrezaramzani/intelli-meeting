@@ -7,6 +7,7 @@ from src.audio import models as audio_models
 from src.speaker_profile import models as speaker_profile_models
 from src.notification import models as notification_models
 from src.meeting_summary import models as meeting_summary_models
+from src.meeting_chat import models as chat_models
 import os
 from src import utils
 from sqlalchemy import delete, select
@@ -199,6 +200,18 @@ def delete_meeting(db: Session, meeting_id: int):
         db.execute(
             delete(models.meeting_employee)
             .where(models.meeting_employee.c.meeting_id == meeting_id)
+        )
+
+        db.execute(
+            delete(chat_models.MeetingChatJob).where(
+                chat_models.MeetingChatJob.meeting_id == meeting_id
+            )
+        )
+
+        db.execute(
+            delete(chat_models.MeetingChatMessage).where(
+                chat_models.MeetingChatMessage.meeting_id == meeting_id
+            )
         )
 
         db.execute(
