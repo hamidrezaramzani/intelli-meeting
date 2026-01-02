@@ -1,7 +1,11 @@
 /* eslint-disable max-lines-per-function */
 import { confirmation, MainLayout } from "@intelli-meeting/shared-ui";
-import { useUploadAudioMutation } from "@intelli-meeting/store";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  logout,
+  useAppDispatch,
+  useUploadAudioMutation,
+} from "@intelli-meeting/store";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -11,25 +15,7 @@ import { AudioNameModal } from "./sub-components";
 
 export const RecordPage = () => {
   const navigate = useNavigate();
-
-  const menuItems = [
-    {
-      label: "Dashboard",
-      onClick: () => window.open(`${process.env.WEBSITE_URL}/dashboard`),
-    },
-    {
-      label: "Profile",
-      onClick: () => window.open(`${process.env.WEBSITE_URL}/profile`),
-    },
-    {
-      label: "Meetings",
-      onClick: () => window.open(`${process.env.WEBSITE_URL}/meeetings`),
-    },
-    {
-      label: "Settings",
-      onClick: () => window.open(`${process.env.WEBSITE_URL}/settings`),
-    },
-  ];
+  const dispatch = useAppDispatch();
 
   const [uploadRecordingFile] = useUploadAudioMutation();
 
@@ -125,11 +111,45 @@ export const RecordPage = () => {
     setSeconds(0);
   };
 
-  const handleStop = () => {
+  const handleStop = useCallback(() => {
     chrome.runtime.sendMessage({ target: "offscreen", type: "stop-recording" });
     setIsRecording(false);
     setIsPaused(false);
-  };
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    if (isRecording) {
+      handleStop();
+    }
+    dispatch(logout());
+    navigate("/login");
+  }, [dispatch, handleStop, isRecording, navigate]);
+
+  const menuItems = useMemo(
+    () => [
+      {
+        label: "Dashboard",
+        onClick: () => window.open(`${process.env.WEBSITE_URL}/dashboard`),
+      },
+      {
+        label: "Profile",
+        onClick: () => window.open(`${process.env.WEBSITE_URL}/profile`),
+      },
+      {
+        label: "Meetings",
+        onClick: () => window.open(`${process.env.WEBSITE_URL}/meeetings`),
+      },
+      {
+        label: "Settings",
+        onClick: () => window.open(`${process.env.WEBSITE_URL}/settings`),
+      },
+      {
+        label: "Logout",
+        onClick: handleLogout,
+      },
+    ],
+    [handleLogout],
+  );
 
   const handlePauseResume = () => {
     if (isPaused) {
