@@ -1,0 +1,64 @@
+{
+  "title": "Profile",
+  "profileInfo": {
+    "title": "Profile Information"
+  },
+  "preview": {
+    "title": "Current Profile",
+    "editButton": "Edit Profile"
+  },
+  "table": {
+    "field": "Field",
+    "value": "Value",
+    "name": "Name",
+    "email": "Email",
+    "bio": "Bio",
+    "memberSince": "Member Since",
+    "noData": "No profile data available"
+  },
+  "stats": {
+    "title": "Account Statistics",
+    "memberSince": "Member Since",
+    "profileViews": "Profile Views",
+    "meetingsAttended": "Meetings Attended"
+  },
+  "activity": {
+    "title": "Recent Activity",
+    "profileUpdated": "Profile Updated",
+    "passwordChanged": "Password Changed",
+    "emailVerified": "Email Verified"
+  },
+  "form": {
+    "title": "Edit Profile",
+    "description": "Update your personal information and account settings.",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "bio": "Bio",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "saveChanges": "Save Changes"
+  },
+  "placeholders": {
+    "firstName": "Enter your first name",
+    "lastName": "Enter your last name",
+    "email": "Enter your email address",
+    "bio": "Tell us about yourself...",
+    "newPassword": "Enter new password (optional)",
+    "confirmPassword": "Confirm new password"
+  },
+  "validation": {
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordMinLength": "Password must be at least 6 characters long",
+    "passwordsMatch": "Passwords must match"
+  },
+  "messages": {
+    "updating": "Updating profile...",
+    "updated": "Profile updated successfully!",
+    "updateFailed": "Failed to update profile. Please try again.",
+    "loadFailed": "Failed to load profile. Please try again."
+  }
+}

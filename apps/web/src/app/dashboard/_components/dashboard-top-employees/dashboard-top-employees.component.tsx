@@ -39,7 +39,7 @@ export const DashboardTopEmployees = () => {
                     width={48}
                     alt="user"
                     className="w-12 rounded-md"
-                    src={`https://avatar.iran.liara.run/username?username=${employee.employeeName.replace(" ", "")}`}
+                    src={`https://api.dicebear.com/9.x/miniavs/svg?seed=${employee.employeeName.replace(" ", "")}`}
                   />
                 </div>
                 <div className="flex justify-center flex-col">

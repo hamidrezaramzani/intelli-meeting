@@ -25,7 +25,7 @@ const axiosBaseQuery =
   (): BaseQueryFn<BaseQueryArgs, unknown, BaseQueryError> =>
   async (
     { url, method = "GET", data, responseType = "json" },
-    { getState, dispatch }
+    { getState, dispatch },
   ) => {
     try {
       const state = getState() as RootState;
@@ -39,7 +39,7 @@ const axiosBaseQuery =
           if (error.response?.status === 401) {
             dispatch(logout());
           }
-        }
+        },
       );
 
       const baseUrl =
@@ -79,6 +79,7 @@ export const baseApi = createApi({
     "Employees",
     "EmployeeCandidates",
     "Notifications",
+    "Profile",
   ],
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),

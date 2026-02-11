@@ -3,6 +3,9 @@ import { baseApi } from "@intelli-meeting/store";
 import type {
   CheckIsEmailAlreadyUsedRequestBody,
   CheckIsEmailAlreadyUsedResponse,
+  ProfileUpdateRequest,
+  ProfileUpdateResponse,
+  UserProfileResponse,
 } from "./auth.type";
 
 export const authApi = baseApi.injectEndpoints({
@@ -25,7 +28,30 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+    getProfile: builder.query<UserProfileResponse, unknown>({
+      query: () => ({
+        url: "/auth/profile",
+        method: "GET",
+      }),
+      providesTags: ["Profile"],
+    }),
+    updateProfile: builder.mutation<
+      ProfileUpdateResponse,
+      ProfileUpdateRequest
+    >({
+      query: (data) => ({
+        url: "/auth/profile",
+        method: "PUT",
+        data,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
   }),
 });
 
-export const { useSignupMutation, useCheckEmailMutation } = authApi;
+export const {
+  useSignupMutation,
+  useCheckEmailMutation,
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} = authApi;

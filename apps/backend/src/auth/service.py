@@ -7,7 +7,13 @@ from fastapi import Request, HTTPException
 
 def create_user(db: Session, user: schemas.UserCreate):
     hashed_password = utils.hash_password(user.password)
-    db_user = models.User(name=user.name, email=user.email, password=hashed_password)
+    db_user = models.User(
+        first_name=user.first_name,
+        last_name=user.last_name,
+        email=user.email,
+        password=hashed_password,
+        bio=user.bio
+    )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -48,4 +54,51 @@ def read_user_profile(db: Session, request: Request):
     if user == None:
         raise HTTPException(status_code=500, detail=str("User not found"))
 
-    return {"success": True, "user": {"id": user.id, "name": user.name}}
+    return {
+        "success": True, 
+        "user": {
+            "id": user.id, 
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "bio": user.bio
+        }
+    }
+
+
+def update_user_profile(db: Session, request: Request, profile_update: schemas.ProfileUpdate):
+    user_id = main_utils.get_user_id(request, db)
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if user == None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Check if email is being updated and if it's unique
+    if profile_update.email and profile_update.email != user.email:
+        if not check_is_email_unique(db, profile_update.email):
+            raise HTTPException(status_code=400, detail="Email already exists")
+
+    # Update fields that are provided
+    update_data = profile_update.dict(exclude_unset=True)
+    
+    # Hash password if it's being updated
+    if 'password' in update_data:
+        update_data['password'] = utils.hash_password(update_data['password'])
+
+    for field, value in update_data.items():
+        setattr(user, field, value)
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "success": True,
+        "user": {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "bio": user.bio
+        },
+        "message": "Profile updated successfully"
+    }

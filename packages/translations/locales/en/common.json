@@ -34,6 +34,8 @@
 
   "viewThing": "View {{thing, lowercase}}",
   "loadingThing": "Loading {{thing, lowercase}}...",
+  "loading": "Loading",
+  "saving": "Saving...",
   "thingLoaded": "{{thing}} loaded successfully",
 
   "editThing": "Edit {{thing, lowercase}}",

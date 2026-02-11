@@ -15,8 +15,11 @@ export const UserMenu = ({
 }: UserMenuProps) => {
   const [open, setOpen] = useState(false);
   const { data } = useReadUserProfileQuery({});
-  const employeeName = data?.user?.name || guestLabel || "";
-  const avatarUrl = `https://avatar.iran.liara.run/username?username=${employeeName.replace(" ", "")}`;
+  const employeeName =
+    data?.user?.first_name && data?.user?.last_name
+      ? `${data.user.first_name} ${data.user.last_name}`
+      : data?.user?.name || guestLabel || "";
+  const avatarUrl = `https://api.dicebear.com/9.x/miniavs/svg?seed=${employeeName.replace(" ", "")}`;
   const greeting = renderGreeting ? renderGreeting(employeeName) : employeeName;
   const isLanding = variant === "landing";
 
@@ -49,7 +52,9 @@ export const UserMenu = ({
         >
           <div
             className={`px-4 py-3 border-b ${
-              isLanding ? "border-white/10 bg-white/5" : "border-slate-200 bg-slate-100"
+              isLanding
+                ? "border-white/10 bg-white/5"
+                : "border-slate-200 bg-slate-100"
             }`}
           >
             <p

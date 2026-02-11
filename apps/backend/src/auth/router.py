@@ -42,7 +42,13 @@ def signup(body: schemas.CheckEmailBody, db: Session = Depends(get_db)):
 
 
 @router.get("/profile", response_model=schemas.UserProfileResponse)
-def signup(request: Request, db: Session = Depends(get_db)):
+def get_profile(request: Request, db: Session = Depends(get_db)):
     return service.read_user_profile(db, request)
+
+
+@router.put("/profile", response_model=schemas.ProfileUpdateResponse)
+@router.patch("/profile", response_model=schemas.ProfileUpdateResponse)
+def update_profile(request: Request, profile_update: schemas.ProfileUpdate, db: Session = Depends(get_db)):
+    return service.update_user_profile(db, request, profile_update)
 
 

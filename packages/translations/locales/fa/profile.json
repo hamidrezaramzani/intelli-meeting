@@ -1,0 +1,64 @@
+{
+  "title": "پروفایل",
+  "profileInfo": {
+    "title": "اطلاعات پروفایل"
+  },
+  "preview": {
+    "title": "پروفایل فعلی",
+    "editButton": "ویرایش پروفایل"
+  },
+  "table": {
+    "field": "فیلد",
+    "value": "مقدار",
+    "name": "نام",
+    "email": "ایمیل",
+    "bio": "بیوگرافی",
+    "memberSince": "عضو از",
+    "noData": "اطلاعات پروفایل موجود نیست"
+  },
+  "stats": {
+    "title": "آمار حساب",
+    "memberSince": "عضو از",
+    "profileViews": "بازدیدهای پروفایل",
+    "meetingsAttended": "جلسات شرکت کرده"
+  },
+  "activity": {
+    "title": "فعالیت‌های اخیر",
+    "profileUpdated": "پروفایل به‌روز شد",
+    "passwordChanged": "رمز عبور تغییر کرد",
+    "emailVerified": "ایمیل تأیید شد"
+  },
+  "form": {
+    "title": "ویرایش پروفایل",
+    "description": "اطلاعات شخصی و تنظیمات حساب کاربری خود را به‌روز کنید.",
+    "firstName": "نام",
+    "lastName": "نام خانوادگی",
+    "email": "ایمیل",
+    "bio": "بیوگرافی",
+    "changePassword": "تغییر رمز عبور",
+    "newPassword": "رمز عبور جدید",
+    "confirmPassword": "تأیید رمز عبور",
+    "saveChanges": "ذخیره تغییرات"
+  },
+  "placeholders": {
+    "firstName": "نام خود را وارد کنید",
+    "lastName": "نام خانوادگی خود را وارد کنید",
+    "email": "ایمیل خود را وارد کنید",
+    "bio": "در مورد خود به ما بگویید...",
+    "newPassword": "رمز عبور جدید را وارد کنید (اختیاری)",
+    "confirmPassword": "رمز عبور جدید را تأیید کنید"
+  },
+  "validation": {
+    "firstNameRequired": "نام الزامی است",
+    "lastNameRequired": "نام خانوادگی الزامی است",
+    "invalidEmail": "لطفاً یک ایمیل معتبر وارد کنید",
+    "passwordMinLength": "رمز عبور باید حداقل ۶ کاراکتر باشد",
+    "passwordsMatch": "رمزهای عبور باید یکسان باشند"
+  },
+  "messages": {
+    "updating": "در حال به‌روزرسانی پروفایل...",
+    "updated": "پروفایل با موفقیت به‌روز شد!",
+    "updateFailed": "به‌روزرسانی پروفایل ناموفق بود. لطفاً دوباره تلاش کنید.",
+    "loadFailed": "بارگذاری پروفایل ناموفق بود. لطفاً دوباره تلاش کنید."
+  }
+}

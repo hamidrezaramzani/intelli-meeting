@@ -32,6 +32,8 @@
   "thingAdded": "{{thing}} با موفقیت اضافه شد",
   "viewThing": "مشاهده {{thing}}",
   "loadingThing": "در حال بارگذاری {{thing}}...",
+  "loading": "در حال بارگذاری",
+  "saving": "در حال ذخیره",
   "thingLoaded": "{{thing}} با موفقیت بارگذاری شد",
   "editThing": "ویرایش {{thing}}",
   "updatingThing": "در حال ویرایش {{thing}}...",

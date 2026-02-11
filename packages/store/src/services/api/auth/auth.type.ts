@@ -6,8 +6,11 @@ export interface SignInRequestBody {
 export interface SignInResponseBody {
   user: {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
+    bio?: string;
+    created_at?: string;
   };
   token: string;
 }
@@ -16,6 +19,9 @@ export interface UserProfileResponse {
   success: boolean;
   user: {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    bio?: string;
   };
 }
