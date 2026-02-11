@@ -21,11 +21,11 @@ const NewPositionForm = () => {
       error: t("common:errors.createPosition"),
       success: {
         render: () => {
-          router.push("/settings?tab=positions");
           return t("common:messages.positionCreated");
         },
       },
     });
+    router.push("/settings?tab=positions");
   };
 
   return (

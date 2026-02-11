@@ -47,9 +47,7 @@ export const EmployeeForm = ({
             : t("employee:form.createTitle")}
         </h2>
 
-        <p className="text-slate-600 mb-6">
-          {t("employee:form.description")}
-        </p>
+        <p className="text-slate-600 mb-6">{t("employee:form.description")}</p>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
@@ -68,7 +66,11 @@ export const EmployeeForm = ({
             options={positionOptions}
           />
 
-          <Button className="mt-2 w-full sm:w-96" disabled={isLoading} type="submit">
+          <Button
+            className="mt-2 w-full sm:w-96"
+            disabled={isLoading}
+            type="submit"
+          >
             {isEdit
               ? t("employee:form.editSubmit")
               : t("employee:form.createSubmit")}

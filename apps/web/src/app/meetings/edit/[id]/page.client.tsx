@@ -41,13 +41,12 @@ const EditMeetingForm = () => {
         error: t("common:operationFailed"),
         success: {
           render: () => {
-            console.log("Meeting updated successfully");
-            router.push("/meetings");
             return t("common:thingUpdated", { thing: t("meeting:meeting") });
           },
         },
       },
     );
+    router.push("/meetings");
   };
 
   return (

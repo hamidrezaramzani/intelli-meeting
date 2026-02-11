@@ -26,12 +26,12 @@ const EditPositionForm = () => {
         error: "We have an error when updating position, please try again",
         success: {
           render: () => {
-            router.push("/settings?tab=positions");
             return "Position updated successfully";
           },
         },
       },
     );
+    router.push("/settings?tab=positions");
   };
 
   return (

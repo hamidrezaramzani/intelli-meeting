@@ -26,19 +26,16 @@ const NewEmployeeForm = () => {
       pending: t("employee:messages.creating"),
       success: {
         render: () => {
-          router.push("/employees");
           return t("employee:messages.created");
         },
       },
       error: t("employee:messages.createFailed"),
     });
+    router.push("/employees");
   };
 
   return (
-    <Dashboard
-      backUrl="/employees"
-      title={t("employee:form.createTitle")}
-    >
+    <Dashboard backUrl="/employees" title={t("employee:form.createTitle")}>
       <EmployeeForm
         defaultValue={{ fullName: "", position: "" }}
         isEdit={false}

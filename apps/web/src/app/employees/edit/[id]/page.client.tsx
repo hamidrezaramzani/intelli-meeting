@@ -32,12 +32,12 @@ const EditEmployeePage = () => {
       pending: "Updating employee...",
       success: {
         render: () => {
-          router.push("/employees");
           return "Employee updated successfully!";
         },
       },
       error: "Error while updating employee. Please try again.",
     });
+    router.push("/employees");
   };
 
   return (

@@ -26,12 +26,12 @@ const NewMeetingForm = () => {
         error: t("common:operationFailed"),
         success: {
           render: () => {
-            router.push("/meetings");
             return t("common:thingAdded", { thing: t("meeting:meeting") });
           },
         },
       },
     );
+    router.push("/meetings");
   };
 
   return (
